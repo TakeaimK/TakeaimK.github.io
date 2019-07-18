@@ -4,7 +4,7 @@ highlighter: rouge
 
 # Setup
 title: Takeaim
-tagline: "A Jekyll theme"
+tagline: "Developer Blog"
 description: 'The <a href="http://hyde.getpoole.com" target="_blank">Hyde</a> theme for <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, refreshed.'
 url: https://fongandrew.github.io
 baseurl:
