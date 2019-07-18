@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Hello World!
-categories: Markup
-
+categories:
+  - Markup
 ---
 
 ****지킬 테마를 사용해서 웹사이트를 만들고 있습니다****
