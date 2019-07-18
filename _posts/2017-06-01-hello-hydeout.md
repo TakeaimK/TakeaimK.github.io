@@ -1,8 +1,27 @@
 ---
 layout: post
-title: Hello Hydeout
+title: Hello World!
 excerpt_separator:  <!--more-->
 ---
+
+****지킬 테마를 사용해서 웹사이트를 만들고 있습니다****
+++이 글은 밑줄을 사용합니다++
+~~이 글은 취소선을 사용합니다~~
+==이 글은 하이라이트를 사용합니다==
+^이 글은 슈퍼스크립트를 사용합니다^
+~이 글은 서브스크립트를 사용합니다~
+
+This is an H1
+=============
+
+	#include<stdio.h>
+
+	int main(void){
+		printf("Hello world!\n");
+	}
+
+
+****
 
 Hydeout updates the original [Hyde](https://github.com/poole/hyde)
 theme for [Jekyll](http://jekyllrb.com) 3.x and adds new functionality.
