@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Hello World!
-excerpt_separator:  <!--more-->
+
 ---
 
 ****지킬 테마를 사용해서 웹사이트를 만들고 있습니다****
