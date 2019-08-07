@@ -1,6 +1,6 @@
 ---
 layout: category
-title: Markup
+title: C언어
 ---
 
-Another sample category page.
+C언어에 대한 기초부터 심화, 그리고 각종 꿀팁을 모아놓은 곳
