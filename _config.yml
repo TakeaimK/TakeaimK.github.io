@@ -5,8 +5,8 @@ highlighter: rouge
 # Setup
 title: Takeaim
 tagline: "Developer Blog"
-description: 'The <a href="http://hyde.getpoole.com" target="_blank">Hyde</a> theme for <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, refreshed.'
-url: https://fongandrew.github.io
+description: '한 걸음씩, 차분하게'
+url: https://takeaim.github.io
 baseurl:
   # the optional subpath of your site, e.g. "/blog"
   # NB: This applies to all pages in your Jekyll site.
@@ -15,9 +15,8 @@ baseurl:
   # sidebar_blog_link below.
 
 author:
-  name: "Andrew Fong"
-  url: https://twitter.com/fongandrewc
-
+  name: "Choi Sejin"
+  url: 
 paginate: 5
 # paginate_path:    '/page:num'
 # Or '/blog/page:num' if you want to move your index pages
