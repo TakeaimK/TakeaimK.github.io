@@ -28,7 +28,8 @@ body {
   background-image: linear-gradient(
     to bottom,
     lighten($sidebar-bg-color, 7%),
-    darken($sidebar-bg-color, 7%));
+    darken($sidebar-bg-color, 7%)
+  );
   display: flex;
   flex-direction: column;
   min-width: 100vw;
@@ -40,13 +41,15 @@ body {
   padding: $section-spacing;
 
   .site-title {
-    font-family: "Abril Fatface", serif;
+    font-family: "나눔고딕", serif;
     font-weight: normal;
     font-size: $large-font-size;
     margin-top: 0;
     margin-bottom: $heading-spacing;
 
-    .back-arrow { margin-right: 0.5rem; }
+    .back-arrow {
+      margin-right: 0.5rem;
+    }
   }
 }
 
@@ -68,7 +71,6 @@ body {
   padding: $section-spacing;
 }
 
-
 /* -----------------------------------------------------------
   Mobile view
 ----------------------------------------------------------- */
@@ -76,7 +78,9 @@ body {
 // Hide secondary nav content in sidebar
 // Hide lead paragraph in sidebar
 #sidebar {
-  header ~ *, header ~ nav, p.lead {
+  header ~ *,
+  header ~ nav,
+  p.lead {
     display: none;
   }
 }
@@ -85,11 +89,11 @@ body {
 .container > header {
   color: $sidebar-title-color;
   background: transparent;
-  margin: ($heading-spacing - $section-spacing)
-          $section-spacing
-          $section-spacing;
+  margin: ($heading-spacing - $section-spacing) $section-spacing
+    $section-spacing;
 
-  h1, h2 {
+  h1,
+  h2 {
     color: inherit;
 
     &:last-child {
@@ -98,13 +102,11 @@ body {
   }
 }
 
-
 /* -----------------------------------------------------------
   Mobile view for home page)
 ----------------------------------------------------------- */
 
 .home #sidebar {
-
   // Center sidebar content
   text-align: center;
 
@@ -114,7 +116,8 @@ body {
   }
 
   // Show secondary nav content + lead
-  header ~ *, p.lead {
+  header ~ *,
+  p.lead {
     display: block;
   }
 
@@ -131,7 +134,6 @@ body {
   }
 }
 
-
 /* -----------------------------------------------------------
   Tablet / Desktop view
 ----------------------------------------------------------- */
@@ -143,15 +145,16 @@ body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     > * {
-      max-height: 100vh; 
-      overflow-y: auto; 
+      max-height: 100vh;
+      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
   }
 
   /* Undo mobile CSS */
 
-  #sidebar, .home #sidebar {
+  #sidebar,
+  .home #sidebar {
     width: $sidebar-width;
     text-align: left;
 
@@ -163,10 +166,13 @@ body {
   #sidebar {
     .site-title {
       font-size: 3.25rem;
-      .back-arrow { display: none; }
+      .back-arrow {
+        display: none;
+      }
     }
 
-    p.lead, header ~ * {
+    p.lead,
+    header ~ * {
       display: block;
     }
 
@@ -175,21 +181,22 @@ body {
     }
   }
 
-  .index #sidebar { margin-bottom: 0; }
+  .index #sidebar {
+    margin-bottom: 0;
+  }
 
   // Make entire container background white to contrast against sidebar
   .container {
     background: $body-bg;
     color: $body-color;
-    padding: $section-spacing * 2
-             $section-spacing * 2
-             0;
+    padding: $section-spacing * 2 $section-spacing * 2 0;
     height: 100vh;
 
     > header {
       color: $heading-color;
       margin: 0;
-      h1, h2 {
+      h1,
+      h2 {
         color: inherit;
 
         &:last-child {
@@ -205,7 +212,6 @@ body {
   }
 }
 
-
 /* -----------------------------------------------------------
   Sidebar links + nav
 ----------------------------------------------------------- */
@@ -217,11 +223,16 @@ body {
     fill: $sidebar-icon-color;
   }
 
-  &:hover, &:focus, &.active {
-    svg { fill: $sidebar-icon-color; }
+  &:hover,
+  &:focus,
+  &.active {
+    svg {
+      fill: $sidebar-icon-color;
+    }
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     text-decoration: underline;
     &.icon {
       text-decoration: none;
@@ -235,7 +246,9 @@ body {
 
 #sidebar .site-title {
   color: $sidebar-title-color;
-  a { color: inherit; }
+  a {
+    color: inherit;
+  }
 }
 #sidebar nav {
   display: flex;
@@ -268,7 +281,6 @@ body {
   margin: 0 0.25em;
 }
 
-
 /* -----------------------------------------------------------
   Sticky sidebar
 
@@ -283,7 +295,6 @@ body {
     }
   }
 }
-
 
 /* -----------------------------------------------------------
   Reverse layout
