@@ -1,6 +1,6 @@
 ---
 layout: category
-title: Language-Pyhton
+title: Language-Python
 ---
 
 ```
