@@ -36,4 +36,4 @@ sidebar_home_link: true
 # set this to the root of the paginate_path
 # to enable a separate blog link.
 
-excerpt_separator: 20
+post.excerpt: 20
