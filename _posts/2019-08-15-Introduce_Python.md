@@ -2,7 +2,7 @@
 layout: post
 title: 0. 파이썬을 사용할 준비를 해 보자
 categories:
-  - Language
+  - Language-Pyhton
 ---
 
 # Python?
