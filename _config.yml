@@ -8,7 +8,7 @@ tagline: "Developer Blog"
 description: "한 걸음씩, 차분하게"
 url: https://takeaim.github.io
 baseurl:
-  /
+  "/"
   # the optional subpath of your site, e.g. "/blog"
   # NB: This applies to all pages in your Jekyll site.
   # If you want to move just the blog index pages but keep
@@ -35,3 +35,9 @@ sidebar_home_link: true
 # page. If you change your paginate_path,
 # set this to the root of the paginate_path
 # to enable a separate blog link.
+
+defaults:
+  - scope:
+      path: "/img"
+    values:
+      image: true
