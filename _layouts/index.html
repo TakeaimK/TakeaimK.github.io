@@ -23,7 +23,7 @@ layout: default
     {% else %}
     {{ post.content }}
     {% endif %}
-
+    <!--
     {% if post.excerpt %}
     {% comment %}Excerpt may be equal to content. Check.{% endcomment %}
     {% capture content_words %}
@@ -37,6 +37,7 @@ layout: default
     <a href="{{ post.url | relative_url }}">More &hellip;</a>
     {% endif %}
     {% endif %}
+    -->
   </article>
   {% endfor %}
 
