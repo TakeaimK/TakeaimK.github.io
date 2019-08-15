@@ -18,7 +18,7 @@ baseurl:
 author:
   name: "Choi Sejin"
   url:
-paginate: 5
+paginate: 3
 # paginate_path:    '/page:num'
 # Or '/blog/page:num' if you want to move your index pages
 
