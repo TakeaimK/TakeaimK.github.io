@@ -5,9 +5,10 @@ highlighter: rouge
 # Setup
 title: Takeaim
 tagline: "Developer Blog"
-description: '한 걸음씩, 차분하게'
+description: "한 걸음씩, 차분하게"
 url: https://takeaim.github.io
-baseurl:""
+baseurl:
+  /
   # the optional subpath of your site, e.g. "/blog"
   # NB: This applies to all pages in your Jekyll site.
   # If you want to move just the blog index pages but keep
@@ -16,7 +17,7 @@ baseurl:""
 
 author:
   name: "Choi Sejin"
-  url: 
+  url:
 paginate: 5
 # paginate_path:    '/page:num'
 # Or '/blog/page:num' if you want to move your index pages
