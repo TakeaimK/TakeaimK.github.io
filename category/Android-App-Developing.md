@@ -1,6 +1,6 @@
 ---
 layout: category
-title: JBNU Study
+title: Android App Developing
 ---
 
 ```
