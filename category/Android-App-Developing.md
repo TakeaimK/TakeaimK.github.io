@@ -4,5 +4,5 @@ title: Android App Developing
 ---
 
 ```
-전북대학교에서 공부했던 것들 & 과제들
+안드로이드 앱을 만들어 보자
 ```
