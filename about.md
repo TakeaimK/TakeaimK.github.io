@@ -8,11 +8,15 @@ sidebar_link: true
 
 ![ChoiSejin_Profile.jpg](./assets/ChoiSejin_Profile.jpg)
 
+---
+
 ## 학력
 
 - 군산동원중학교 졸업
 - 군산동고등학교 졸업
 - 전북대학교 재학 중
+
+---
 
 ## 활동내역
 
