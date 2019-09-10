@@ -4,6 +4,8 @@ title: About
 sidebar_link: true
 ---
 
+---
+
 # Choi Sejin
 
 ![ChoiSejin_Profile.jpg](./assets/ChoiSejin_Profile.jpg)
@@ -23,3 +25,5 @@ sidebar_link: true
 - Invisible Shield 8기 활동(2015~2018)
 - DFC 가지장으로 활동(2015~)
 - Like Lion 7기 활동(2019~)
+
+---
