@@ -7,7 +7,7 @@ categories:
 
 # 안드로이드 스튜디오 기본 설정
 
-지난 게시글 <[1. 안드로이드 APP 개발 준비 (1)](http://takeaimk.tk/android%20app%20developing/2019/09/02/1.%EA%B0%9C%EB%B0%9C-%EC%A4%80%EB%B9%84(1).html)>에 이어서, 이번 시간에는 프로젝트 생성, API 다운로드, 가상머신 실행 등을 해보겠습니다.
+지난 게시글 <[1. 안드로이드 APP 개발 준비 (1)](http://takeaimk.tk/android%20app%20developing/2019/09/02/(Android-Studio)1.%EA%B0%9C%EB%B0%9C-%EC%A4%80%EB%B9%84(1).html)>에 이어서, 이번 시간에는 프로젝트 생성, API 다운로드, 가상머신 실행 등을 해보겠습니다.
 
 ---
 
