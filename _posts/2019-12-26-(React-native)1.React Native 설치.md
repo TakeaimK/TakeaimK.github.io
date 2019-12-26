@@ -95,5 +95,5 @@ npx react-native init AwesomeProject
 ---
 
 이상으로 React Native 설치를 마치겠습니다.  
-다음에는 Android 기반으로 처음 앱을 실행하는 방법을 알아보겠습니다.
+다음에는 Android 기반으로 처음 앱을 실행하는 방법을 알아보겠습니다.  
 읽어주셔서 감사합니다.
