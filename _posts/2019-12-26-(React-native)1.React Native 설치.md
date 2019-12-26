@@ -72,12 +72,12 @@ choco install -y nodejs.install python2 jdk8
 - 만약 윈도우 계정 이름을 모르면 내PC(내 컴퓨터)-C드라이브-사용자 로 들어가서 확인해 줍니다.  
 ![React_Native_install_5](/assets/images/React_native/React_native_install/install_5.PNG)  
 ![React_Native_install_6](/assets/images/React_native/React_native_install/install_6.PNG)  
-- 다음으로, Path를 추가합니다. 시스템 변수에서 Path를 찾아 편집을 누르고, 다음과 같이 추가합니다.
-![React_Native_install_7](/assets/images/React_native/React_native_install/install_7.PNG)  
-![React_Native_install_8](/assets/images/React_native/React_native_install/install_8.PNG)  
+- 다음으로, Path를 추가합니다. 시스템 변수에서 Path를 찾아 편집을 누르고, 다음과 같이 추가합니다.  
 ```
 C:\Users\<윈도우 계정 이름>\AppData\Local\Android\Sdk\platform-tools
 ```
+![React_Native_install_7](/assets/images/React_native/React_native_install/install_7.PNG)  
+![React_Native_install_8](/assets/images/React_native/React_native_install/install_8.PNG)  
 
 ---
 ## 4. 새로운 APP 생성  
