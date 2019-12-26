@@ -89,7 +89,7 @@ npx react-native init AwesomeProject
 ```  
 - 이제 한참 동안 무언가 다운로드 후 진행됩니다. 전부 진행될 때까지 기다립니다.  
 ![React_Native_install_10](/assets/images/React_native/React_native_install/install_10.PNG)
-- 아래의 창이 나오면, 설치가 완료되었다는 뜻입니다.
+- 아래의 창이 나오고 콘솔 입력 창이 뜨면, 설치가 완료되었다는 뜻입니다.
 ![React_Native_install_11](/assets/images/React_native/React_native_install/install_11.PNG)  
 
 ---
