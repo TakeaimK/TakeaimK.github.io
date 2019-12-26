@@ -26,9 +26,9 @@ categories:
 Chocolatey는 Windows 기반의 패키지 관리자입니다. 이곳에서 필요한 패키지를 내려받겠습니다. 먼저 Chocolatey을 설치하겠습니다.  
 다음 링크를 눌러 아래 사진의 사이트에 접속합니다.  
 
-[Chocolatey - Package manager](https://chocolatey.org/)  
+[Chocolatey - Package manager](https://chocolatey.org/){: target="_blank"}  
 
-![React_Native_install_1](/assets/images/React_native/React_native_install/install_1.png)
+![React_Native_install_1](/assets/images/React_native/React_native_install/install_1.PNG)
 
 우측 상단의 install now를 눌러 다운로드 받고 설치합니다.  
 
