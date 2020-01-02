@@ -6,7 +6,7 @@ categories:
 ---
 
 정보처리 기능사 필기 공부자료입니다. 이곳 저곳에서 모아놓은 자료들입니다.  
-[정보처리기능사 필기 요약](https://1drv.ms/f/s!AnCKISpAsNPvi8QgQbEhABnSsjUV-w){: target="_blank"}  
+> [정보처리기능사 필기 요약](https://1drv.ms/f/s!AnCKISpAsNPvi8QgQbEhABnSsjUV-w){: target="_blank"}  
 
 ---
 ## 공부방법 TIP  
@@ -14,7 +14,7 @@ categories:
 정보처리기능사는 문제 공개가 꽤 오래 전부터 막혔기 때문에 시험 자료를 구하기 매우 힘듭니다.  
 따라서 가까운 도서관 등에 방문하셔서 가장 최근에 나온 이기적 or 시나공 정보처리기능사 책을 참고하시고 문제를 풀어 보시는 방법이 제일 좋습니다.  
 예전 기출문제를 풀어보길 희망하시는 분은 다음 사이트를 참고하시기 바랍니다.  
-[정보처리기능사 필기 문제](https://www.comcbt.com/xe/j1){: target="_blank"}  
+> [정보처리기능사 필기 문제](https://www.comcbt.com/xe/j1){: target="_blank"}  
 필기는 어려운 편이 아니기 때문에 저 위에 있는 요약본만 잘 봐도 합격할 수 있을 것이라 생각합니다. 위 자료로 공부하시는 수험생 분들의 합격을 희망합니다.  
 
 ---
