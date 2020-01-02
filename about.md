@@ -1,12 +1,10 @@
 ---
 layout: page
-title: About
+title: About Choi Sejin
 sidebar_link: true
 ---
 
 ---
-
-# Choi Sejin
 
 ![ChoiSejin_Profile.jpg](./assets/ChoiSejin_Profile.jpg)
 
@@ -20,7 +18,7 @@ sidebar_link: true
 - Invisible Shield 8기 활동(2015.3~2018.2)
 - DFC 가지장(2015.9~)
 - Like Lion 7기 활동(2019.3~2019.12)
-- K-hub 실습생 - React Native App 개발(2019.12~2020.2)
+- K-hub 실습생 - React Native App 개발 (2019.12~2020.2)
 
 ---
 
