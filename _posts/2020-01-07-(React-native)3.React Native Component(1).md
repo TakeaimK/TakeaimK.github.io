@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 3. React Native Component(1)
+title: 3. React Native Component(1) - View, Text, Image
 categories:
   - React-native
 ---
@@ -70,25 +70,25 @@ const styles = StyleSheet.create({
   ```
 - Text
   - 문장을 화면에 띄울 때 사용  
-  ```
+```
    <Text style={styles.someone}>Hello World!</Text> 
-  ```
+```
 - Image
   - 로컬 이미지나 네트워크 경로의 이미지를 띄울 때 사용  
-  ```
+```
   <Image source={pic} style={{width:300, height:100}} />
-  ```
+```
 - StyleSheet
   - CSS와 거의 동일한 방법으로 디자인
   - CSS와의 차이점 : 카멜 케이스 (camelCase, 낙타 표기법) 사용. 
     ex) font-size => fontSize  
-  ```
+```
   const styles = StyleSheet.create({
   someone: {
     (write design)
   },
   });
-  ```
+```
 
   ### 실행화면
 ![React_Native_ViewTextImage](/assets/images/React_native/Component/ViewTextImage.PNG) 
@@ -96,6 +96,5 @@ const styles = StyleSheet.create({
 
 
 ---
-이상으로 React Native 최초 앱 실행을 마치겠습니다.  
-다음에는 (미정)  
+본 강좌는 [ideafactory kaist](https://www.youtube.com/channel/UCTivi6Kji_93AjJu-7-osLQ) 강좌 기반으로 진행됩니다.  
 읽어주셔서 감사합니다.
