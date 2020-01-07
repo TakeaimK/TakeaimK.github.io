@@ -83,5 +83,5 @@ npx react-native run-android
 
 ---
 이상으로 React Native 최초 앱 실행을 마치겠습니다.  
-다음에는 (미정)  
+다음에는 Component에 대해 알아보겠습니다.  
 읽어주셔서 감사합니다.
