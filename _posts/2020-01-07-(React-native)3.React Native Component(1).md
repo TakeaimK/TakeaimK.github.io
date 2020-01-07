@@ -98,9 +98,7 @@ someone: {
 ```  
 
 ### 실행화면
-![React_Native_ViewTextImage](/assets/images/React_native/Component/ViewTextImage.PNG) 
----
-
+![React_Native_ViewTextImage](/assets/images/React_native/Component/ViewTextImage.PNG)  
 
 ---
 본 강좌는 [ideafactory kaist](https://www.youtube.com/channel/UCTivi6Kji_93AjJu-7-osLQ) 강좌 기반으로 진행됩니다.  
