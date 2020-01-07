@@ -62,22 +62,25 @@ const styles = StyleSheet.create({
 ### Import 분석  
 - View
   - div와 유사한 역할을 수행
-  - 주로 구역을 나누거나 style을 입힐 때 사용  
+  - 주로 구역을 나누거나 style을 입힐 때 사용
 ```
 <View style={styles.someone}>
      (Contents)
 </View>
-```
+```  
+
 - Text
   - 문장을 화면에 띄울 때 사용  
 ```
 <Text style={styles.someone}>Hello World!</Text> 
-```
+```  
+
 - Image
   - 로컬 이미지나 네트워크 경로의 이미지를 띄울 때 사용  
 ```
 <Image source={pic} style={{width:300, height:100}} />
-```
+```  
+
 - StyleSheet
   - CSS와 거의 동일한 방법으로 디자인
   - CSS와의 차이점 : 카멜 케이스 (camelCase, 낙타 표기법) 사용. 
@@ -88,7 +91,7 @@ someone: {
   (write design)
 },
 });
-```
+```  
 
   ### 실행화면
 ![React_Native_ViewTextImage](/assets/images/React_native/Component/ViewTextImage.PNG) 
