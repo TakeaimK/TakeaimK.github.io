@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   - CSS와 거의 동일한 방법으로 디자인
   - CSS와의 차이점 : 카멜 케이스 (camelCase, 낙타 표기법) 사용. 
     ex) font-size => fontSize
-    
+
 ```
 const styles = StyleSheet.create({
 someone: {
@@ -97,7 +97,7 @@ someone: {
 });
 ```  
 
-  ### 실행화면
+### 실행화면
 ![React_Native_ViewTextImage](/assets/images/React_native/Component/ViewTextImage.PNG) 
 ---
 
