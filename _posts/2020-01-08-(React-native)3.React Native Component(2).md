@@ -144,7 +144,7 @@ render(){
 
 
 ### 실행화면
-![React_Native_ViewTextImage](/assets/images/React_native/Component/State1.PNG)  
+![React_Native_ViewTextImage](/assets/images/React_native/Component/State1.PNG)
 ![React_Native_ViewTextImage](/assets/images/React_native/Component/State2.PNG) 
 
 ---
