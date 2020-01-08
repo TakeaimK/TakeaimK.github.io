@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 3. React Native Component(2) - State
+title: 4. React Native Component(2) - State
 categories:
   - React-native
 ---
