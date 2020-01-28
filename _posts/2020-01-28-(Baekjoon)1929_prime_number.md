@@ -99,7 +99,8 @@ public class java_1929 {    // 채점 시 Class 명을 'Main'으로 변경
 ```  
 
 ### 소스 코드 (C++)
-- 다음 코드 부분은 속도가 느린 C++의 cin, cout을 C의 printf, scanf로 변경시켜 준다. 시간초과 발생 시 사용해 보자.
+- 다음 코드 부분은 속도가 느린 C++의 cin, cout을 C의 printf, scanf로 변경시켜 준다. 시간초과 발생 시 사용해 보자.  
+단, c의 getchar() 등과 동시에 사용할 수 없다.
 ```
 ios_base :: sync_with_stdio(false);
     cin.tie(NULL);
