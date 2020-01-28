@@ -106,7 +106,7 @@ ios_base :: sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 ```
-1. 간단한 방법
+1. 간단한 방법  
 ```
 #include <iostream>
 #include <cmath>
