@@ -30,7 +30,8 @@ categories:
   - N이라는 자연수를 표현할 때, 1 x N의 형태로만 표현할 수 있는 수
   - 반대 개념으로 합성수(N이라는 자연수 표현 시 A x B로 표현이 가능)가 있다.
   
-소수를 구하는 방법은 의외로 간단하다. A x B = N이 나오는 합성수를 걸러내면 된다.  
+#### 1. 간단한 방법 (Python, Java, C++)  
+A x B = N이 나오는 합성수를 걸러내면 된다.  
 즉, N을 A로 나누었을 때 B로 몫이 떨어진다는 소리이고, 나머지가 나오지 않는다는 것이다.  
 예를 들어, 14가 소수인지 판별하는 방법은, 14를 13부터 2까지 차례대로 나누어 나머지가 나오는지 확인한다. 
 이 때 7로 나누면 나머지가 0이므로 14는 합성수이다.  
@@ -42,6 +43,11 @@ categories:
 간단한 방법으로는 수를 반으로 나누어 나머지를 확인하는 방법이 있다. 하지만 곱셈에서는 더 좋은 방법이 있다.  
 바로 **제곱근(Root)**를 활용하는 것이다. N을 곱셈으로 표현할 수 있는 가장 작은 두 수는 N의 제곱근이다.  
 __따라서 N의 제곱근에서 소숫점 아래 부분을 잘라낸 수부터 2까지 나누어 나머지가 나오지 않는 수__ 가 소수이다.  
+
+#### 2. 에라토스테네스의 체 사용 (C++)
+하지만 위 방법은 이중 for문을 사용하므로 시간이 매우 오래 걸리게 된다. (시간복잡도 O(n^2))  
+여기서 에라토스테네스의 체를 사용하면 for문을 최소화할 수 있다.
+2부터 N까지의 배수는 모두 합성수이다. 따라서 배수를 모두 제거한 후 출력하는 방식을 사용한다.
 
 ### 소스 코드 (Python)
 ```
@@ -93,6 +99,78 @@ public class java_1929 {    // 채점 시 Class 명을 'Main'으로 변경
 ```  
 
 ### 소스 코드 (C++)
+- 다음 코드 부분은 속도가 느린 C++의 cin, cout을 C의 printf, scanf로 변경시켜 준다. 시간초과 발생 시 사용해 보자.
 ```
+ios_base :: sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+```
+1. 간단한 방법
+```
+#include <iostream>
+#include <cmath>
+ 
+using namespace std;
+ 
+int main() {
 
+    ios_base :: sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int start, end;
+    cin >> start >> end;
+    bool set;
+ 
+    for (int i = start; i <= end; i++) {
+        
+        set=true;
+        
+        for (int j = 2 ; j <= floor(sqrt(i)); j++){
+            if(i%j == 0){
+                set=false;
+                break;
+            }
+        }
+        
+        if(set && i>1){
+            cout<<i<<'\n';
+        }
+        
+    }
+ 
+    return 0;
+}
+
+```
+2. 에라토스테네스의 체
+```
+#include <iostream>
+#include <vector>
+ 
+using namespace std;
+ 
+int main() {
+
+ 
+    int start, end;
+    cin >> start >> end;
+    vector<bool> isPrime(end + 1, true);
+ 
+    isPrime[0] = false;
+    isPrime[1] = false;
+    for (int i = 2; i <= end; i++) {
+        if (isPrime[i]) {
+           
+            for (int j = 2 * i; j <= end; j += i)
+                isPrime[j] = false;
+        }
+    }
+ 
+    for(int i = start; i <= end; i++)
+        if(isPrime[i])
+            cout << i << endl;
+ 
+    return 0;
+}
 ```
