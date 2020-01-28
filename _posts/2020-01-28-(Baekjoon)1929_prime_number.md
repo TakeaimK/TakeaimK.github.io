@@ -106,7 +106,8 @@ ios_base :: sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 ```
-1. 간단한 방법  
+1. 간단한 방법
+
 ```
 #include <iostream>
 #include <cmath>
@@ -145,6 +146,7 @@ int main() {
 
 ```
 2. 에라토스테네스의 체
+
 ```
 #include <iostream>
 #include <vector>
