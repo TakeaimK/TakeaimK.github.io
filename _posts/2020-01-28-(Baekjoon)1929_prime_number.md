@@ -50,7 +50,7 @@ __따라서 N의 제곱근에서 소숫점 아래 부분을 잘라낸 수부터 
 2부터 N까지의 배수는 모두 합성수이다. 따라서 배수를 모두 제거한 후 출력하는 방식을 사용한다.
 
 ### 소스 코드 (Python)
-```
+```python
 import math
 
 start, end = map(int, input().split())
@@ -69,7 +69,7 @@ for i in range(start, end+1):
 
 
 ### 소스 코드 (Java)
-```
+```java
 import java.util.Scanner;
 import java.math.*;
 
@@ -101,7 +101,7 @@ public class java_1929 {    // 채점 시 Class 명을 'Main'으로 변경
 ### 소스 코드 (C++)
 - 다음 코드 부분은 속도가 느린 C++의 cin, cout을 C의 printf, scanf로 변경시켜 준다. 시간초과 발생 시 사용해 보자.  
 단, c의 getchar() 등과 동시에 사용할 수 없다.
-```
+```cpp
 ios_base :: sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
@@ -109,7 +109,7 @@ ios_base :: sync_with_stdio(false);
 
 - 간단한 방법
 
-```
+```cpp
 #include <iostream>
 #include <cmath>
  
@@ -148,7 +148,7 @@ int main() {
 ```
 - 에라토스테네스의 체
 
-```
+```cpp
 #include <iostream>
 #include <vector>
  
