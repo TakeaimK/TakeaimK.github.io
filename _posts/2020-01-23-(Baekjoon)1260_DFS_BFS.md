@@ -70,7 +70,7 @@ categories:
   ![DFS_BFS](/assets/images/Baekjoon/DFS_BFS.gif)  
 
 ### 소스 코드 (Python - 1)
-```
+```Python
 from collections import deque
 
 def DFS(graph, root):   #dfs 수행 함수
@@ -138,7 +138,7 @@ print(*BFS(graph, V))
 ```  
 
 ### 소스 코드 (Python - 2)
-```
+```Python
 N, M, V = map(int, input().split())
 matrix = [[0] * (N + 1) for _ in range(N + 1)]
 for _ in range(M):
@@ -173,7 +173,7 @@ print(*bfs(V))
 ```  
 
 ### 소스 코드 (Java)
-```
+```Java
 import java.util.*;
 
 public class java_1260 {    // 채점 시 Class 명을 'Main'으로 변경
@@ -238,7 +238,7 @@ class Sub{
 ```  
 
 ### 소스 코드 (C++)
-```
+```C++
 
 ```
 BFS & DFS 이미지 출처 : [나무위키 - BFS](https://namu.wiki/w/BFS)  

@@ -16,7 +16,7 @@ React Native에서는 주로 사용되는 컴포넌트를 지원합니다.
 ## View, Text, Image  
 
 ### App.js
-```
+```JavaScript
 
 import React, { Component } from 'react';
 import {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   - div와 유사한 역할을 수행
   - 주로 구역을 나누거나 style을 입힐 때 사용
 
-```
+```JavaScript
 <View style={styles.someone}>
      (Contents)
 </View>
@@ -73,14 +73,14 @@ const styles = StyleSheet.create({
 - Text
   - 문장을 화면에 띄울 때 사용
 
-```
+```JavaScript
 <Text style={styles.someone}>Hello World!</Text> 
 ```  
 
 - Image
   - 로컬 이미지나 네트워크 경로의 이미지를 띄울 때 사용
 
-```
+```JavaScript
 <Image source={pic} style={{width:300, height:100}} />
 ```  
 
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   - CSS와의 차이점 : 카멜 케이스 (camelCase, 낙타 표기법) 사용. 
     ex) font-size => fontSize
 
-```
+```JavaScript
 const styles = StyleSheet.create({
 someone: {
   (write design)

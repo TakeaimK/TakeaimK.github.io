@@ -55,7 +55,7 @@ __(본인 자신의 수) + (일의 자리 수) + (십의 자리 수) + ...__
 그러면 위 이해를 토대로 코드를 작성해 보자.  
 
 ### 소스 코드 (Python)
-```
+```Python
 def non_self_number(num):
     total=num
     if(num>=10000):  #수가 10000이 넘으면
@@ -82,9 +82,7 @@ for i in range(1, 10001):
 ```  
 
 ### 소스 코드 (Java)
-```
-
-
+```Java
 public class java_4673{    // 채점 시 Class 명을 'Main'으로 변경
 
     private static int non_self_number(int num) {
@@ -125,7 +123,7 @@ public class java_4673{    // 채점 시 Class 명을 'Main'으로 변경
 ```  
 
 ### 소스 코드 (C++)
-```
+```C++
 #include <iostream>
 using namespace std;
 

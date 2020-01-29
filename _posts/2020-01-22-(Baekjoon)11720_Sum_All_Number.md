@@ -46,7 +46,7 @@ categories:
 3. 더해서 출력  
 
 ### 소스 코드 (Python)
-```
+```Python
 i = int(input())
 string = input()       #일단 문자열로 입력받음
 num = 0
@@ -58,7 +58,7 @@ print(num)  #결과 출력
 ```  
 
 ### 소스 코드 (Java)
-```
+```Java
 
 import java.util.Scanner;
 
@@ -83,7 +83,7 @@ public class java_11720{    // 채점 시 Class 명을 'Main'으로 변경
 ```  
 
 ### 소스 코드 (C++)
-```
+```C++
 #include <iostream>
 #include <string>
 

@@ -16,7 +16,7 @@ categories:
 ## State - setInterval
 
 ### App.js
-```
+```javascript
 
 import React, { Component } from 'react';
 import {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 - export default class APP
   - Blink 클래스를 호출할 때 text를 넘겨 줌. Blink Class에서는 props의 text로 사용
 
-```
+```javascript
 export default class App extends Component{
   render(){
     return(
@@ -96,7 +96,7 @@ export default class App extends Component{
   - Component를 상속받음
   - 쉽게 말해, Component가 가진 메소드를 사용할 수 있음
 
-```
+```javascript
 class Blink extends Component{
   (Contents)
 }
@@ -112,7 +112,7 @@ class Blink extends Component{
   - A는 Arrow Function으로 구성. B msec가 지나면 this.setState의 prevState(직전 상태)에서 isShowingText 값이 반전됨. 즉 T=true면 false로, false면 true가 됨
   - B 값이 1000 이므로 1000msc=1sec. 즉, 1초마다 상태가 변경됨
 
-```
+```javascript
 constructor(props){
       super(props);
       this.state = {isShowingText: true}
@@ -129,7 +129,7 @@ constructor(props){
   - this.state.isShowingText가 false라면 ♥ ♥ ♥ 을 return
   - this.state.isShowingText가 true라면 넘겨받은 원래의 text를 출력
 
-```
+```javascript
 render(){
     if(!this.state.isShowingText){
       return (
