@@ -48,7 +48,7 @@ categories:
 ![khub_site_Notice_detail](/assets/images/Other/khub_site_notice_detail.PNG)  
 
 ## 화면 구성 요소 설명 및 Code
-![khub_App_React-native_Notice](/assets/images/Other/khub_app_rn_notice.png){: width="100" height="300"}  
+![khub_App_React-native_Notice](/assets/images/Other/khub_app_rn_notice.png){: width="361" height="623"}  
 
 ### 1. Navigation
 - 화면 상단에 뒤로가기 버튼과 제목 노출
