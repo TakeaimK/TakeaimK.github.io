@@ -57,12 +57,12 @@ categories:
 <details>
 <summary>Code</summary>
 
-```javascript
+<code>javascript
 <View style={styles.header}>
     <Icon onPress={()=>{navigation.goBack()}} style={{color:'#fff',fontSize:26, position:'absolute',left:15,}} name='ios-arrow-back'/>
     <Text style={styles.title}>공지사항</Text>
 </View>
-```
+</code>
 </details>
 
 ### 2. 공지사항 List
