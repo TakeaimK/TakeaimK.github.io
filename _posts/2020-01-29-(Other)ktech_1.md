@@ -17,7 +17,9 @@ categories:
 ## 준비과정
  - React-native 설치 : [설치(1)](http://takeaimk.tk/react-native/2019/12/26/(React-native)1.React-Native-%EC%84%A4%EC%B9%98.html) / [설치(2)](http://takeaimk.tk/react-native/2019/12/27/(React-native)2.React-Native-%EC%8B%A4%ED%96%89.html)  
 
- - App 제작에 필요한 node_modules install  
+<details>
+<summary>App 제작에 필요한 node_modules install </summary>
+<div markdown="1"> 
 
  ```
 1. 네비게이션
@@ -43,6 +45,9 @@ categories:
 6. AsyncStorage
  npm install @react-native-community/async-storage --save
  ```  
+ </div>
+</details>
+
 ## 실제 화면 (Web)
 ![khub_site_Notice](/assets/images/Other/khub_site_notice.PNG)  
 ![khub_site_Notice_detail](/assets/images/Other/khub_site_notice_detail.PNG)  
