@@ -56,13 +56,14 @@ categories:
 
 <details>
 <summary>Code</summary>
+<div markdown="1">
 
-<code>javascript
+```javascript
 <View style={styles.header}>
     <Icon onPress={()=>{navigation.goBack()}} style={{color:'#fff',fontSize:26, position:'absolute',left:15,}} name='ios-arrow-back'/>
     <Text style={styles.title}>공지사항</Text>
 </View>
-</code>
+```
 </details>
 
 ### 2. 공지사항 List
@@ -74,6 +75,7 @@ NoticeDetail으로 넘어가도록 구성
 
 <details>
 <summary>Code</summary>
+<div markdown="1">
 
 ```javascript
 const [publicNotices,setPublicNotices] = useState([]);
@@ -118,6 +120,7 @@ const [publicNotices,setPublicNotices] = useState([]);
 
 <details>
 <summary>Code</summary>
+<div markdown="1">
 
 ```javascript
 const [token,setToken] = useState('');
