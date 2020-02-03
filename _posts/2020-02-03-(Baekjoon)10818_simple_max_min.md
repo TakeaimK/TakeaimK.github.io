@@ -10,7 +10,7 @@ categories:
 ### 문제 난이도 (solved.ac 기준) : Bronze III  
 
 ### 문제 내용
-![10818_최댓값과_최솟값](/assets/images/Baekjoon/10818_simple_min_max.PNG)  
+![10818_최댓값과_최솟값](/assets/images/Baekjoon/10818_simple_max_min.PNG)  
 
 ### 입력 1
 ```
