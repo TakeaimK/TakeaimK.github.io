@@ -1,59 +1,43 @@
 ---
 layout: post
-title: K-Tech 현장실습 - React-Native로 공지사항 제작(1)
+title: K-Tech 현장실습 - React-Native로 공지사항 제작(2)
 categories:
   - Other
 ---
 
-## 프로젝트 개요
- - 현재 Ionic으로 개발된 하이브리드 K-HUB APP -> 크로스플랫폼 App으로 변경
- - 현재 내 파트 : 전체 공지사항 구현
- - Framework : React-native
- - Reopsitory : Github, npm
- - 작업인원 : 실습생 4명
-  
-## 공지사항 작동 구조
-(추후 추가 예정)
+## 지난 진행 과정
+[K-Tech 현장실습 - React-Native로 공지사항 제작(2)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html) 
+
+## 이번에 실습할 사항
+ - 전체 공지사항 코드를 조금만 수정하면, 그룹 공지사항에도 사용이 가능하다. 코드 재사용으로 생산성을 향상시켜 보자.
+ - 공지사항의 Main화면을 제작했으니, 이제 세부사항 보기 화면을 제작해 보자.
+ - 일부 항목(이용약관 등)은 웹 사이트를 그대로 띄워주어도 괜찮다. Webview를 사용해 보자.
+ - React Native 내부에서도 HTML 태그를 사용할 수 있는 라이브러리를 사용해서 가독성을 높여보자.
 
 ## 준비과정
- - React-native 설치 : [설치(1)](http://takeaimk.tk/react-native/2019/12/26/(React-native)1.React-Native-%EC%84%A4%EC%B9%98.html) / [설치(2)](http://takeaimk.tk/react-native/2019/12/27/(React-native)2.React-Native-%EC%8B%A4%ED%96%89.html)  
 
 <details>
-<summary>App 제작에 필요한 node_modules install </summary>
+<summary>추가 node_modules install </summary>
 <div markdown="1"> 
 
  ```
-1. 네비게이션
- npm install --save react-navigation
- npm install --save react-native-gesture-handler
- npm install --save react-navigation-stack
-
-2. 뷰
- npm install --save @react-native-community/masked-view
- npm install react-native-safe-area-context
-
-3. 모달 팝업
- npm install react-native-extra-dimensions-android
- npm install react-native-modal
- npm install react-native-reanimated
-
-4. 아이콘
- npm install react-native-vector-icons --save
-
-5. image 선택
- npm install react-native-image-picker
-
-6. AsyncStorage
- npm install @react-native-community/async-storage --save
+1. WebView
+    npm install react-native-htmlview --save
+2. HTMLView
+    npm install react-native-webview --save
  ```  
  </div>
 </details>
 
 ## 실제 화면 (Web)
-![khub_site_Notice](/assets/images/Other/khub_site_notice.PNG)  
-![khub_site_Notice_detail](/assets/images/Other/khub_site_notice_detail.PNG)  
+![khub_site_Notice](/assets/images/Other/khub_site_group_notice.PNG)  
+![khub_site_Notice](/assets/images/Other/khub_site_group_notice_2.PNG)  
+![khub_site_Notice_detail](/assets/images/Other/khub_site_group_notice_detail.PNG)  
 
 ## 화면 구성 요소 설명 및 Code
+
+//여기부터 작성//
+
 ![khub_App_React-native_Notice](/assets/images/Other/khub_app_rn_notice.png){: width="360" height="640"}  
 
 ### 1. Navigation
