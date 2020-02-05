@@ -30,123 +30,112 @@ categories:
 </details>
 
 ## 실제 화면 (Web)
-![khub_site_Notice](/assets/images/Other/khub_site_group_notice.PNG)  
-![khub_site_Notice](/assets/images/Other/khub_site_group_notice_2.PNG)  
-![khub_site_Notice_detail](/assets/images/Other/khub_site_group_notice_detail.PNG)  
+![khub_site_Notice](/assets/images/Other/khub_site_group_notice.PNG){: width="360" height="640"}    
+![khub_site_Notice](/assets/images/Other/khub_site_group_notice_2.PNG){: width="360" height="640"}    
+![khub_site_Notice_detail](/assets/images/Other/khub_site_group_notice_detail.PNG){: width="360" height="640"}    
 
-## 화면 구성 요소 설명 및 Code
+## 화면 구성 요소 설명 및 Code (공지사항 세부내용)
 
-//여기부터 작성//
-
-![khub_App_React-native_Notice](/assets/images/Other/khub_app_rn_notice.png){: width="360" height="640"}  
+![khub_App_React-native_Notice](/assets/images/Other/khub_app_rn_notice_detail.png){: width="360" height="640"}  
 
 ### 1. Navigation
-- 화면 상단에 뒤로가기 버튼과 제목 노출
-- ios 스타일의 뒤로가기 버튼 적용
+- 공지사항 목록과 유사
+- 상단 타이틀 제목을 "공지사항 내용"으로만 변경
+
+### 2. 공지 제목
+- AdminNotice로부터 필요한 항목을 navigation.getParam()을 사용하여 받아옴
+- 가져온 항목을 hook를 사용(useState)하여 update
+- 시간 값은 유닉스 시간으로 넘어오기 때문에 알아보기 쉽도록 변환 함수(timestamp2DateStr) 사용
+
+### 3. 공지 내용
+- 공지 내용이 HTML 태그가 붙어서 전달받기 때문에 태그 처리 필요
+- HTML 태그를 사용할 수 있는 HTMLView를 사용하여 표현
 
 <details>
 <summary>Code</summary>
 <div markdown="1">
 
 ```javascript
-<View style={styles.header}>
-    <Icon onPress={()=>{navigation.goBack()}} style={{color:'#fff',fontSize:26, position:'absolute',left:15,}} name='ios-arrow-back'/>
-    <Text style={styles.title}>공지사항</Text>
-</View>
-```
-</div>
-</details>
+const [title,setTitle] = useState(navigation.getParam('title','null'));
+const [body,setBody] = useState(navigation.getParam('body','null'));
+const [userName,setUserName] = useState(navigation.getParam('user_name','null'));
+const [date,setDate] = useState(navigation.getParam('date','null'));
+const [count,setCount] = useState(navigation.getParam('count','null'));
 
-### 2. 공지사항 List
-- publicNotices에서 공지사항 Data를 가져옴
-- `Flatlist`를 사용하고 각 항목마다 `TouchableOpacity`를 눌러 
-NoticeDetail으로 넘어가도록 구성
-- NoticeDetail에 받아온 요소 중 필요한 항목을 넘겨줌
-- 각 항목은 게시글의 고유ID로 구분
-
-<details>
-<summary>Code</summary>
-<div markdown="1">
-
-```javascript
-const [publicNotices,setPublicNotices] = useState([]);
-//Hook를 사용하여 publicNotices를 Update
-...
+(...)
 
 <View style={styles.contents}>
-  <FlatList
-      data ={publicNotices}
-      numColumns={1}
-      renderItem = {({item})=>
-      <View style={styles.list}>
-          <TouchableOpacity
-              onPress={()=>navigation.navigate('NoticeDetail',{
-                  title: item.title,
-                  body: item.body,
-                  ...(넘겨지는 Data)...
-              })
-          }>
-          
-          <Text numberOfLines={1}style={{fontSize:20}}>
-              {item.title}
-          </Text>
-          <Text style={{fontSize:12}}>
-              {item.userName} | {timestamp2DateStr(item.date)} | {item.count}
-          </Text>
-          
-          </TouchableOpacity>
-      </View>
-      }
-      keyExtractor = {(item,postId)=>item.postId}
-  />
+    <ScrollView>
+        <View style={styles.subTitle}>
+            <Text style={{fontSize:22}}>{title}</Text>
+        </View>
+        <View style={styles.adminAndDate}>
+            <Text style={{fontSize:14}}>
+                작성자 : {userName} | 작성일시{timestamp2DateStr(date)} | 조회수{count}
+            </Text>
+        </View>
+        <View style={styles.mainContent}>
+        <HTMLView
+            value={body}
+            stylesheet={{fontSize:16, color:'white'}}
+        /> 
+        </View>
+    </ScrollView>
 </View>
 ```
+
 </div>
 </details>
 
-### 3. Data Parsing
-- useEffect를 사용하여 Token 및 publicNotice를 Load
-- REST API에서 Axios에서 Token을 붙여 데이터 요청
-- 비동기를 사용하여 데이터를 받아올 때까지 대기
-- 공지 목록을 성공적으로 불러오면 setPublicNotices 등록
-
 <details>
-<summary>Code</summary>
+<summary>Unix Timestamp function</summary>
 <div markdown="1">
 
 ```javascript
-const [token,setToken] = useState('');
-const [load,setLoad] = useState(false);
 
-...
-
-useEffect(()=>{
-    const getToken = async () => {
-        ...(Token 가져오기)...
-        setToken(tkn);
-    } 
-    getToken();
-},[]);
-
-useEffect(()=>{
-    getPublicNotices();
-    setLoad(true);
-},[token]);
-
-const getPublicNotices = async () => {
-    await axios.get((공지사항 내용)
-    ).then((res) => {
-        setPublicNotices(res.data);    //성공 시 setting
-    }).catch((err) => {
-        console.log("전체 공지 목록을 가져오는 데 실패했습니다.");
-    });
-}
-
+function timestamp2DateStr(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp);
+    console.log(UNIX_timestamp);
+  
+    var year = a.getFullYear();
+    //var month = months[a.getMonth()];
+    var month = (a.getMonth()+1);
+    var day = "0" + a.getDate();
+    var hour = "0" + a.getHours();
+    var minute = "0" + a.getMinutes();
+    var second = "0" + a.getSeconds();
+    var time = year + "-" + month.toString().substr(-2) + "-" + day.substr(-2) + " " + hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2);
+    return time;
+  }
 ```
+
+</div>
+</details>
+
+## 화면 구성 요소 설명 및 Code (이용약관 및 개인정보 보호정책)
+![khub_App_React-native_Policy](/assets/images/Other/khub_app_rn_policy.png){: width="360" height="640"}  
+![khub_App_React-native_Policy](/assets/images/Other/khub_app_rn_policy_detail.png){: width="360" height="640"}  
+
+### WebView
+- 특정 사이트에서 넘어오는 HTML 문서를 그대로 화면에 띄워 줌
+- 데스크톱 브라우저 버전으로 열려 핀치 줌이 가능
+- 웹 페이지의 내용을 가공하지 않고 그대로 화면에 띄워 줄 때 유용
+
+<details>
+<summary>Unix Timestamp function</summary>
+<div markdown="1">
+
+```javascript
+<View style={styles.contents}>
+    <WebView
+        source={{uri: '(이용약관이 담겨있는 URL을 입력)'}}
+    />  
+</View>
+```
+
 </div>
 </details>
 
 ## 구현에서 어려웠던 점
-- `Axios`를 처음 사용해 보는 터라 사용법을 익히는 데 꽤 많은 시간 소요. Web에서 Parsing이 처음이라 어떤 형태로 데이터가 넘어오는지, 넘어온 데이터를 어떻게 Handling해서 출력시킬 수 있는지 오랜 시간이 걸림.
-- `Hook`에 대해 오해하고 있던 부분이 있어(Class에서 사용하는 줄 알고 착각) Hook에 대해 다시 공부하고 사용법을 익혀 적용.
-- 시간 값이 `Unix Timestamp` 값으로 넘어오는데 이 값을 다시 시간으로 바꾸어 주는 과정에서 애를 먹었다. timestamp2DateStr 함수를 제작해 값을 변경시켜 주었는데 변수를 date가 아닌 data라고 적는 바람에(...) undefined된 값으로 함수에 전달되어 시간낭비를 좀 했다.
+- 페이지 데이터 전송 시 HTML Tag가 같이 넘어오는데 이 데이터를 그대로 출력 시 HTML Tag를 읽지 못하고 텍스트로 인지하여 그대로 출력하는 문제가 발생하였다.
+- 초기에는 'HTMLView'를 활용해서 이용약관을 작성하려고 시도했다. 그러나 모바일 환경에 맞춰 만들어진 페이지가 아니라 가독성이 떨어졌고, 스크롤이 굉장히 길어지는 문제가 발생했다. 같이 근무하는 실습생의 조언을 토대로 Webview를 사용했고 
