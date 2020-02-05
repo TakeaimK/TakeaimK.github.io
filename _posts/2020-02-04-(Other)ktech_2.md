@@ -6,7 +6,7 @@ categories:
 ---
 
 ## 지난 진행 과정
-[K-Tech 현장실습 - React-Native로 공지사항 제작(2)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html) 
+[K-Tech 현장실습 - React-Native로 공지사항 제작(1)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html) 
 
 ## 이번에 실습할 사항
  - 전체 공지사항 코드를 조금만 수정하면, 그룹 공지사항에도 사용이 가능하다. 코드 재사용으로 생산성을 향상시켜 보자.
