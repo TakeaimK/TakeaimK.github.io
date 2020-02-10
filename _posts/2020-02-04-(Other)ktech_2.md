@@ -9,8 +9,8 @@ categories:
 [K-Tech 현장실습 - React-Native로 공지사항 제작(1)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html) 
 
 ## 이번에 실습할 사항
- - 전체 공지사항 코드를 조금만 수정하면, 그룹 공지사항에도 사용이 가능하다. 코드 재사용으로 생산성을 향상시켜 보자.
  - 공지사항의 Main화면을 제작했으니, 이제 세부사항 보기 화면을 제작해 보자.
+ - 전체 공지사항 코드를 조금만 수정하면, 그룹 공지사항에도 사용이 가능하다. 코드 재사용으로 생산성을 향상시켜 보자.
  - 일부 항목(이용약관 등)은 웹 사이트를 그대로 띄워주어도 괜찮다. Webview를 사용해 보자.
  - React Native 내부에서도 HTML 태그를 사용할 수 있는 라이브러리를 사용해서 가독성을 높여보자.
 
@@ -111,6 +111,9 @@ function timestamp2DateStr(UNIX_timestamp){
 
 </div>
 </details>
+
+## 코드 재사용으로 빠르게 그룹 공지 제작하기
+
 
 ## 화면 구성 요소 설명 및 Code (이용약관 및 개인정보 보호정책)
 ![khub_App_React-native_Policy](/assets/images/Other/khub_app_rn_policy.png){: width="360" height="640"}  
