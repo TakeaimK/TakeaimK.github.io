@@ -31,38 +31,33 @@ OOOOXOOOOXOOOOX
 ```  
 
 ### 문제 이해
-첫 번째로 입력받은 수가 1이라면, ascending인지 비교.  
-중간에 하나라도 아닐 경우 mixed 출력
-첫 번째로 입력받은 수가 8이라면, descending인지 비교.  
-중간에 하나라도 아닐 경우 mixed 출력
-첫 번째로 입력받은 수가 1도 8도 아니라면, mixed 출력.
+O가 연속적으로 나올 경우 누적해서 temp에 쌓고,  
+X가 나올 경우 쌓은 값을 total에 넣고 temp를 0으로 초기화한다.  
+마지막 문자 처리 후 temp를 다시 total에 넣어주고, total을 출력한다.  
 
 ### 소스 코드 (Python)
 ```python
 if __name__ == "__main__":
-    
-    set=0
-    dingdong = list(map(int, input().split()))
-    if(dingdong[0]==1):
-        for i in range(0, 8):
-            if(dingdong[i]!=i+1):
-                print("mixed")
-                set=1
-                break
-        if(set==0):
-            print("ascending")
 
-    elif(dingdong[0]==8):
-        for i in range(7, -1, -1):
-            if(dingdong[7-i]!=i+1):
-                print("mixed")
-                set=1
-                break
-        if(set==0):
-            print("descending")
-    else:
-        print("mixed")
+    many = input()
+    
+
+    for _ in range(int(many)):
+        temp=0
+        connected=0
+        total=0
+        string = input()
+        for i in range(len(string)):
+            if(string[i] == "O"):
+                connected+=1
+                temp+=connected
+            else:
+                total+=temp
+                connected=0
+                temp=0
         
+        total+=temp
+        print(total)
 
 ```  
 
@@ -71,48 +66,45 @@ if __name__ == "__main__":
 ```java
 import java.util.Scanner;
 
-public class java_2920 {    // 채점 시 Class 명을 'Main'으로 변경
+public class java_8958 {    // 채점 시 Class 명을 'Main'으로 변경
 
     public static void main(String[] args) {
         
         Scanner scan = new Scanner(System.in);
-        int arr[] = new int[8];
-        boolean set = true;
+        int many = 0;
+        int total = 0;
+        int temp= 0 ;
+        int connected = 0;
+        String str = "";
 
-        for(int i=0; i<8; i++){
-            arr[i] = scan.nextInt();
-        }
-            
-        if(arr[0] == 1){
-            for(int i=0; i<8; i++){
-                if(arr[i] != i+1){
-                    System.out.println("mixed");
-                    set=false;
-                    break;
+        many = scan.nextInt();
+
+        for(int i=0; i<many; i++){
+            str = scan.next();
+            scan.nextLine();
+
+            total=0;
+            temp=0;
+            connected=0;
+
+            for(int j=0; j<str.length();j++){
+                if(str.charAt(j) == 'O'){
+                    connected++;
+                    temp+=connected;
+                }
+                else{
+                    total+=temp;
+                    connected=temp=0;
                 }
             }
-            if(set){
-                System.out.println("ascending");
-            }
+            total+=temp;
+            System.out.println(total);
             
-        }
-        else if(arr[0] == 8){
-            for(int i=7; i>-1; i--){
-                if(arr[7-i] != i+1){
-                    System.out.println("mixed");
-                    set=false;
-                    break;
-                }
-            }
-            if(set){
-                System.out.println("descending");
-            }
             
-        }
-        else{
-            System.out.println("mixed");
-        }
-    }   
+            //scan.nextLine();
+            
+        }   
+    }
 }
 ```  
 
@@ -128,40 +120,32 @@ int main(void){
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int arr[8];
-    bool set = true;
-    for(int i=0; i<8; i++){
-        cin>>arr[i];
-    }
+    int many = 0;
+    int total = 0;
+    int temp= 0 ;
+    int connected = 0;
+    string str = "";
+
+    cin>>many;
+
+    for(int i=0; i<many; i++){
+        cin>>str;
         
-    if(arr[0] == 1){
-        for(int i=0; i<8; i++){
-            if(arr[i] != i+1){
-                cout<<"mixed"<<"\n";
-                set=false;
-                break;
+        total=0;
+        temp=0;
+        connected=0;
+        for(int j=0; j<str.length();j++){
+            if(str.at(j) == 'O'){
+                connected++;
+                temp+=connected;
+            }
+            else{
+                total+=temp;
+                connected=temp=0;
             }
         }
-        if(set){
-            cout<<"ascending"<<"\n";
-        }
-        
-    }
-    else if(arr[0] == 8){
-        for(int i=7; i>-1; i--){
-            if(arr[7-i] != i+1){
-                cout<<"mixed"<<"\n";
-                set=false;
-                break;
-            }
-        }
-        if(set){
-            cout<<"descending"<<"\n";
-        }
-        
-    }
-    else{
-        cout<<"mixed"<<"\n";
+        total+=temp;
+        cout<<total<<"\n";
     }
     //system("pause");
     return 0;
