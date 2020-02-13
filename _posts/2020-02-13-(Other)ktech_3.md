@@ -90,13 +90,13 @@ create table teach_course
 insert into (table name) values (value, value, ... , value);
 ```
 
-![DB_Book_Table_department](/assets/images/Other/DB_book_talbe/1_department_Table.PNG)
-![DB_Book_Table_student](/assets/images/Other/DB_book_talbe/2_student_Table.PNG)
-![DB_Book_Table_professor](/assets/images/Other/DB_book_talbe/3_professor_Table.PNG)
-![DB_Book_Table_course](/assets/images/Other/DB_book_talbe/4_course_Table.PNG)
-![DB_Book_Table_take_course](/assets/images/Other/DB_book_talbe/5_take_course_Table.PNG)
-![DB_Book_Table_teach_course_1](/assets/images/Other/DB_book_talbe/6_1_teach_course_Table.PNG)
-![DB_Book_Table_teach_course_2](/assets/images/Other/DB_book_talbe/6_2_teach_course_Table.PNG)
+![DB_Book_Table_department](/assets/images/Other/DB_book_table/1_department_Table.PNG)
+![DB_Book_Table_student](/assets/images/Other/DB_book_table/2_student_Table.PNG)
+![DB_Book_Table_professor](/assets/images/Other/DB_book_table/3_professor_Table.PNG)
+![DB_Book_Table_course](/assets/images/Other/DB_book_table/4_course_Table.PNG)
+![DB_Book_Table_take_course](/assets/images/Other/DB_book_table/5_take_course_Table.PNG)
+![DB_Book_Table_teach_course_1](/assets/images/Other/DB_book_table/6_1_teach_course_Table.PNG)
+![DB_Book_Table_teach_course_2](/assets/images/Other/DB_book_table/6_2_teach_course_Table.PNG)
 
 
 ## 구현에서 어려웠던 점
