@@ -143,8 +143,6 @@ if __name__ == "__main__":
 
 ### 소스 코드 (Python - BFS)
 ```python
-import sys
-
 def bfs(arr, visit, row, col) :
     queue = []
     queue.append((0,0))

@@ -1,5 +1,3 @@
-import sys
-
 def bfs(arr, visit, row, col) :
     queue = []
     queue.append((0,0))
