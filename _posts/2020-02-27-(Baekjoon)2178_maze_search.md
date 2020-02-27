@@ -81,7 +81,7 @@ categories:
  > [얕은 복사와 깊은 복사 - deepcopy](https://wikidocs.net/16038)
  - Python에서 2차원 배열은 다음과 같이 쉽게 생성이 가능하다.  
  > [Python에서 2차원 배열 생성](https://andrew0409.tistory.com/53)
-```
+
 
 ### 소스 코드 (Python - DFS)
 ```python
