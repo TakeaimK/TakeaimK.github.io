@@ -72,12 +72,15 @@ categories:
 그러나 이 방식은 가능한 모든 방법을 탐색하기에 백준에서 시간초과가 발생(...)했다.  
 따라서 최종 해결은 BFS를 사용하였으며, 두 가지 소스 코드를 모두 첨부하였다.  
 
-```markdown
+---
+
 본 문제를 풀다 막혀 도움을 얻어 알게 된 사실
- - Python은 Call By Reference 방식을 사용하여 List, Dict 등의 자료형은 데이터가 공유된다.
- [Python 은 call-by-value 일까 call-by-reference 일까](https://www.pymoon.com/entry/Python-%EC%9D%80-callbyvalue-%EC%9D%BC%EA%B9%8C-callbyreference-%EC%9D%BC%EA%B9%8C)
- - 즉, List나 Dict 자료형을 사용하면서 Call By Value 방식을 사용하려면 다음과 같은 방식을 사용한다.
- [얕은 복사와 깊은 복사 - deepcopy](https://wikidocs.net/16038)
+ - Python은 Call By Reference 방식을 사용하여 List, Dict 등의 자료형은 데이터가 공유된다.  
+ > [Python 은 call-by-value 일까 call-by-reference 일까](https://www.pymoon.com/entry/Python-%EC%9D%80-callbyvalue-%EC%9D%BC%EA%B9%8C-callbyreference-%EC%9D%BC%EA%B9%8C)  
+ - 즉, List나 Dict 자료형을 사용하면서 Call By Value 방식을 사용하려면 다음과 같은 방식을 사용한다.  
+ > [얕은 복사와 깊은 복사 - deepcopy](https://wikidocs.net/16038)
+ - Python에서 2차원 배열은 다음과 같이 쉽게 생성이 가능하다.  
+ > [Python에서 2차원 배열 생성](https://andrew0409.tistory.com/53)
 ```
 
 ### 소스 코드 (Python - DFS)
