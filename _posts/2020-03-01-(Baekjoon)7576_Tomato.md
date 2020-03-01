@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.7576 : 데이트](https://www.acmicpc.net/problem/7576)  
+## 문제 원문 : [Baekjoon NO.7576 : 토마토](https://www.acmicpc.net/problem/7576)  
 
 ### 문제 난이도 (solved.ac 기준) : Silver I
 
