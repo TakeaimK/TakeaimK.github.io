@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.1012 : 유기농 배추](https://www.acmicpc.net/problem/1012)  
+## 문제 원문 : [Baekjoon NO.1012 : 유기농 배추](https://www.acmicpc.net/problem/1012){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) :   Silver I
 
@@ -45,7 +45,7 @@ categories:
 
 ### 문제 이해
 본 문제는 보통 DFS로 푸는 경우가 많다. 전체 배열을 검사하여 최초 1을 발견하면 0으로 바꾸어 주고, 상하좌우를 검사 후 1이 있을 경우 해당 위치로 이동하여 0으로 바꾸어 주는 작업을 반복하고, 인접 값이 전부 1에서 0으로 바뀌고 돌아오면 count+1을 하는 식으로 말이다.  
-그러나 지난 [토마토](http://takeaimk.tk/baekjoon/2020/03/01/(Baekjoon)7576_Tomato.html) 문제의 코드를 약간만 수정한다면 이 문제에도 써먹을 수 있겠다는 생각에 BFS로 풀이하였다. 풀이법은 다음과 같다.  
+그러나 지난 토마토 문제[(Link)](http://takeaimk.tk/baekjoon/2020/03/01/(Baekjoon)7576_Tomato.html){: target="_blank"} 의 코드를 약간만 수정한다면 이 문제에도 써먹을 수 있겠다는 생각에 BFS로 풀이하였다. 풀이법은 다음과 같다.  
 1. 일단 토마토를 넣은 좌표의 밭을 1로 바꿈과 동시에 좌표값도 따로 저장
 2. 좌표의 값을 하나씩 꺼내서 그 칸 값이 1인자 확인. 1이면 3번을 진행하고 0이면 continue
 3. count+1을 한 뒤 현재 칸을 포함 bfs로 인접 칸의 1을 전부 0으로 바꾸고 전부 바꾸면 2번으로 돌아감

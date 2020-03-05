@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.16433 : 주디와 당근 농장](https://www.acmicpc.net/problem/16433)  
+## 문제 원문 : [Baekjoon NO.16433 : 주디와 당근 농장](https://www.acmicpc.net/problem/16433){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) :  Bronze I
 
