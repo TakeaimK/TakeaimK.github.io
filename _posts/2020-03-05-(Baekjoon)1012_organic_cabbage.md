@@ -44,13 +44,69 @@ categories:
 ```  
 
 ### 문제 이해
-
-
-
-### 문제 이해 (간결한 풀이)
+본 문제는 보통 DFS로 푸는 경우가 많다. 전체 배열을 검사하여 최초 1을 발견하면 0으로 바꾸어 주고, 상하좌우를 검사 후 1이 있을 경우 해당 위치로 이동하여 0으로 바꾸어 주는 작업을 반복하고, 인접 값이 전부 1에서 0으로 바뀌고 돌아오면 count+1을 하는 식으로 말이다.  
+그러나 지난 [토마토](http://takeaimk.tk/baekjoon/2020/03/01/(Baekjoon)7576_Tomato.html) 문제의 코드를 약간만 수정한다면 이 문제에도 써먹을 수 있겠다는 생각에 BFS로 풀이하였다. 풀이법은 다음과 같다.  
+1. 일단 토마토를 넣은 좌표의 밭을 1로 바꿈과 동시에 좌표값도 따로 저장
+2. 좌표의 값을 하나씩 꺼내서 그 칸 값이 1인자 확인. 1이면 3번을 진행하고 0이면 continue
+3. count+1을 한 뒤 현재 칸을 포함 bfs로 인접 칸의 1을 전부 0으로 바꾸고 전부 바꾸면 2번으로 돌아감
 
 ### 소스 코드 (Python)
 ```python
+
+def cabbage_bfs(farm, cabbage, cabbage_count, m, n):
+
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+
+    bug_count = 0
+
+    for _ in range(cabbage_count, 0, -1):
+        y, x = cabbage.pop()
+        if farm[y][x] == 1:
+            farm[y][x] = 0
+
+            bug_count += 1
+
+            next_cabbage = []  # 주변 배추 list
+            next_cabbage.append((y, x))
+            # 직전에 익은 토마토에 대해 모두 수행
+            while next_cabbage:
+                nowy, nowx = next_cabbage.pop()
+                for i in range(4):
+                    temp_y = nowy + dy[i]
+                    temp_x = nowx + dx[i]
+                    if temp_y >= 0 and temp_y < n and temp_x >= 0 and temp_x < m:
+                        if farm[temp_y][temp_x] == 1:
+                            farm[temp_y][temp_x] = 0
+                            next_cabbage.append((temp_y, temp_x))
+
+    return bug_count
+
+
+if __name__ == "__main__":
+
+    case = int(input())
+    for _ in range(case):
+
+        m, n, k = map(int, input().strip().split())
+        # 주의 : m 값이 가로길이 = 열(col)이고 n 값이 세로길이 = 행(row)
+
+        farm = [[0 for _ in range(m)] for _ in range(n)]
+        cabbage = []
+        cabbage_count = 0
+
+        for i in range(k):
+            # strip : 문자열 양쪽 공백을 지우기
+            a, b = map(int, input().strip().split())
+            # 주의 : a는 가로위치, b는 세로위치. 즉 뒤집어져 있음
+            farm[b][a] = 1
+            cabbage.append((b, a))
+            cabbage_count += 1
+
+        if k == 0:
+            print(0)
+        else:
+            print(cabbage_bfs(farm, cabbage, cabbage_count, m, n))
 
 
 ```

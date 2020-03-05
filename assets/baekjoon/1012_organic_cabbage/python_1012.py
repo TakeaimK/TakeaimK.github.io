@@ -4,26 +4,27 @@ def cabbage_bfs(farm, cabbage, cabbage_count, m, n):
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
 
-    changed = True
     bug_count = 0
 
     for _ in range(cabbage_count, 0, -1):
-        x, y = cabbage.pop()
-        if farm[x][y] == 1:
-            farm[x][y] = 0
+        y, x = cabbage.pop()
+        if farm[y][x] == 1:
+            farm[y][x] = 0
+
             bug_count += 1
 
             next_cabbage = []  # 주변 배추 list
-            next_cabbage.append((x, y))
+            next_cabbage.append((y, x))
             # 직전에 익은 토마토에 대해 모두 수행
             while next_cabbage:
-                nowx, nowy = next_cabbage.pop()
+                nowy, nowx = next_cabbage.pop()
                 for i in range(4):
-                    temp_x = nowx + dx[i]
                     temp_y = nowy + dy[i]
-                    if temp_x >= 0 and temp_x < m and temp_y >= 0 and temp_y < n and farm[temp_x][temp_y] == 1:
-                        farm[temp_x][temp_y] = 0
-                        next_cabbage.append((temp_x, temp_y))
+                    temp_x = nowx + dx[i]
+                    if temp_y >= 0 and temp_y < n and temp_x >= 0 and temp_x < m:
+                        if farm[temp_y][temp_x] == 1:
+                            farm[temp_y][temp_x] = 0
+                            next_cabbage.append((temp_y, temp_x))
 
     return bug_count
 
