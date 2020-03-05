@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.2920 : 음계](https://www.acmicpc.net/problem/2920)  
+## 문제 원문 : [Baekjoon NO.2920 : 음계](https://www.acmicpc.net/problem/2920){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Bronze II  
 

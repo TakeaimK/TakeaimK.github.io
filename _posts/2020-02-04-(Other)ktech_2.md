@@ -6,7 +6,7 @@ categories:
 ---
 
 ## 지난 진행 과정
-[K-Tech 현장실습 - React-Native로 공지사항 제작(1)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html) 
+[K-Tech 현장실습 - React-Native로 공지사항 제작(1)](http://takeaimk.tk/other/2020/01/29/(Other)ktech_1.html){: target="_blank"}  
 
 ## 이번에 실습할 사항
  - 공지사항의 Main화면을 제작했으니, 이제 세부사항 보기 화면을 제작해 보자.

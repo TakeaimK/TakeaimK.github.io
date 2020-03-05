@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.2675 : 문자열 반복](https://www.acmicpc.net/problem/2675)  
+## 문제 원문 : [Baekjoon NO.2675 : 문자열 반복](https://www.acmicpc.net/problem/2675){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Bronze II  
 

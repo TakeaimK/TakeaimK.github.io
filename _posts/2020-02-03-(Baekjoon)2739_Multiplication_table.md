@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.2739 : 구구단](https://www.acmicpc.net/problem/2739)  
+## 문제 원문 : [Baekjoon NO.2739 : 구구단](https://www.acmicpc.net/problem/2739){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Bronze III  
 

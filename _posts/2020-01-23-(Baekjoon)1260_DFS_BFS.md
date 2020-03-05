@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon_NO.1260_DFS와 BFS](https://www.acmicpc.net/problem/1260)  
+## 문제 원문 : [Baekjoon_NO.1260_DFS와 BFS](https://www.acmicpc.net/problem/1260){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Silver I  
 

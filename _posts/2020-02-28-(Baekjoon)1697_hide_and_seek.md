@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.1697 : 숨바꼭질](https://www.acmicpc.net/problem/1697)  
+## 문제 원문 : [Baekjoon NO.1697 : 숨바꼭질](https://www.acmicpc.net/problem/1697){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Silver I
 

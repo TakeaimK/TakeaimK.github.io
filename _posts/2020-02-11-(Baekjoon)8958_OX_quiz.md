@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.8958 : OX퀴즈](https://www.acmicpc.net/problem/8958)  
+## 문제 원문 : [Baekjoon NO.8958 : OX퀴즈](https://www.acmicpc.net/problem/8958{: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Bronze II  
 

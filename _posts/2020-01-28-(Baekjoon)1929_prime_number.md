@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon_NO.1929_Prime_Number](https://www.acmicpc.net/problem/1929)  
+## 문제 원문 : [Baekjoon_NO.1929_Prime_Number](https://www.acmicpc.net/problem/1929){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Silver I  
 

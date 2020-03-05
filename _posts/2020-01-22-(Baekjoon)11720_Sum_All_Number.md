@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon_NO.11720_숫자의 합](https://www.acmicpc.net/problem/11720)  
+## 문제 원문 : [Baekjoon_NO.11720_숫자의 합](https://www.acmicpc.net/problem/11720){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Bronze II  
 

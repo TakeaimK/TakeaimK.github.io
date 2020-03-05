@@ -5,7 +5,7 @@ categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.2178 : 미로 탐색](https://www.acmicpc.net/problem/2178)  
+## 문제 원문 : [Baekjoon NO.2178 : 미로 탐색](https://www.acmicpc.net/problem/2178){: target="_blank"}  
 
 ### 문제 난이도 (solved.ac 기준) : Silver I
 
