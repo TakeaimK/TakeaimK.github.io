@@ -15,7 +15,7 @@ def cabbage_bfs(farm, cabbage, cabbage_count, m, n):
 
             next_cabbage = []  # 주변 배추 list
             next_cabbage.append((y, x))
-            # 직전에 익은 토마토에 대해 모두 수행
+
             while next_cabbage:
                 nowy, nowx = next_cabbage.pop()
                 for i in range(4):
