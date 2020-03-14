@@ -1,36 +1,42 @@
 ---
 layout: post
-title: 12. 문자열 반복
+title: 14. 문자열 반복
 categories:
   - Baekjoon
 ---
 
-## 문제 원문 : [Baekjoon NO.2675 : 문자열 반복](https://www.acmicpc.net/problem/2675){: target="_blank"}  
+## 문제 원문 : [Baekjoon NO.2675 : 문자열 반복](https://www.acmicpc.net/problem/2675){: target="\_blank"}
 
-### 문제 난이도 (solved.ac 기준) : Bronze II  
+### 문제 난이도 (solved.ac 기준) : Bronze II
 
 ### 문제 내용
-![2675_max](/assets/images/Baekjoon/2675_string_repeat.PNG)  
+
+![2675_max](/assets/images/Baekjoon/2675_string_repeat.PNG)
 
 ### 입력 1
+
 ```
 2
 3 ABC
 5 /HTP
 ```
+
 ### 출력 1
+
 ```
 AAABBBCCC
 /////HHHHHTTTTTPPPPP
-```  
+```
 
 ### 문제 이해
+
 문자열을 받아 글자 별로 지정된 횟수만큼 늘려쓰는 새로운 문자열을 만들어 출력한다.
 
 ### 소스 코드 (Python)
+
 ```python
 if __name__ == "__main__":
-    
+
     newstr = ""
 
     many = input()
@@ -45,17 +51,17 @@ if __name__ == "__main__":
 
         print(newstr)
         newstr=""
-```  
-
+```
 
 ### 소스 코드 (Java)
+
 ```java
 import java.util.Scanner;
 
 public class java_2675 {    // 채점 시 Class 명을 'Main'으로 변경
 
     public static void main(String[] args) {
-        
+
         Scanner scan = new Scanner(System.in);
         int many = 0;
         int repeat = 0;
@@ -77,11 +83,11 @@ public class java_2675 {    // 채점 시 Class 명을 'Main'으로 변경
             System.out.println(newstr);
             newstr = "";
             //scan.nextLine();
-            
-        }   
+
+        }
     }
 }
-```  
+```
 
 ### 소스 코드 (C++)
 
@@ -99,12 +105,12 @@ int main(void){
     int repeat = 0;
     string str = "";
     string newstr = "";
-   
+
     cin>>many;
 
     for(int i=0; i<many; i++){
         cin>>repeat>>str;
-        
+
         for(int j=0; j<str.length(); j++){
             for(int k=0; k<repeat; k++){
                 newstr += str.at(j);
@@ -121,4 +127,3 @@ int main(void){
 }
 
 ```
-

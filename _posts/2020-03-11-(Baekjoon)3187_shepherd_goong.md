@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 29. 양치기 꿍
+title: 31. 양치기 꿍
 categories:
   - Baekjoon
 ---

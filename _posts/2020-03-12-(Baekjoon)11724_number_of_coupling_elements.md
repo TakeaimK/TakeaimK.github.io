@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 30. 연결 요소의 갯수
+title: 32. 연결 요소의 갯수
 categories:
   - Baekjoon
 ---

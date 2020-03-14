@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 28. 다리 만들기
+title: 30. 다리 만들기
 categories:
   - Baekjoon
 ---

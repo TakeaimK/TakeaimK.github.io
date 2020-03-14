@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 31. 단지 번호 붙이기
+title: 33. 단지 번호 붙이기
 categories:
   - Baekjoon
 ---
