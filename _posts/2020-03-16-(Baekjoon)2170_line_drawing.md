@@ -40,7 +40,11 @@ categories:
 3. 마지막 선분까지 수행 후, 마지막으로 남은 start와 end 값을 ans에 누적 저장
 4. ans 값 출력
 
-특히 Python으로 풀 때, `input = sys.stdin.readline`을 사용하지 않으면 시간초과가 발생한다. 또한 리스트의 첫 번째 튜플의 값으로 정렬하기 위해 다음과 같은 람다 함수를 사용하였다.
+특히 Python으로 풀 때, `input = sys.stdin.readline`을 사용하지 않으면 시간초과가 발생한다. 입력 함수에 대한 시간 비교는 다음 글을 참조하면 좋다.
+
+> [입력 속도 비교 - Beakjoon](https://www.acmicpc.net/blog/view/56)
+
+또한 리스트의 첫 번째 튜플의 값으로 정렬하기 위해 다음과 같은 람다 함수를 사용하였다.
 
 ```python
 arr.sort(key=lambda ar: ar[0])
