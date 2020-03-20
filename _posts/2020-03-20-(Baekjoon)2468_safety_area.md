@@ -46,7 +46,7 @@ import copy
 input = sys.stdin.readline
 
 
-def safety_area_dfs(arr, N, flow):
+def safety_area_bfs(arr, N, flow):
 
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         top = max(max(temp), top)
 
     for i in range(1, top):
-        safety = safety_area_dfs(arr, N, i)
+        safety = safety_area_bfs(arr, N, i)
         ans = max(safety, ans)
     print(ans)
 

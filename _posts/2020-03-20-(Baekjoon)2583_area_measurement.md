@@ -42,7 +42,7 @@ import sys
 input = sys.stdin.readline
 
 
-def area_measurement_dfs(arr, squre, M, N):
+def area_measurement_bfs(arr, squre, M, N):
 
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         for j in range(len(arr[i])):
             if arr[i][j] == 1:
                 squre.append((i, j))
-    count, ans = area_measurement_dfs(arr, squre, M, N)
+    count, ans = area_measurement_bfs(arr, squre, M, N)
     print(count)
     ans.sort()
     print(" ".join(map(str, ans)))
