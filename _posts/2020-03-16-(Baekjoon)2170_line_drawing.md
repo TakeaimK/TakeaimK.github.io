@@ -7,7 +7,7 @@ categories:
 
 ## 문제 원문 : [Baekjoon NO.2170 : 선 긋기](https://www.acmicpc.net/problem/2170){: target="\_blank"}
 
-### 문제 난이도 (solved.ac 기준) : Silver IV
+### 문제 난이도 (solved.ac 기준) : Gold V
 
 ### 문제 내용
 
