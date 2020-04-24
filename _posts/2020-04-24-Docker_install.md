@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [Docker] 1. 도커 개념과 설치(Windows)
+title: (Docker) 1. 도커 개념과 설치(Windows)
 categories:
   - Docker
 ---
