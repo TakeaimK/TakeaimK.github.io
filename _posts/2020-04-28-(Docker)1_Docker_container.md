@@ -137,7 +137,7 @@ vim
 
 정말로 작동된다! 간단한 텍스트를 입력하고 저장하여 실제로 파일이 생성되는지 확인해 보자.~~(리눅스 배우는 시간)~~  
 
-> `i` Key 누르기 > 내용 작성 > `esc` Key 누르기 > `w <filename>` 입력 후 Enter > `q` 입력 후 Enter  
+> `i` Key 누르기 > 내용 작성 > `esc` Key 누르기 > `:w <filename>` 입력 후 Enter > `:q` 입력 후 Enter  
 
 ![vim](/assets/images/Docker/2_docker_container/vim_edit.PNG)  
 
