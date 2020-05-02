@@ -153,7 +153,15 @@ vim 에디터를 빠져나왔다면 `ls` 명령으로 확인해 보자.
 
 
 ---  
+
+> 참고 사이트
+> https://subicura.com/2017/01/19/docker-guide-for-beginners-2.html
+> https://docs.docker.com/engine/reference/run/
+> https://snowdeer.github.io/docker/2018/01/03/docker-launch-container-from-image/
+> https://jungwoon.github.io/docker/2019/01/11/Docker-1/
+> https://okky.kr/article/534561
  
+
  읽어주셔서 감사합니다.
 
 
