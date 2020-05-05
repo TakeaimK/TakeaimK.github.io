@@ -125,8 +125,9 @@ go run test.go
 
 ---
 
-> 참고 사이트
-> http://golang.site/go/article/2-Go-%EC%84%A4%EC%B9%98%EC%99%80-Go-%ED%8E%B8%EC%A7%91%EA%B8%B0-%EC%86%8C%EA%B0%9C  
-> https://woongheelee.com/entry/%EC%9A%B0%EB%B6%84%ED%88%AC%EC%97%90%EC%84%9C-path-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%95%84%EB%A7%88-%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%9D%BC%EB%B0%98%EC%A0%81%EC%9D%B8-%EB%B0%A9%EB%B2%95
+### 참고 사이트
+
+- http://golang.site/go/article/2-Go-%EC%84%A4%EC%B9%98%EC%99%80-Go-%ED%8E%B8%EC%A7%91%EA%B8%B0-%EC%86%8C%EA%B0%9C
+- https://woongheelee.com/entry/%EC%9A%B0%EB%B6%84%ED%88%AC%EC%97%90%EC%84%9C-path-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%95%84%EB%A7%88-%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%9D%BC%EB%B0%98%EC%A0%81%EC%9D%B8-%EB%B0%A9%EB%B2%95
 
 읽어주셔서 감사합니다.
