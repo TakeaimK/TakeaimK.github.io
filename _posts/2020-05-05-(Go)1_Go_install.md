@@ -61,7 +61,7 @@ PATH=$PATH:/usr/local/go/bin
 
 ![gui_PATH](/assets/images/Go/1_install/gui_2.png)
 
-4. 재부팅한다.
+이후 재부팅한다.
 
 ## Console 환경에서 작업
 
