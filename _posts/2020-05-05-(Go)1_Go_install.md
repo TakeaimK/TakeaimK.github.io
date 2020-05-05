@@ -92,7 +92,7 @@ source ~/.bashrc
 
 5. 다음 명령으로 경로 추가가 잘 되었는지 확인한다.
 
-```
+```bash
 echo $PATH
 ```
 
