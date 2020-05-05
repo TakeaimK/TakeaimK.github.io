@@ -68,11 +68,15 @@ PATH=$PATH:/usr/local/go/bin
 현재 글 작성 시점에서 최신 버전의 go(1.14.2)를 다운받는다.  
 다음 명령을 shell에 입력한다. 본 명령은 wget을 사용하였다.
 
-> wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
+```bash
+wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
+```
 
 다운로드 폴더로 이동(`cd download` or `cd 다운로드`)한 다음 아래 명령으로 `/usr/local` 경로에 압축을 풀어준다.
 
-> sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
+```bash
+sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
+```
 
 홈 디렉토리로 이동(`cd ./`)한 다음, vi나 nano 같은 편집기로 `.bashrc` 파일을 열어 다음 구문을 추가한다.
 
@@ -82,7 +86,7 @@ PATH=$PATH:/usr/local/go/bin
 
 재부팅하거나 다음 명령을 입력한다.
 
-```
+```bash
 source ~/.bashrc
 ```
 
