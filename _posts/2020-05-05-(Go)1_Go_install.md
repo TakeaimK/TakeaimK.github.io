@@ -5,7 +5,7 @@ categories:
   - Language-Go
 ---
 
-**본 글은 Kakao Enterprise 예비 인턴과정 GOLang 교육내용 및 자습/과제를 정리한 내용입니다.**
+**본 글은 Kakao Enterprise 예비인턴 GOLang 교육내용 및 자습/과제를 정리한 내용입니다.**
 
 ---
 
