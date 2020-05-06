@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 42. 연구소
+title: 43. 연구소
 categories:
   - Baekjoon
 ---
