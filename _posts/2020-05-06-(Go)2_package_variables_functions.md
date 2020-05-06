@@ -48,7 +48,7 @@ func main() {
 
 이 코드에서는 여러개의 "package" 를 소괄호로 감싸서 import를 표현합니다. 주석과 같이 import 문장을 여러번 사용할 수 도 있습니다.
 
-```Go
+```go
 package main
 
 import (
@@ -77,7 +77,7 @@ Go에서는 **첫 문자가 대문자로 시작하면 그 패키지를 사용하
 예를 들어 Foo 와 FOO 는 외부에서 참조할 수 있지만 foo 는 참조 할 수 없습니다.  
 아래 예문에서 주석은 동작하지 않습니다.
 
-```Go
+```go
 package main
 
 import (
@@ -101,7 +101,7 @@ func main() {
 C, C++, Java 언어와 다르게 매개변수의 타입은 변수명 뒤에 명시합니다.  
 타입을 뒤에 놓는 이유는 코드를 자연스럽게 읽기 위해서입니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -124,7 +124,7 @@ func main() {
 
 두 개 이상의 매개변수가 같은 타입(type)일 때, 같은 타입을 취하는 마지막 매개변수에만 타입을 명시하고 나머지는 생략할 수 있습니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -147,7 +147,7 @@ func main() {
 
 **하나의 함수는 여러 개의 결과를 반환할 수 있습니다.**
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -166,7 +166,7 @@ func main() {
 함수는 매개변수를 취합니다. Go에서 함수는 여러 개의 결과를 반환할 수 있습니다. 반환 값에 이름을 부여하면 변수처럼 사용할 수도 있습니다.  
 결과에 이름을 붙히면, 반환 값을 지정하지 않은 return 문장으로 결과의 현재 값을 알아서 반환합니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -207,7 +207,7 @@ func main() {
 변수를 선언을 위해 var 을 사용합니다.  
 함수의 매개변수처럼 타입은 문장 끝에 명시합니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -227,7 +227,7 @@ func main() {
 변수 선언과 함께 변수 각각을 초기화를 할 수 있습니다.  
 **초기화를 하는 경우 타입(type)을 생략할 수 있습니다.** 변수는 초기화 하고자 하는 값에 따라 타입이 결정됩니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -250,7 +250,7 @@ func main() {
 **함수 내에서 := 을 사용하면 var 과 명시적인 타입(e.g. int, bool) 을 생략**할 수 있습니다.  
 그러나 함수 밖에서는 := 선언을 사용할 수 없습니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -275,7 +275,7 @@ func main() {
 상수는 const 키워드와 함께 변수처럼 선언합니다.  
 상수는 문자(character), 문자열(string), 부울(boolean), 숫자 타입 중의 하나가 될 수 있습니다.
 
-```Go
+```go
 package main
 
 import "fmt"
@@ -297,7 +297,7 @@ func main() {
 타입을 지정하지 않은 상수는 문맥(context)에 따라 타입을 가지게 됩니다.  
 예를 들어, 아래 주석 부분은 동작하지 않습니다.
 
-```Go
+```go
 package main
 
 import "fmt"
