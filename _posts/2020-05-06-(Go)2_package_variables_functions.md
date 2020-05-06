@@ -241,7 +241,7 @@ func main() {
 	var i = 100
 	var s = "Kakao Enterprise"
 
-	fmt.Println("나는",i,"% 확신을 가지고 있다.")
+	fmt.Println("나는",i,"% 자신감을 충전했다.")
 	fmt.Print(s)
 }
 
