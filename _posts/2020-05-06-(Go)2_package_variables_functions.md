@@ -27,7 +27,7 @@ A tour of Go는 Golang의 특징을 공부할 수 있는 학습 사이트이다.
 **패키지 이름은 디렉토리 경로의 마지막 이름을 사용**하는 것이 규칙입니다.  
 예를 들어 "path/filepath" 를 사용한다면 패키지명은 filepath 입니다.
 
-```Go
+```go
 package main
 
 import (
