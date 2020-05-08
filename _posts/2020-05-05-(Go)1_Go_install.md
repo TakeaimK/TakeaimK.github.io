@@ -13,7 +13,7 @@ categories:
 
 다음 링크에서 최신 버전의 GO를 다운로드한다. 확장자는 `.msi` 이다.
 
-> [GoLang 공식 다운로드](https://golang.org/dl/)
+> [GoLang 공식 다운로드](https://golang.org/dl/){: target="\_blank"}
 
 Windows에서 Go는 변경사항이 없다면 C:\go 폴더에 설치되며, MSI가 C:\go\bin을 PATH 환경변수를 알아서 추가한다.  
 설치되었다면, 메모장 or Notepad++ or VSCode를 열고 다음 코드를 작성한다.
