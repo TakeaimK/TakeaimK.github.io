@@ -433,4 +433,9 @@ func main() {
 
 ---
 
+### 참고 링크
+
+> [Go언어 배우기 - 패키지](https://medium.com/@yhmin84/a-tour-of-go%EB%A1%9C-%EB%B0%B0%EC%9A%B0%EA%B8%B0-1-%ED%8C%A8%ED%82%A4%EC%A7%80-package-%EC%99%80-%EC%9E%84%ED%8F%AC%ED%8A%B8-import-a91e9db1c135)  
+> [Go 표현 범위에 따라 원하는 정수 형식 사용 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-6-%ED%91%9C%ED%98%84-%EB%B2%94%EC%9C%84%EC%97%90-%EB%94%B0%EB%9D%BC-%EC%9B%90%ED%95%98%EB%8A%94-%EC%A0%95%EC%88%98-%ED%98%95%EC%8B%9D-%EC%82%AC%EC%9A%A9/)
+
 읽어주셔서 감사합니다!
