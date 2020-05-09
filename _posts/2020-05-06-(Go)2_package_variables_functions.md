@@ -19,6 +19,13 @@ A tour of Go는 Golang의 특징을 공부할 수 있는 학습 사이트이다.
 
 ---
 
+## 학습 진행 방식
+
+- gotour 설명과 기본 예제 코드를 기본으로 삼고, 추가 코드를 간단하게 작성하기도 한다.
+- 예제문을 분석하고, 내가 바라본 특징에 대해 기술한다.
+
+---
+
 ## 패키지 (Package)
 
 ```
@@ -44,6 +51,10 @@ func main() {
 
 ```
 
+우선, 패키지에 대해 설명하고 있다.  
+Java 등의 언어에서도 패키지로 코드를 묶어 관리한다. 주목해야 할 점은, **go 프로그램을 실행하는 핵심은 main패키지의 main함수**라는 것이다.  
+만약, main패키지의 이름을 바꾸게 되면 `package name must be main`라는 오류를 출력한다.
+
 ---
 
 ## 임포트 (import)
@@ -57,7 +68,8 @@ package main
 
 import (
     "fmt"
-    "math"
+	"math"
+	//"net/http"
 )
 /*
 import "fmt"
@@ -70,7 +82,12 @@ func main() {
 	fmt.Printf("20에 Root를 씌운 값은 %f 입니다.", math.Sqrt(20))
 }
 
+
 ```
+
+import 아래 주석 처리로 된 부분이 기존 다른 언어의 import와 약간 유사하다. 저 방식으로도 작동한다.  
+하지만 대부분의 경우 여러 개의 패키지를 import하는데, 각각 import를 반복해서 적어줘야 하는 불편함이 있다. Golang은 이러한 불편함을 해결하기 위해 위와 같은 방법을 사용한 것으로 보인다.  
+또 다른 특징은, 사용하지 않는 패키지를 import하는 경우, 에러를 발생시킨다. 위 코드에서 `net/http`를 import하고 사용하지 않는다면, `imported and not used: "net/http"`라는 에러를 출력하고, 컴파일되지 않는다. 사용하지 않는 패키지는 import에서 제거해 주어야 한다.
 
 ---
 
@@ -98,6 +115,9 @@ func main() {
 
 ```
 
+[0.Go?](<http://takeaimk.tk/language-go/2020/05/05/(Go)0_Go_preview.html>) 게시글에 설명한 Go의 특징 중, `대문자로 시작하면 Public, 소문자로 시작하면 private 역할을 수행` 이라는 내용이 있었다.  
+만약, `math.pi`라고 접근하게 된다면, math 패키지 내에서만 접근할 수 있는 함수를 main 패키지에서 접근을 시도하게 되는데, 원천적으로 막아놓는다. main함수도 다른 패키지에서 불러올 수 없도록 소문자로 시작한다.
+
 ---
 
 ## 함수 (Function)
@@ -118,17 +138,32 @@ func add(x int, y int) int {
     return x + y
 }
 
-func add_a_to_b(a int, b int) int{
-	x:=b+1
-	return b*x/2
+func add2(a int, b int) {
+	fmt.Println(a+b)
+}
+
+func ret777 () int{
+	return 777
 }
 
 func main() {
-	fmt.Println(add(42, 13))
-	fmt.Print(add_a_to_b(1,10))
+	fmt.Println(add(42, 13))	//55
+	add2(6,4)					//10
+	fmt.Println(ret777())		//777
+	fmt.Println(ret777)			//0x49dd50
 }
 
 ```
+
+Golang의 function의 특징은, (1)함수라는 것을 밝히고 (2)함수의 이름을 알리고 (3)이 함수의 매개변수는 어떠한 것이 있으며 (4)리턴 타입은 이것이다 순서로 기술된다.  
+몇 가지 함수를 추가로 만들어 테스트해 보았는데, 함수의 특징을 알 수 있었다.
+
+1. `func add(x int, y int) int`에서 매개변수를 받을 때도 변수명-타입 순으로 기술한다.
+2. `func add2(a int, b int)`에서 리턴 값이 없으면 리턴 타입은 적지 않아도 작동한다.
+3. `func ret777 () int`에서 매개변수가 없을 땐 빈 괄호를 적어준다.
+4. `fmt.Println(ret777)`를 실행시키면, 함수가 위치한 주소값으로 추정되는 값이 출력된다!
+
+---
 
 ```
 두 개 이상의 매개변수가 같은 타입(type)일 때, 같은 타입을 취하는 마지막 매개변수에만 타입을 명시하고 나머지는 생략할 수 있습니다.
@@ -155,6 +190,10 @@ func main() {
 
 ```
 
+위 함수의 매개변수에서 int를 반복해서 먹어야 하는 불편함을 해소하기 위해 같은 타입은 콤마 형태로 이어 서술한다.
+
+---
+
 ```
 하나의 함수는 여러 개의 결과를 반환할 수 있습니다.
 ```
@@ -174,6 +213,11 @@ func main() {
 }
 
 ```
+
+역시 여러 개의 반환 값을 가지면 괄호로 묶어 돌려줄 수 있다.  
+뒤에 나오지만, main 함수의 a, b 선언 부분이 인상적인데, Python처럼 변수의 타입을 지정하지 않고 `:=`을 사용하여 바로 값을 넣어줄 수 있으며, 알아서 a, b라는 변수의 타입이 지정된다.
+
+---
 
 ```
 함수는 매개변수를 취합니다. Go에서 함수는 여러 개의 결과를 반환할 수 있습니다. 반환 값에 이름을 부여하면 변수처럼 사용할 수도 있습니다.
@@ -214,6 +258,8 @@ func main() {
 
 ```
 
+학습하면서 신기했던 부분 중 하나이다. **미리 return할 변수를 함수 생성 시 선언하고, return만 입력하면 알아서 값을 반환**시킬 수 있다. 굳이 함수 내부에서 return하기 위해 변수를 선언하느라 코드 한 줄 더 적을 필요가 없다!
+
 ---
 
 ## 변수 (Variables)
@@ -232,13 +278,26 @@ var x, y, z int
 var c, python, java bool
 var golang float32
 
+var(
+	a int
+	b string
+)
+
 func main() {
 	fmt.Println(x, y, z, c, python, java)
+	fmt.Println(a,b)
 	fmt.Scanln(&golang)
 	fmt.Printf("You typed %f \n", golang)
 }
 
+
 ```
+
+변수는 variable의 앞 3글자를 따서 var로 통칭한다. 가능한 타입은 자료형 파트에서 나오므로 일단 넘어가기로 하고, 다른 언어에서 지원하는 int, bool 등의 자료형이 존재함을 알 수 있다.  
+또한 import와 마찬가지로 **`var()` 형태로 여러 개의 변수를 한 번에 묶어 선언**할 수 있다. 또한, 아무런 값을 넣지 않는다면 **초기 값은 int는 0으로, string은 빈 값으로, bool은 false로 초기화**된다.
+또한 `fmt` 패키지에 있는 `Scanln` 함수를 가져다 사용해 보았다. Scan에 관련된 사용법은 [콘솔 입력 함수 사용하기 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-25-%ED%91%9C%EC%A4%80-%EC%9E%85%EB%A0%A5-%ED%95%A8%EC%88%98-scanln-scan-scanf-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/) 사이트를 참고하였다.
+
+---
 
 ```
 변수 선언과 함께 변수 각각을 초기화를 할 수 있습니다.
@@ -265,6 +324,11 @@ func main() {
 
 ```
 
+x,y,z와 다르게, 아래 c,python,java에서는 bool과 string 타입을 선언하지 않았지만, 변수의 내용에 따라 알아서 지정되는 것을 알 수 있다.  
+또한 `fmt.Println("나는",i,"% 자신감을 충전했다.")`라는 코드를 추가해 보았는데, string 사이에 i라는 int 형 변수를 콤마(,)를 사용하여 추가할 수 있다.
+
+---
+
 ```
 함수 내에서 := 을 사용하면 var 과 명시적인 타입(e.g. int, bool) 을 생략할 수 있습니다.
 그러나 함수 밖에서는 := 선언을 사용할 수 없습니다.
@@ -275,6 +339,8 @@ package main
 
 import "fmt"
 
+var s = "galaxy S"
+
 func main() {
 	var x, y, z int = 1, 2, 3
 	w := 8	//함수 안에서만 사용 가능!
@@ -283,10 +349,13 @@ func main() {
 
 	fmt.Println(x, y, z, c, python, java)
 
-	fmt.Printf("Apple %s %d", s, w)
+	fmt.Printf("Apple %s %d", s, w)		//Apple iPhone 8
 }
 
 ```
+
+위에서 한 번 언급한 기호 `:=`가 등장했다. :=는 해당 함수 내에서 변수를 선언할 때 좀 더 편리하게 사용할 수 있는데, 전역변수가 아닌 해당 함수에서 사용하는 변수임을 확실하게 알리는 효과도 있다.  
+또한 지역 변수가 더 높은 우선순위를 가진다. 위 `fmt.Printf("Apple %s %d", s, w)`를 출력하면 상단에 선언한 `var s = "galaxy S"` 가 아닌, `s := "iPhone"`를 우선하여 가져와 출력한다. (그래도 이름이 동일하게 변수를 선언하는 건 좋은 습관은 아닌 것 같다...)
 
 ---
 
@@ -311,14 +380,24 @@ func main() {
 
     const Truth = true
     fmt.Println("Go rules?", Truth)
+
+    test := "World!"
+    fmt.Println("Hello", test)
+    test = "세상!"
+    fmt.Println("Hello", test)
+    //World = "Hi"
+
 }
 
 ```
 
+상수는 변하지 않는 고정된 값으로, 변경할 수 없다. 위 코드에서 `test`는 변경되어 출력되지만, `World`를 변경하려 하면 `cannot assign to World` 오류와 함께 에러가 출력된다.
+
+---
+
 ```
 숫자형 상수는 정밀한 값(values) 을 표현할 수 있습니다.
 타입을 지정하지 않은 상수는 문맥(context)에 따라 타입을 가지게 됩니다.
-예를 들어, 아래 주석 부분은 동작하지 않습니다.
 ```
 
 ```go
@@ -329,7 +408,7 @@ import "fmt"
 const (
     Big   = 1 << 100	//2^100
   	Small = Big >> 99	//2^(100-99) = 2^1 = 2
-	  intMax = 1<<63 -1
+	intMax = 1<<63 -1
 )
 
 func needInt(x int) int { return x*10 + 1 }
@@ -348,6 +427,9 @@ func main() {
 }
 
 ```
+
+상수도 역시 import와 마찬가지로 **`const()` 의 형태로 여러 개를 묶어 선언**할 수 있다.  
+64bit 시스템에서 int는 8바이트의 크기를 가진다는 점도 인상적이다. 따라서 2^63-1을 초과하는 수는 에러가 발생하게 된다.
 
 ---
 
