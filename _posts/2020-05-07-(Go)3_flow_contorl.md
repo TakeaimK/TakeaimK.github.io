@@ -223,6 +223,8 @@ func main() {
 
 ```
 
+if에서 선언된 조건문에 사용된 변수는, else에서도 활용이 가능하다. if와 else는 서로 뗄 수 없는 관계이며, 그래서 if 블록 다음 else를 바로 붙여 적어야 하게 만들었다는 느낌을 받는다.
+
 ```
 함수와 루프의 사용법을 익히는 간단한 연습으로, 제곱근 함수를 뉴턴의 방법(Newton's method)을 이용하여 구현합니다.
 
@@ -244,25 +246,99 @@ package main
 
 import (
     "fmt"
+    "math"
 )
 
-func Sqrt(x float64) float64 {
+func Sqrt1(x float64, r int) float64 {
+    z := float64(1)
+
+    for i:=0; i<r; i++{
+        z = z-(z*z-x)/(2*z)
+    }
+    return z
+}
+
+func Sqrt2(x float64) float64{
+    z := float64(1)
+
+    for {
+        result := z-(z*z-x)/(2*z)
+
+        if float64(result) == float64(z) {
+                return result
+        }
+        z = result
+    }
 }
 
 func main() {
-    fmt.Println(Sqrt(2))
+    var num float64
+    var rng int
+    fmt.Print("Sqrt number : ")
+    fmt.Scan(&num)
+    fmt.Print("range : ")
+    fmt.Scan(&rng)
+    fmt.Println(Sqrt1(num, rng))
+    fmt.Println(Sqrt2(num))
+    fmt.Println(math.Sqrt(num))
 }
 
 ```
 
----
-
-## 조건문 (Switch)
+뉴턴-랩슨의 방법에 대해서 자세히 알고 싶다면 [제곱근 구하기 - 바빌로니아, 뉴턴-랩슨 방법](https://dowhati1.tistory.com/m/31?category=722279){: target="\_blank"} 링크를 참조하자.  
+우선 제곱근을 구할 수를 입력받고, Sqrt1 함수에서 반복할 횟수를 입력받는다. 그러면 (1)뉴턴-랩슨 방법에서 지정된 횟수만큼 돌린 값, (2)컴퓨터 계산으로 동일하다고 판단될 때까지 반복하며 돌린 값, (3)`math.Sqrt`를 사용한 값 순서로 출력한다.  
+결과는 다음과 같다.
 
 ```
-A switch statement is a shorter way to write a sequence of if - else statements. It runs the first case whose value is equal to the condition expression.
+Sqrt number : 10
+range : 1
+5.5
+3.1622776601683795
+3.1622776601683795
 
-Go's switch is like the one in C, C++, Java, JavaScript, and PHP, except that Go only runs the selected case, not all the cases that follow. In effect, the break statement that is needed at the end of each case in those languages is provided automatically in Go. Another important difference is that Go's switch cases need not be constants, and the values involved need not be integers.
+Sqrt number : 10
+range : 2
+3.659090909090909
+3.1622776601683795
+3.1622776601683795
+
+Sqrt number : 10
+range : 3
+3.196005081874647
+3.1622776601683795
+3.1622776601683795
+
+Sqrt number : 10
+range : 4
+3.1624556228038903
+3.1622776601683795
+3.1622776601683795
+
+Sqrt number : 10
+range : 5
+3.162277665175675
+3.1622776601683795
+3.1622776601683795
+
+Sqrt number : 10
+range : 6
+3.1622776601683795
+3.1622776601683795
+3.1622776601683795
+```
+
+10의 제곱근을 구하고자 한다면, 6회를 돌려야 동일하게 나온다는 것을 알 수 있다. 무한루프를 돌린 값과 `math.Sqrt` 값은 같다. 즉, math 라이브러리에 있는 sqrt 함수와 거의 동일하다.  
+실제 `math.Sqrt`는 다음과 같다.
+[Source file src/math/sqrt.go](https://golang.org/src/math/sqrt.go)
+
+---
+
+## 조건문 (Switch) - Eng ver에만 존재
+
+```
+Switch 문은 if-else 문의 순서를 작성하는 더 짧은 방법이다. 값이 조건식과 같은 첫 번째 경우를 실행한다.
+Go의 스위치는 C, C++, Java, Javascript, PHP의 Switch와 같으나, break 문이 필요 없이 선택된 항목에 대해서만 실행된다.
+또 다른 중요한 점은, Switch의 case 값이 꼭 상수가 아니어도 되고, 관련 값은 정수가 아니어도 된다.
 ```
 
 ```go
@@ -287,21 +363,23 @@ func main() {
 	}
 }
 
-
 ```
 
-```
-Switch cases evaluate cases from top to bottom, stopping when a case succeeds.
+Go 언어의 switch는 break문이 필요 없다. 알아서 case에 걸리면 해당 case만 실행하고 switch문을 탈출한다. 더욱이, case 자리에 문자열이나 함수의 결과값이 들어가도 된다!
 
-(For example,
+---
+
+```
+switch문은 위에서 아래로 훑으며 case에 걸리면 나머지 case는 진행하지 않는다.
+
+(예를 들어,
 
 switch i {
 case 0:
 case f():
 }
-does not call f if i==0.)
+i==0이면 f는 부르지 않음)
 
-Note: Time in the Go playground always appears to start at 2009-11-10 23:00:00 UTC, a value whose significance is left as an exercise for the reader.
 ```
 
 ```go
@@ -329,10 +407,14 @@ func main() {
 
 ```
 
-```
-Switch without a condition is the same as switch true.
+만약 토요일에 본 프로그램을 작동시킨다면 Today가 나올 것이다. 만약 오늘이 토요일이라면 Today가 출력되고 그 아래로 진행하지 않는다.  
+또한, default 값도 설정이 가능하다는 것을 알 수 있다.
 
-This construct can be a clean way to write long if-then-else chains.
+---
+
+```
+조건이 없는 switch는 true와 동일하다.
+이 구조는 긴 if-then-else 체인을 쓰는 것보다 깔끔한 방법이 될 수 있다.
 ```
 
 ```go
@@ -345,72 +427,72 @@ import (
 
 func main() {
 	t := time.Now()
+	fmt.Println(t.Hour())	//22
 	switch {
 	case t.Hour() < 12:
 		fmt.Println("Good morning!")
 	case t.Hour() < 17:
 		fmt.Println("Good afternoon.")
 	default:
-		fmt.Println("Good evening.")
+		fmt.Println("Good evening.")	//출력됨
 	}
 }
 
 
+
 ```
+
+이 부분이 매우 충격적이고 신선하다. if문을 사용하는 것보다 너무나도 깔끔하다! 사실 switch문은 생각보다 잘 쓰이지 않는 편인데, case가 상수여야 하는 조건이 생각보다 크다. 그런데 case 자리에 t.Hour()과 상수를 비교해서 참이면 출력시키는 참신한 방법으로 코드를 간결하게 만들어 준다.
 
 ---
 
-## 지연 실행 (Defer)
+## 지연 실행 (Defer) - Eng ver에만 있음
 
-상수는 const 키워드와 함께 변수처럼 선언합니다.  
-상수는 문자(character), 문자열(string), 부울(boolean), 숫자 타입 중의 하나가 될 수 있습니다.
-
-```go
-package main
-
-import "fmt"
-
-const Pi = 3.14
-
-func main() {
-    const World = "안녕"
-    fmt.Println("Hello", World)
-    fmt.Println("Happy", Pi, "Day")
-
-    const Truth = true
-    fmt.Println("Go rules?", Truth)
-}
-
-```
-
-숫자형 상수는 정밀한 값(values) 을 표현할 수 있습니다.  
-타입을 지정하지 않은 상수는 문맥(context)에 따라 타입을 가지게 됩니다.  
-예를 들어, 아래 주석 부분은 동작하지 않습니다.
+Defer(지연문)은 함수가 return될 때까지 해당 구문의 실행을 연기합니다. 지연된 호출 인수는 즉시 계산되지만, 함수가 return될 때까지 기다립니다.
 
 ```go
 package main
 
 import "fmt"
 
-const (
-    Big   = 1 << 100	//2^100
-  	Small = Big >> 99	//2^(100-99) = 2^1 = 2
-	  intMax = 1<<63 -1
-)
-
-func needInt(x int) int { return x*10 + 1 }
-func needFloat(x float64) float64 {
-    return x * 0.1
-}
-
 func main() {
-	  fmt.Println(Small)
-	  //fmt.Println(Big)	//overflows int error 발생
-	  fmt.Println(intMax)
-    fmt.Println(needInt(Small))
-    fmt.Println(needFloat(Small))
-	  fmt.Println(needFloat(Big))
-	  //fmt.Println(needInt(Big))	//역시 overflows int error 발생
+	defer fmt.Println("world")
+
+	fmt.Println("hello")
 }
+
 
 ```
+
+지연 구문은 Java 등에서 finally와 같이 함수 실행 이후 마지막으로 실행되는 구문이다. 해당 함수가 실행을 마칠 때까지 기다리는데, 위 구문에서는 hello가 먼저 출력되고, main이 종료되는 시점에 world를 출력한다.
+
+---
+
+```
+지연되는 구문은 Stack에 push된다. LIFO(Last-In-First-Out) 방식으로 꺼내온다.
+```
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
+
+
+```
+
+위 프로그램의 출력 결과는 우선 counting이 출력된다. 후에 0부터 9까지 stack에 쌓이게 되고, done을 출력한다. main이 끝나는 시점에서 stack에서 LIFO로 꺼내오게 되고, 9부터 1까지 역순으로 출력된다.  
+이걸 어디에 쓸까 생각해 보았는데, 파일을 열고 작업할 때 어떠한 문제가 생기더라도 미리 close를 걸어두면 파일이 안전하게 닫히지 않을까 추측해 보았다. 즉, 꼭 마무리되어야 할 작업이 있다면 defer를 사용하지 않을까 싶다.
+
+---
+
+읽어주셔서 감사합니다!
