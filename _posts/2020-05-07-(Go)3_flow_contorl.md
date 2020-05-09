@@ -7,15 +7,15 @@ categories:
 
 **본 글은 Kakao Enterprise 예비인턴 GOLang 교육내용 및 자습/과제를 정리한 내용입니다.**
 
-> [Github Source Code - Gotour](https://github.com/TakeaimK/Gotour)
+> [Github Source Code - Gotour](https://github.com/TakeaimK/Gotour){: target="\_blank"}
 
 # A tour of Go
 
 A tour of Go는 Golang의 특징을 공부할 수 있는 학습 사이트이다.
 한국어 사이트와 영어 사이트가 있으며, 내용은 거의 동일하다.
 
-> [gotour - 한국어](https://go-tour-kr.appspot.com/#1)  
-> [gotour - 영어](https://tour.golang.org/welcome/1)
+> [gotour - 한국어](https://go-tour-kr.appspot.com/#6){: target="\_blank"}  
+> [gotour - 영어](https://tour.golang.org/flowcontrol/1){: target="\_blank"}
 
 ---
 
@@ -45,8 +45,11 @@ func main() {
 	fmt.Println(sum2)
 }
 
-
 ```
+
+Golang의 for문은 C++,Java와 유사하다. 특징도 비슷한데, for문 안에서 선언된 변수는 for문을 나가면 해제되어 사용할 수 없다.
+
+---
 
 ```
 C와 Java에서 처럼 전.후 처리를 제외하고 조건문만 표현할 수도 있습니다.
@@ -72,6 +75,11 @@ func main() {
 
 ```
 
+굳이 반복문을 while, do-while, for 세 가지로 만들 필요 없이 for 하나로 모든 역할을 수행한다.  
+또한, and 및 or을 `&&` 및 `||` 기호를 사용하는 부분은 C++과 유사하다.
+
+---
+
 ```
 for에서 조건문을 생략하면 무한 루프를 간단하게 표현할 수 있습니다.
 ```
@@ -93,6 +101,9 @@ func main() {
 }
 
 ```
+
+while(true) 기능을 구현하기는 더욱 간단하다. Golang에서 for문에 조건을 제시하지 않으면 기본적으로 true 상태가 된다.  
+조건문을 넣어 break로 탈출하는 방식 역시 가능하다.
 
 ---
 
@@ -126,12 +137,19 @@ func main() {
 	fmt.Scan(&temp)
 	if temp < 0{
 		fmt.Println(math.Sqrt(math.Abs(temp)),"i")
-	}else{
+	}else if{
 		fmt.Println(math.Sqrt(math.Abs(temp)))
+	} else{    //개행 후 else 입력 시 에러 발생
+        
 	}
 }
 
 ```
+
+Go의 조건문은 C++ 등과 유사해 보이지만, 한 가지 차이점이 있다. **조건문의 결과가 무조건 Bool 형식**이어야 한다.  
+또한, else if, else 문을 지원하지만, **직전 블럭의 닫는 괄호와 같은 라인에 위치**해야 한다.
+
+---
 
 ```
 for 처럼 if 에서도 조건문 앞에 짧은 문장을 실행할 수 있습니다.
@@ -153,6 +171,7 @@ import (
 
 func pow(x, n, lim float64) float64 {
     if v := math.Pow(x, n); v < lim {
+		//v += 1 //<=가능함!
         return v
     }
     return lim
@@ -167,6 +186,10 @@ func main() {
 
 
 ```
+`math.Pow(x,y)`는 x의 y승을 계산해 주는 함수이다. 조건문 안에서 계산하여 세미콜론으로 문장을 구분지어 비교가 가능하다.
+
+
+---
 
 ```
 if 에서 짧은 명령문을 통해 선언된 변수는 else 블럭 안에서도 사용할 수 있습니다.
