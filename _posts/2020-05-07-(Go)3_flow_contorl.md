@@ -14,7 +14,7 @@ categories:
 A tour of Go는 Golang의 특징을 공부할 수 있는 학습 사이트이다.
 한국어 사이트와 영어 사이트가 있으며, 내용은 거의 동일하다.
 
-> [gotour - 한국어](https://go-tour-kr.appspot.com/#6){: target="\_blank"}  
+> [gotour - 한국어](https://go-tour-kr.appspot.com/#16){: target="\_blank"}  
 > [gotour - 영어](https://tour.golang.org/flowcontrol/1){: target="\_blank"}
 
 ---
@@ -140,7 +140,7 @@ func main() {
 	}else if{
 		fmt.Println(math.Sqrt(math.Abs(temp)))
 	} else{    //개행 후 else 입력 시 에러 발생
-        
+
 	}
 }
 
@@ -186,8 +186,8 @@ func main() {
 
 
 ```
-`math.Pow(x,y)`는 x의 y승을 계산해 주는 함수이다. 조건문 안에서 계산하여 세미콜론으로 문장을 구분지어 비교가 가능하다.
 
+`math.Pow(x,y)`는 x의 y승을 계산해 주는 함수이다. 조건문 안에서 계산하여 세미콜론으로 문장을 구분지어 비교가 가능하다.
 
 ---
 
