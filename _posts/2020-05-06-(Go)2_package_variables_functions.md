@@ -115,7 +115,7 @@ func main() {
 
 ```
 
-[0.Go?](<http://takeaimk.tk/language-go/2020/05/05/(Go)0_Go_preview.html>) 게시글에 설명한 Go의 특징 중, `대문자로 시작하면 Public, 소문자로 시작하면 private 역할을 수행` 이라는 내용이 있었다.  
+[0.Go?](<http://takeaimk.tk/language-go/2020/05/05/(Go)0_Go_preview.html>){: target="\_blank"} 게시글에 설명한 Go의 특징 중, `대문자로 시작하면 Public, 소문자로 시작하면 private 역할을 수행` 이라는 내용이 있었다.  
 만약, `math.pi`라고 접근하게 된다면, math 패키지 내에서만 접근할 수 있는 함수를 main 패키지에서 접근을 시도하게 되는데, 원천적으로 막아놓는다. main함수도 다른 패키지에서 불러올 수 없도록 소문자로 시작한다.
 
 ---
@@ -295,7 +295,7 @@ func main() {
 
 변수는 variable의 앞 3글자를 따서 var로 통칭한다. 가능한 타입은 자료형 파트에서 나오므로 일단 넘어가기로 하고, 다른 언어에서 지원하는 int, bool 등의 자료형이 존재함을 알 수 있다.  
 또한 import와 마찬가지로 **`var()` 형태로 여러 개의 변수를 한 번에 묶어 선언**할 수 있다. 또한, 아무런 값을 넣지 않는다면 **초기 값은 int는 0으로, string은 빈 값으로, bool은 false로 초기화**된다.
-또한 `fmt` 패키지에 있는 `Scanln` 함수를 가져다 사용해 보았다. Scan에 관련된 사용법은 [콘솔 입력 함수 사용하기 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-25-%ED%91%9C%EC%A4%80-%EC%9E%85%EB%A0%A5-%ED%95%A8%EC%88%98-scanln-scan-scanf-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/) 사이트를 참고하였다.
+또한 `fmt` 패키지에 있는 `Scanln` 함수를 가져다 사용해 보았다. Scan에 관련된 사용법은 [콘솔 입력 함수 사용하기 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-25-%ED%91%9C%EC%A4%80-%EC%9E%85%EB%A0%A5-%ED%95%A8%EC%88%98-scanln-scan-scanf-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/){: target="\_blank"} 사이트를 참고하였다.
 
 ---
 
@@ -435,7 +435,7 @@ func main() {
 
 ### 참고 링크
 
-> [Go언어 배우기 - 패키지](https://medium.com/@yhmin84/a-tour-of-go%EB%A1%9C-%EB%B0%B0%EC%9A%B0%EA%B8%B0-1-%ED%8C%A8%ED%82%A4%EC%A7%80-package-%EC%99%80-%EC%9E%84%ED%8F%AC%ED%8A%B8-import-a91e9db1c135)  
-> [Go 표현 범위에 따라 원하는 정수 형식 사용 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-6-%ED%91%9C%ED%98%84-%EB%B2%94%EC%9C%84%EC%97%90-%EB%94%B0%EB%9D%BC-%EC%9B%90%ED%95%98%EB%8A%94-%EC%A0%95%EC%88%98-%ED%98%95%EC%8B%9D-%EC%82%AC%EC%9A%A9/)
+> [Go언어 배우기 - 패키지](https://medium.com/@yhmin84/a-tour-of-go%EB%A1%9C-%EB%B0%B0%EC%9A%B0%EA%B8%B0-1-%ED%8C%A8%ED%82%A4%EC%A7%80-package-%EC%99%80-%EC%9E%84%ED%8F%AC%ED%8A%B8-import-a91e9db1c135){: target="\_blank"}  
+> [Go 표현 범위에 따라 원하는 정수 형식 사용 - 언제나휴일](http://ehpub.co.kr/%EA%B5%AC%EA%B8%80-go-%ED%95%98%EC%9E%90-6-%ED%91%9C%ED%98%84-%EB%B2%94%EC%9C%84%EC%97%90-%EB%94%B0%EB%9D%BC-%EC%9B%90%ED%95%98%EB%8A%94-%EC%A0%95%EC%88%98-%ED%98%95%EC%8B%9D-%EC%82%AC%EC%9A%A9/){: target="\_blank"}
 
 읽어주셔서 감사합니다!
