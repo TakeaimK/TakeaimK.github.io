@@ -589,18 +589,38 @@ type rot13Reader struct {
     r io.Reader
 }
 
+func rot13byte(sb byte) byte {
+    s := rune(sb)
+    if s >= 'a' && s <= 'm' || s >= 'A' && s <= 'M' {
+        sb += 13
+    }
+    if s >= 'n' && s <= 'z' || s >= 'N' && s <= 'Z' {
+        sb -= 13
+}
+
+    return sb
+}
+
+func (rot13 rot13Reader) Read(data []byte) (len int, err error) {
+    len, err = rot13.r.Read(data)
+    for i := 0; i < len; i++ {
+        data[i] = rot13byte(data[i])
+    }
+
+    return
+}
+
 func main() {
     s := strings.NewReader(
-        "Lbh penpxrq gur pbqr!")
+    "Lbh penpxrq gur pbqr!")
     r := rot13Reader{s}
     io.Copy(os.Stdout, &r)
 }
 
-
 ```
 
 ROT-13은 알파벳을 13글자씩 밀어내고, z가 넘어가면 다시 a부터 시작하는 방식으로 순환하여 문자를 바꾼다.
-(아직 구현 중)
+일단 이번 문제를 푸는 데 있어서 내 방식으로는 실패했다. 그래서 여러 코드를 찾아보다가 간결하고 확실하게 풀어놓은 코드가 있어서 가져왔다. 출처는 [이곳](https://godsman.tistory.com/entry/golang-A-Tour-of-Go-61-%EC%97%B0%EC%8A%B5-%EB%AC%B8%EC%A0%9C?category=276353)이다.
 
 ---
 
