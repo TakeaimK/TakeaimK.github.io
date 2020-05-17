@@ -515,7 +515,6 @@ package main
 
 import (
     "code.google.com/p/go-tour/pic"
-    //"golang.org/x/tour/pic"
     "image"
     "image/color"
 )
@@ -539,9 +538,10 @@ func (img Image) At(x, y int) color.Color {
 
 
 func main() {
-    m := Image{256,256}
+    m := Image{512,512}
     pic.ShowImage(m)
 }
+
 
 
 ```
@@ -599,7 +599,8 @@ func main() {
 
 ```
 
-ROT-13은 알파벳을 13글자씩 밀어내고, z가 넘어가면 다시 a부터 시작하는 방식으로 순환하여 문자를 바꾼다. <해결중>
+ROT-13은 알파벳을 13글자씩 밀어내고, z가 넘어가면 다시 a부터 시작하는 방식으로 순환하여 문자를 바꾼다.
+(아직 구현 중)
 
 ---
 
