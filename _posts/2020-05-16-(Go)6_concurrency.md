@@ -358,6 +358,7 @@ go Walk(tree.New(1), ch)
 ```
 
 ```go
+
 package main
 
 import (
