@@ -30,8 +30,10 @@ go f(x, y, z)
 f(x, y, z)
 현재의 고루틴에서 f , x , y , z 가 평가(evaluation)되고, 새로운 고루틴에서 f 가 수행(execution)됩니다.
 
-고루틴은 동일한 주소 공간에서 실행되므로, 공유되는 자원으로의 접근은 반드시 동기화 되어야 합니다. [[http://golang.org/pkg/sync/][sync]] 패키지가 이를 위해 유용한 기본 기능을 제공합니다. Go 에서는 그외에도 다양한 기본 기능을 제공하니 크게 필요치 않을 테지만요. (다음 슬라이드를 보세요.)
+고루틴은 동일한 주소 공간에서 실행되므로, 공유되는 자원으로의 접근은 반드시 동기화 되어야 합니다. sync 패키지가 이를 위해 유용한 기본 기능을 제공합니다. Go 에서는 그외에도 다양한 기본 기능을 제공하니 크게 필요치 않을 테지만요. (다음 슬라이드를 보세요.)
 ```
+
+[Golang - sync](http://golang.org/pkg/sync/)
 
 ```go
 package main
@@ -56,7 +58,7 @@ func main() {
 
 ```
 
-<내용 추가>
+쓰레드의 실행은 OS가 우선순위를 결정하여 실행하고, 따라서 hello와 world가 실행할 때마다 순서가 일정하지 않고 뒤죽박죽되어 나온다.
 
 ---
 
@@ -79,7 +81,10 @@ ch := make(chan int)
 ```go
 package main
 
-import "fmt"
+import (
+    "fmt"
+    //"time"
+    )
 
 func sum(a []int, c chan int) {
     sum := 0
@@ -92,18 +97,19 @@ func sum(a []int, c chan int) {
 func main() {
     a := []int{7, 2, 8, -9, 4, 0}
 
-    c := make(chan int)
-    go sum(a[:len(a)/2], c)
-    go sum(a[len(a)/2:], c)
-    x, y := <-c, <-c // receive from c
+    c := make(chan int, 3)
+    go sum(a[:len(a)/2], c)	//17
+    go sum(a[len(a)/2:], c)	//-5
+    go sum(a[:], c)			//12
+    //time.Sleep(100 * time.Millisecond)
+    x, y, z := <-c, <-c, <-c// receive from c
 
-    fmt.Println(x, y, x+y)
+    fmt.Println(x, y, z)
 }
-
 
 ```
 
-<내용 추가>
+여기서 의아했던 것은, PC에서 돌려봤을 때 결과가 매번 달라졌다. `17 -5 12`, `12 17 -5`, `12 -5 17` 등 ~~경우의 수 구하기~~ 여러 가지 케이스가 발생했다. 곰곰히 생각을 해 보았는데, 바로 뒤에 나올 버퍼를 적용하지 않고 3개의 응답을 기다리는 게 되는데, 하나의 채널을 공유하며 채널이 사용 중일 때는 나머지 스레드가 기다린다. 이때, 고루틴이 실행되어 채널에 들어가는 순서가 항상 일정하지 않다. 스레드는 순차지향적이지 않고 병렬적으로 실행되는 개념이기 때문이다. 따라서 어떤 것이 먼저 x에 들아갈지 명확히 단정지을 수 없다.
 
 ---
 
@@ -125,6 +131,8 @@ func main() {
     c := make(chan int, 2)
     c <- 1
     c <- 2
+    fmt.Println("Warning!") //출력됨
+    c <- 3	//fatal error: all goroutines are asleep - deadlock!
     fmt.Println(<-c)
     fmt.Println(<-c)
 }
@@ -132,7 +140,60 @@ func main() {
 
 ```
 
-<내용 추가>
+만약 추가로 `c <-3`을 넣는다면, 무서운 오류를 볼 수 있다. 전 예제와 달리 하나의 함수에서 채널 버퍼를 초과하여 채널에 데이터를 욱여넣으면, 모든 고루틴을 종료시켜 버린다. 그리고, deadlock(교착 상태) 메세지를 뿜는다! 버퍼에서 데이터를 빼내야 새로운 데이터를 넣는데, 빼는 과정이 없고 추가로 넣으려고 시도만 한다. 혹시 후에 고루틴으로 빼내주는 경우를 만들어 테스트를 진행해 보았다.
+
+```go
+package main
+
+import "fmt"
+
+func out(ch chan int){
+    fmt.Println(<-ch)
+}
+
+func main() {
+    c := make(chan int, 2)
+    c <- 1
+    c <- 2
+    fmt.Println("Warning!")
+
+    c <- 3	//fatal error: all goroutines are asleep - deadlock!
+
+    go out(c)   //진행되지 않음
+
+    fmt.Println(<-c)
+    fmt.Println(<-c)
+    fmt.Println("Warning!")    //출력 안 됨
+}
+
+```
+
+만약, 고루틴이 c를 채널에 추가하기 전에 넣는다면 정상적으로 실행됨을 알 수 있다.
+
+```go
+package main
+
+import "fmt"
+
+func out(ch chan int){
+    fmt.Println(<-ch)   //1
+}
+
+func main() {
+    c := make(chan int, 2)
+    c <- 1
+    c <- 2
+    fmt.Println("Warning!")
+
+    go out(c)
+    c <- 3
+
+    fmt.Println(<-c)    //2
+    fmt.Println(<-c)    //3
+    fmt.Println("Warning!")
+}
+
+```
 
 ---
 
@@ -177,7 +238,7 @@ func main() {
 
 ```
 
-<설명 추가>
+오직 수신 측에서만 종료시킬 수 있다는 점을 주의해야 한다!
 
 ---
 
@@ -221,12 +282,6 @@ func main() {
 
 ```
 
-<설명 추가>
-
----
-
-## 에러 (error)
-
 ```
 select 의 default 케이스는 현재 수행 준비가 완료된 케이스가 없을 때 수행됩니다.
 
@@ -267,7 +322,7 @@ func main() {
 
 ```
 
-<내용 추가>
+여러 개의 채널에서 값이 들어올 때, select 구문으로 채널에서 데이터가 들어올 때 작업할 수 있다. 마치 switch와 유사한 형태이다.
 
 ---
 

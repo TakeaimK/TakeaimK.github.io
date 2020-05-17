@@ -51,7 +51,7 @@ func main() {
 
 ```
 
-<내용 추가>
+구조체 포인터 타입을 가지는 메소드 형태로 구조체에 엮인 함수를 만들 수 있다.
 
 ---
 
@@ -85,7 +85,7 @@ func main() {
 
 ```
 
-<내용 추가>
+굳이 구조체가 아니더라도 직접 만든 자료형에도 가능하다.
 
 ---
 
@@ -132,7 +132,8 @@ func main() {
 
 ```
 
-<내용 추가>
+전 챕터에서 구조체 자체를 넘기는 것과 구조체 포인터를 넘기는 것의 차이와 동일한 문제이다. 만약 위 Scale 메소드의 앞부분을 `(v Vertex)라고 선언한다면, 해당 메소드는 값을 계산하고 종료되는 순간 값이 사라진다.  
+Scale 메소드는 구조체 내부 값을 변경해 주는 메소드이기 때문에 값이 유지되어야 하고, Abs 메소드는 return되어 돌아오는 값이므로 무관하다.
 
 ---
 
@@ -189,10 +190,6 @@ func (v *Vertex) Abs() float64 {
 
 ```
 
-<설명 추가>
-
----
-
 ```
 타입이 인터페이스의 메소드들을 구현하면 인터페이스를 구현한 게 됩니다.
 
@@ -237,7 +234,10 @@ func main() {
 
 ```
 
-<설명 추가>
+메소드의 모음을 인터페이스라고 한다. 나는 이 개념이 왜 존재하는가 잘 이해되지 않았다. 그래서 여러 사이트를 찾아봤고, 개념과 사용처에 관한 사이트를 몇 개 찾았다. 아래 사이트를 참고하여 공부하였다.  
+[Golang 인터페이스 사용하기 - 인터페이스 선언과 사용](http://pyrasis.com/book/GoForTheReallyImpatient/Unit32)  
+[Go 인터페이스 - 인터페이스 매개변수, 빈 인터페이스](http://golang.site/go/article/18-Go-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4)  
+[Go 메소드와 인터페이스 - 상속과 유사한 방법으로 사용](https://kamang-it.tistory.com/entry/Go16%EB%A9%94%EC%86%8C%EB%93%9C%EC%99%80-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4)
 
 ---
 
@@ -286,7 +286,9 @@ func main() {
 
 ```
 
-<내용 추가>
+예외처리 등의 방식을 사용하지 않고 대신 에러 타입에 대해 인터페이스 형태로 정의해 놓았다. 위 예제보다 error를 사용하는 방법에 대한 좋은 글을 찾아보았다.  
+[Go-에러 처리](http://golang.site/go/article/19-Go-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC)  
+[Go-error 예제](https://joinc.co.kr/w/man/12/golang/error)
 
 ---
 
@@ -313,26 +315,41 @@ package main
 
 import (
     "fmt"
+    "math"
 )
 
 type ErrNegativeSqrt float64
 
 func (e ErrNegativeSqrt) Error() string{
-
+    return fmt.Sprintf("cannot Sqrt negative number: %f", e)
 }
 
 func Sqrt(f float64) (float64, error) {
-    return 0, nil
+    if f < 0 {
+        return 0, ErrNegativeSqrt(f)
+    }
+    return math.Sqrt(f), nil
 }
 
 func main() {
-    fmt.Println(Sqrt(2))
-    fmt.Println(Sqrt(-2))
+    //fmt.Println(Sqrt(2))
+    //fmt.Println(Sqrt(-2))
+    if ans, err := Sqrt(2); err!=nil{
+        fmt.Println(err)
+    } else{
+        fmt.Println(ans)
+    }
+    if ans, err := Sqrt(-2); err!=nil{
+        fmt.Println(err)
+    } else{
+        fmt.Println(ans)
+    }
 }
+
 
 ```
 
-<코드 및 내용 추가>
+Sqrt 메소드에 양수가 들어가면, `math.Sqrt(f)`로 값이 계산되어 출력된다. 그러나 음수가 들어가게 되면, error로 ErrNegativeSqrt 자료형이 들어가게 된다. 이 때, ErrNegativeSqrt는 error type에 대응할 Error 메소드를 가지고 있고, 이 Error 메소드가 작동하게 된다. 그리고, 이 결과 반환된 값이 nil, 즉 비어있지 않으면서 Error 메소드에서 return한 string이 출력되게 된다.
 
 ---
 
@@ -376,7 +393,7 @@ func main() {
 
 ```
 
-<내용 추가>
+http 패키지를 제공하여 비교적 쉽게 웹 서버를 구축할 수 있다. http 요청이 들어오면 Hello!라는 글씨를 응답해 준다.
 
 ---
 
@@ -400,17 +417,45 @@ http.Handle("/struct", &Struct{"Hello", ":", "Gophers!"})
 package main
 
 import (
+    "fmt"
     "net/http"
 )
 
+type String string
+
+type Struct struct {
+	Greeting string
+	Punct    string
+	Who      string
+}
+
+type k struct{
+
+}
+
+func (s String) ServeHTTP(w http.ResponseWriter,r *http.Request) {
+    fmt.Fprint(w, s)
+}
+
+func (t *Struct) ServeHTTP(w http.ResponseWriter,r *http.Request) {
+    fmt.Fprint(w, t.Greeting, t.Punct, t.Who)
+}
+
+func (str k) ServeHTTP(w http.ResponseWriter,r *http.Request) {
+    fmt.Fprint(w, "Hello, World!")
+}
+
 func main() {
     // your http.Handle calls here
+    http.Handle("/", k{})
+    http.Handle("/string", String("I'm a frayed knot."))
+    http.Handle("/struct", &Struct{"Hello", ":", "Gophers!"})
     http.ListenAndServe("localhost:4000", nil)
 }
 
 ```
 
-<코드 및 내용 추가>
+생각보다 웹 서버 구현이 어렵지 않았다. 우선, Listen되는 주소로 접속 시 해당 경로를 Handle한다. 그리고 http.Handle에서 값을 주면, ServeHTTP에서 값을 받아 처리한다.
 
 ---
 
@@ -443,13 +488,13 @@ import (
 
 func main() {
     m := image.NewRGBA(image.Rect(0, 0, 100, 100))
-    fmt.Println(m.Bounds())
-    fmt.Println(m.At(0, 0).RGBA())
+    fmt.Println(m.Bounds()) //(0,0)-(100,100)
+    fmt.Println(m.At(0, 0).RGBA())  //0 0 0 0
 }
 
 ```
 
-<내용 수정>
+이미지를 처리하기 위해 image를 import시킨다.
 
 ---
 
@@ -470,59 +515,54 @@ package main
 
 import (
     "code.google.com/p/go-tour/pic"
+    //"golang.org/x/tour/pic"
     "image"
+    "image/color"
 )
 
-type Image struct{}
+type Image struct{
+    w int
+	h int
+}
+
+func (img Image) ColorModel() color.Model {
+    return color.RGBAModel
+}
+
+func (img Image) Bounds() image.Rectangle {
+    return image.Rect(0, 0, img.w , img.h)
+}
+
+func (img Image) At(x, y int) color.Color {
+    return color.RGBA{uint8(x), uint8(y), 255, 255}
+}
+
 
 func main() {
-    m := Image{}
+    m := Image{256,256}
     pic.ShowImage(m)
 }
 
-```
-
-<코드 및 내용 수정>
-
----
 
 ```
-슬라이스의 zero value는 nil 입니다.
 
-nil 슬라이스는 길이와 최대 크기가 0입니다.
-
-(슬라이스에 대해 더 알고 싶다면 다음 글을 읽어보세요.)
-```
-
-[Slices: usage and internals](https://blog.golang.org/slices-intro){: target="\_blank"}
+일단, 필수 함수에 대해 알아보기 위해 image에 있는 interface 항목을 살펴보자.
 
 ```go
-package main
-
-import "fmt"
-
-func main() {
-    var z []int
-    fmt.Println(z, len(z), cap(z))
-    if z == nil {
-        fmt.Println("nil!")
-	}
-
-	var a []int
-	var b []int = make([]int, 0)
-	var c []int = []int{}
-
-	fmt.Println(a, b, c) // [] [] []
-
-	fmt.Println(a == nil) // true
-	fmt.Println(b == nil) // false
-	fmt.Println(c == nil) // false
+type Image interface {
+    // ColorModel returns the Image's color model.
+    ColorModel() color.Model
+    // Bounds returns the domain for which At can return non-zero color.
+    // The bounds do not necessarily contain the point (0, 0).
+    Bounds() Rectangle
+    // At returns the color of the pixel at (x, y).
+    // At(Bounds().Min.X, Bounds().Min.Y) returns the upper-left pixel of the grid.
+    // At(Bounds().Max.X-1, Bounds().Max.Y-1) returns the lower-right one.
+    At(x, y int) color.Color
 }
-
 ```
 
-변수를 만들었으나 아무것도 할당하지 않은 경우, 즉 make를 수행하지도 않고 내부 요소에 대한 어떠한 항목도 없는 경우 nil slice가 된다.  
-다만, 위 코드에서 b와 c는 길이와 용량이 0이지만 nil slice가 아니다. 정말 선언하고 아무것도 취하지 않아야 nil이 된다.
+위 3가지는 필수적으로 구현해야 한다는 것을 알 수 있다. 따라서, 저 3가지를 잘 보고 알맞게 구현하면 된다.
 
 ---
 
@@ -559,7 +599,7 @@ func main() {
 
 ```
 
-<내용 추가>
+ROT-13은 알파벳을 13글자씩 밀어내고, z가 넘어가면 다시 a부터 시작하는 방식으로 순환하여 문자를 바꾼다. <해결중>
 
 ---
 
