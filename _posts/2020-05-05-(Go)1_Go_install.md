@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) 1. Go 설치 (Windows, Linux)
+title: (Go) (Gotour) 1. Go 설치 (Windows, Linux)
 categories:
   - Language-Go
 ---

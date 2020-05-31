@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) 3. 흐름 제어
+title: (Go) (Gotour) 3. 흐름 제어
 categories:
   - Language-Go
 ---

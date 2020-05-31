@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) (Gotour) 6. 동시성
+title: (Go) (Learn With Go Tests) 1. Go Fundamentals
 categories:
   - Language-Go
 ---

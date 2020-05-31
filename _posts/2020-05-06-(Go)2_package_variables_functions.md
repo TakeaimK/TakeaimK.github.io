@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) 2. 패키지, 변수, 함수
+title: (Go) (Gotour) 2. 패키지, 변수, 함수
 categories:
   - Language-Go
 ---

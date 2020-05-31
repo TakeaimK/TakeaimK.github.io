@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) 0. Go?
+title: (Go) (Gotour) 0. Go?
 categories:
   - Language-Go
 ---

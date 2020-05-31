@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Go) 5. 메소드와 인터페이스
+title: (Go) (Gotour) 5. 메소드와 인터페이스
 categories:
   - Language-Go
 ---
