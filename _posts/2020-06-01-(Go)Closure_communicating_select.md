@@ -125,6 +125,72 @@ func newCounter() func() int {
 
 # Select 구문 개념 정리
 
+Select문은 switch와 비슷한 모양새를 가진다. 다만 동시성 프로그래밍에 사용되며, 두 개 이상의 채널에서 메세지를 기다려야 하는 경우 사용한다. 이 select 문은 아래와 같은 특징을 가진다.
+
+- case는 switch와 다르게 순차적인 것이 아니라, 채널에 신호를 수신받으면 동작한다.
+- 모든 case가 계산되며, select문 안에 함수가 있다면 select 수행 시 즉시 호출된다. 채널이 준비되어 있지 않더라도 말이다.
+
+```go
+select{
+  case n := <-ch1:
+    //Do
+  case n := <-ch2:
+    //Do
+  case c3 <- f():
+    //c3의 준비와 관계 없이 f() 호출
+}
+```
+
+- 입출력이 가능한 case가 있다면 그 중 하나를 선택하여 해당 case의 코드를 수행한다.
+- 동시에 두 채널에 신호가 여러 번 도착할 경우, 최대한 균등하게 배분하여 처리한다.
+
+```go
+c1 := make(chan interface{}); close(c1)
+c2 := make(chan interface{}); close(c2)
+var c1Count, c2Count int
+for i := 1000; i >= 0; i-- {
+    select {
+        case <-c1:
+            c1Count++
+        case <-c2:
+            c2Count++
+        }
+    }
+fmt.Printf("c1Count: %d\nc2Count: %d\n", c1Count, c2Count)
+//c1Count와 c2Count는 비슷한 Count를 가짐
+```
+
+- 준비된 채널이 없는 경우, 즉 모든 case에 입출력이 없는 상태일 경우 default를 사용하여 대기할 수 있다.
+
+```go
+start := time.Now()
+var c1, c2 <-chan int
+select {
+    case <-c1:
+    case <-c2:
+    default:
+      fmt.Printf("In default after %v\n\n", time.Since(start))
+      //In default after 1.421µs
+}
+
+```
+
+- 일정 시간만 채널과 통신을 기다리고자 하면 `time.After(wait time)` 함수를 사용한다. 이 함수는 wait time만큼 기다린 후 채널을 반환한다.
+
+```go
+var c <-chan int
+select {
+    case <-c:
+    case <-time.After(5 * time.Second):
+        fmt.Println("Timed out.")
+        return
+}
+```
+
+- for문을 사용하여 무한루프 안에 넣는다면 지속적인 통신도 가능하다.
+
+즉, Select는 여러 개의 고루틴에서 채널을 통해 보낸 메시지를 받아 처리할 때 유용하다.
+
 ---
 
 읽어주셔서 감사합니다!
