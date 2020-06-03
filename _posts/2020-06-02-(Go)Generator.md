@@ -1,0 +1,244 @@
+---
+layout: post
+title: (Go) Generator
+categories:
+  - Language-Go
+---
+
+**본 글은 Kakao Enterprise 예비인턴 GOLang 교육내용 및 자습/과제를 정리한 내용입니다.**
+
+괴제 전체 source code는 아래 링크에 있습니다.
+
+> [Github Source Code - Make Generator using Golang Concurrency](https://github.com/TakeaimK/Study_Goroutine_Channel){: target="\_blank"}
+
+---
+
+# 제너레이터 기본형
+
+```go
+package main
+
+import "fmt"
+
+func IntegerGenerator(n int) <-chan int {
+	next := 0
+	intStream := make(chan int)
+
+	go func() {
+		defer close(intStream)
+		for next < n {
+			next++
+			intStream <- next
+		}
+	}()
+	return intStream
+}
+
+func main() {
+	for i := range IntegerGenerator(10) {
+		fmt.Println(i)
+	}
+}
+```
+
+main에서 제너레이터 호출 > 제너레이터에서 채널 생성 > 고루틴 생성과 동시에 defer로 채널 close > 제너레이터는 채널을 반환 > 고루틴에서 원하는 값 생성 후 채널로 전송 > main의 for문에서 값을 받아 출력 > 채널이 close되면 자동으로 for문도 종료
+
+---
+
+# ex1. 주어진 배열의 n개의 모든 조합을 생성하는 제너레이터 작성
+
+## 제너레이터 부분
+
+- string 슬라이스 채널 생성 후 `Combinations()`에 채널과 슬라이스, 조합 별 요소 수를 넘긴다.
+
+```go
+func CombinationGenerator(fruit []string, n int) <-chan []string {
+	combStream := make(chan []string)
+
+	go func() {
+		defer close(combStream)
+		Combinations(combStream, fruit, n)
+	}()
+	return combStream
+}
+
+func main() {
+	for i := range CombinationGenerator([]string{"사과", "배", "복숭아", "포도", "귤"}, 2) {
+		fmt.Println(i)
+	}
+}
+
+```
+
+## Combination()
+
+- 조합을 만드는 코드는 [original source](https://github.com/mxschmitt/golang-combinations/blob/master/combinations.go#L32)를 응용하였다.
+- 하나의 조합이 만들어질 때마다 채널로 전송한다.
+
+```go
+func Combinations(ch chan []string, set []string, n int) {
+	length := uint(len(set))
+
+	if n > len(set) {
+		n = len(set)
+	}
+
+	// Go through all possible combinations of objects
+	// from 1 (only first object in subset) to 2^length (all objects in subset)
+	for subsetBits := 1; subsetBits < (1 << length); subsetBits++ {
+		if n > 0 && bits.OnesCount(uint(subsetBits)) != n {
+			continue
+		}
+
+		var subset []string
+
+		for object := uint(0); object < length; object++ {
+			// checks if object is contained in subset
+			// by checking if bit 'object' is set in subsetBits
+			if (subsetBits>>object)&1 == 1 {
+				// add object to subset
+				subset = append(subset, set[object])
+			}
+		}
+		// send subset to channel
+		ch <- subset
+	}
+}
+```
+
+---
+
+# ex2. n bit 이진 그레이 코드를 순서대로 출력하는 제너레이터 작성
+
+## 제너레이터 부분
+
+- main에서 n bit Gray Code를 요청받으면, 우선 n비트가 가지는 경우의 수인 2의 n제곱을 구하여 rng에 저장한다.
+- 0부터 rng까지 값을 `convertToGray()`에 보내 변환 뒤 받은 정수 값을 n자릿수만큼 0을 채워 바이너리 값으로 변환 후 string으로 출력한다.
+- 결과 값을 int 슬라이스로 받기 원하므로 각 자릿수를 `strconv.Atoi()`로 변환하여 int 슬라이스에 삽입 후 채널로 전송한다.
+
+```go
+func GrayBinaryGenerator(n int) <-chan []int {
+	GrayCodeStream := make(chan []int)
+
+	rng := 1
+
+	for i := 0; i < n; i++ {
+		rng *= 2
+	}
+	go func() {
+		defer close(GrayCodeStream)
+		var x string
+		arr := make([]int, n)
+
+		for i := 0; i < rng; i++ {
+			x = fmt.Sprintf("%0*b", n, convertToGray(i))
+
+			for j := 0; j < n; j++ {
+				arr[j], _ = strconv.Atoi(string(x[j]))
+			}
+			GrayCodeStream <- arr
+		}
+	}()
+	return GrayCodeStream
+}
+
+func main() {
+	for i := range GrayBinaryGenerator(3) {
+		fmt.Println(i)
+	}
+}
+```
+
+## convertToGray()
+
+- Gray Code로 변환하는 공식(XOR 연산)을 사용한다.
+
+```go
+func convertToGray(num int) int {
+	return num ^ (num >> 1)
+}
+```
+
+---
+
+# ex3. n개의 원반을 이동하는 하노이 탑 제너레이터 작성
+
+## 제너레이터 부분
+
+- 2의 크기를 가지는 string 배열 채널 생성 후 `Move()`에 채널과 원판 갯수, 기둥을 넘긴다.
+
+```go
+func HanoiGenerator(n int, from, to, by string) <-chan [2]string {
+	HanoiStream := make(chan [2]string)
+
+	go func() {
+		defer close(HanoiStream)
+
+		Move(HanoiStream, n, from, to, by)
+
+	}()
+	return HanoiStream
+}
+
+func main() {
+	for move := range HanoiGenerator(5, "A", "B", "C") {
+		fmt.Println(move[0], " ->", move[1])
+	}
+}
+```
+
+## Move()
+
+- 재귀를 이용한 하노이 탑 옮기기 방법을 사용하였다. (Discovery Go - 47p 참조)
+
+```go
+func Move(ch chan [2]string, n int, from, to, by string) {
+	if n <= 0 {
+		return
+	}
+	Move(ch, n-1, from, by, to)
+	ans := [2]string{from, to}
+	ch <- ans
+	Move(ch, n-1, by, to, from)
+}
+```
+
+---
+
+# ex4. 주어진 파일에서 모든 단어를 나온 순서대로 출력하는 제너레이터 작성
+
+## 제너레이터 부분
+
+- 단순하여 따로 동작 함수를 만들지 않았다.
+- 파일을 읽어온 뒤, `strings.Split()`으로 공백 단위로 분리하여 ans 슬라이스에 담은 뒤, 하나씩 꺼내어 채널로 전송한다.
+
+```go
+func AllwordsGenerator(filename string) <-chan string {
+	WordStream := make(chan string)
+
+	go func() {
+		defer close(WordStream)
+
+		data, _ := ioutil.ReadFile(filename)
+
+		temp := string(data)
+		ans := strings.Split(temp, " ")
+
+		for _, word := range ans {
+			WordStream <- word
+		}
+
+	}()
+	return WordStream
+}
+
+func main() {
+	for w := range AllwordsGenerator("./test.txt") {
+		fmt.Println(w)
+	}
+}
+```
+
+---
+
+읽어주셔서 감사합니다!
