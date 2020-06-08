@@ -112,32 +112,18 @@ func Combinations(ch chan []string, set []string, n int) {
 
 ## 제너레이터 부분
 
-- main에서 n bit Gray Code를 요청받으면, 우선 n비트가 가지는 경우의 수인 2의 n제곱을 구하여 rng에 저장한다.
-- 0부터 rng까지 값을 `convertToGray()`에 보내 변환 뒤 받은 정수 값을 n자릿수만큼 0을 채워 바이너리 값으로 변환 후 string으로 출력한다.
-- 결과 값을 int 슬라이스로 받기 원하므로 각 자릿수를 `strconv.Atoi()`로 변환하여 int 슬라이스에 삽입 후 채널로 전송한다.
+- main에서 n bit Gray Code를 요청받으면, `printGray()`에서 그레이 코드로 변환 후 `printCode()`에서 값을 받아 채널로 전송한다.
 
 ```go
 func GrayBinaryGenerator(n int) <-chan []int {
 	GrayCodeStream := make(chan []int)
 
-	rng := 1
-
-	for i := 0; i < n; i++ {
-		rng *= 2
-	}
 	go func() {
 		defer close(GrayCodeStream)
-		var x string
+
 		arr := make([]int, n)
+		printGray(arr, n, 0, 0, GrayCodeStream)
 
-		for i := 0; i < rng; i++ {
-			x = fmt.Sprintf("%0*b", n, convertToGray(i))
-
-			for j := 0; j < n; j++ {
-				arr[j], _ = strconv.Atoi(string(x[j]))
-			}
-			GrayCodeStream <- arr
-		}
 	}()
 	return GrayCodeStream
 }
@@ -149,14 +135,32 @@ func main() {
 }
 ```
 
-## convertToGray()
+## printGray(), printCode()
 
-- Gray Code로 변환하는 공식(XOR 연산)을 사용한다.
+- 재귀를 사용한다.
 
 ```go
-func convertToGray(num int) int {
-	return num ^ (num >> 1)
+func printCode(arr []int, len int, ch chan []int) {
+
+	snd := make([]int, len)
+	for i := 0; i < len; i++ {
+		snd[i] = arr[i]
+	}
+	ch <- snd
 }
+
+func printGray(arr []int, n, index, reverse int, ch chan []int) {
+	if index == n {
+		printCode(arr, n, ch)
+		return
+	}
+
+	arr[index] = reverse
+	printGray(arr, n, index+1, 0, ch)
+	arr[index] = 1 - reverse
+	printGray(arr, n, index+1, 1, ch)
+}
+
 ```
 
 ---
