@@ -219,8 +219,7 @@ func Move(ch chan [2]string, n int, from, to, by string) {
 
 ## 제너레이터 부분
 
-- 단순하여 따로 동작 함수를 만들지 않았다.
-- 파일을 읽어온 뒤, `strings.Split()`으로 공백 단위로 분리하여 ans 슬라이스에 담은 뒤, 하나씩 꺼내어 채널로 전송한다.
+- 파일 Open 이후 `ReadString(' ')`으로 공백을 기준하여 읽어온 후, 채널로 전송한다.
 
 ```go
 func AllwordsGenerator(filename string) <-chan string {
@@ -229,14 +228,34 @@ func AllwordsGenerator(filename string) <-chan string {
 	go func() {
 		defer close(WordStream)
 
-		data, _ := ioutil.ReadFile(filename)
-
-		temp := string(data)
-		ans := strings.Split(temp, " ")
-
-		for _, word := range ans {
-			WordStream <- word
+		fo, err := os.Open(filename)
+		if err != nil {
+			panic(err)
 		}
+		defer fo.Close()
+
+		reader := bufio.NewReader(fo)
+
+		for {
+			line, err := reader.ReadString(' ')
+
+			if err == io.EOF {
+				WordStream <- line
+				break
+			}
+
+			if err != nil {
+				break
+			}
+			WordStream <- line
+		}
+		//data, _ := ioutil.ReadFile(filename)
+		//temp := string(data)
+		//ans := strings.Split(temp, " ")
+		//
+		//for _, word := range ans {
+		//	WordStream <- word
+		//}
 
 	}()
 	return WordStream
@@ -247,6 +266,7 @@ func main() {
 		fmt.Println(w)
 	}
 }
+
 ```
 
 ---
