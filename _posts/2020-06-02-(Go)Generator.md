@@ -74,10 +74,16 @@ func main() {
 
 - 조합을 만드는 코드는 [original source](https://github.com/mxschmitt/golang-combinations/blob/master/combinations.go#L32)를 응용하였다.
 - 하나의 조합이 만들어질 때마다 채널로 전송한다.
+- 만약 0개의 요소 수를 요청받으면, 빈 문자열 슬라이스를 채널로 보내고 종료한다.
 
 ```go
 func Combinations(ch chan []string, set []string, n int) {
 	length := uint(len(set))
+
+	if n == 0{
+		ch <- []string{}
+		return
+	}
 
 	if n > len(set) {
 		n = len(set)
