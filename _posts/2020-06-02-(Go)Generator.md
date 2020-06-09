@@ -20,28 +20,49 @@ package main
 
 import "fmt"
 
-func IntegerGenerator(n int) <-chan int {
+func IntegerGenerator(done chan struct{}) <-chan int {
 	next := 0
 	intStream := make(chan int)
 
 	go func() {
 		defer close(intStream)
-		for next < n {
-			next++
-			intStream <- next
+		for{
+			select{
+				case <- done:
+					return
+				default:
+					next++
+					intStream <- next
+			}
 		}
+
 	}()
 	return intStream
 }
 
 func main() {
-	for i := range IntegerGenerator(10) {
-		fmt.Println(i)
+	done := make(chan struct{})
+
+	IntegerStream := IntegerGenerator(done)
+	for i := 0; i<3; i++ {
+		fmt.Printf("%d", <-IntegerStream)
 	}
+	close(done)
 }
+
 ```
 
-main에서 제너레이터 호출 > 제너레이터에서 채널 생성 > 고루틴 생성과 동시에 defer로 채널 close > 제너레이터는 채널을 반환 > 고루틴에서 원하는 값 생성 후 채널로 전송 > main의 for문에서 값을 받아 출력 > 채널이 close되면 자동으로 for문도 종료
+### main 부분 
+main에서 go thread 종료 채널 생성 > 스트림 변수에 제너레이터 생성 > 스트림 대기
+
+### generator 부분
+스트림으로 전송할 채널 생성 및 종료 예약 > 고루틴 생성 > for-select 조합으로 종료채널 수신 대기 및 default로 생성자 구현 > 생성자에서 원하는 값 생성 후 스트림 채널로 전송
+
+### main 부분
+main에서 채널의 값을 받아 출력 >모든 수행이 완료되면 종료 채널에 데이터 전송
+
+### generator 부분
+고루틴 안의 select에서 종료 신호 수신 > goroutine을 종료(return)
 
 ---
 
