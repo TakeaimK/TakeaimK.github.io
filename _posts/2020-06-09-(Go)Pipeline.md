@@ -18,10 +18,10 @@ categories:
 [Go Blog - Pipeline](https://blog.golang.org/pipelines)
 
 **"파이프라인"** 이라는 용어는 Computer Science를 공부해 본 적이 있다면 한번쯤 접해보았을 단어이다. 아래 그림처럼 CPU 등의 연산 장치에서 데이터를 처리할 때, 병렬로 여러 개의 명령어를 처리하여 속도를 향상시키는 기법이다.  
-![CS-Pipeline](/assets/images/Go/Pipeline/CS_Pipeline.jpg)  
+![CS-Pipeline](/assets/images/Go/Pipeline/CS_Pipeline.jpg)
 
-Golang에서 파이프라인에 대한 명확한 정의는 없지만, 앞서 배운 채널 여러 개를 연결하며 각 단계는  goroutines 그룹으로 이루어져 있다.  
-이게 무슨 말인고 하니, 파이프라인이라 불리는 것들의 특징은 다음과 같다.  
+Golang에서 파이프라인에 대한 명확한 정의는 없지만, 앞서 배운 채널 여러 개를 연결하며 각 단계는 goroutines 그룹으로 이루어져 있다.  
+이게 무슨 말인고 하니, 파이프라인이라 불리는 것들의 특징은 다음과 같다.
 
 > - 매개변수로 in채널을 받아 값을 수신
 > - 채널에서 받은 값을 계산하여 새로운 값 생성
@@ -60,8 +60,7 @@ func main() {
 }
 ```
 
-
-
+우선, 정수 배열을 차례대로 출력하는 `gen()`이라는 제네레이터에 수를 넣고, 제네레이터는 하나씩 수를 꺼내어 채널에 전송합니다. `sq()`에서 이 값을 받아 자기 자신을 곱하고, 이 과정을 한번 더 반복합니다.
 
 ---
 
