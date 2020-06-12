@@ -9,7 +9,7 @@ categories:
 
 괴제 전체 source code는 아래 링크에 있습니다.
 
-> [Github Source Code - Pipeline](https://github.com/TakeaimK/Study_Goroutine_Channel){: target="\_blank"}
+> [Github Source Code - Pipeline](https://github.com/TakeaimK/Study_Goroutine_Channel/tree/master/pipeline){: target="\_blank"}
 
 ---
 
