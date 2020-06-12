@@ -257,4 +257,279 @@ func main() {
 
 ---
 
+## Digesting a tree
+
+- 디렉토리의 md5 file checksum을 출력하는 프로그램을 제작한다. 먼저, 스레드를 사용하지 않는 `serial.go` 코드를 작성한다.
+
+ ```go
+ // MD5All reads all the files in the file tree rooted at root and returns a map
+// from file path to the MD5 sum of the file's contents.  If the directory walk
+// fails or any read operation fails, MD5All returns an error.
+ func MD5All(root string) (map[string][md5.Size]byte, error) {
+    m := make(map[string][md5.Size]byte)
+    err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+        if !info.Mode().IsRegular() {
+            return nil
+        }
+        data, err := ioutil.ReadFile(path)
+        if err != nil {
+            return err
+        }
+        m[path] = md5.Sum(data)
+        return nil
+    })
+    if err != nil {
+        return nil, err
+    }
+    return m, nil
+}
+
+func main() {
+    // Calculate the MD5 sum of all files under the specified directory,
+    // then print the results sorted by path name.
+    m, err := MD5All(os.Args[1])
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    var paths []string
+    for path := range m {
+        paths = append(paths, path)
+    }
+    sort.Strings(paths)
+    for _, path := range paths {
+        fmt.Printf("%x  %s\n", m[path], path)
+    }
+}
+ ```
+
+- 다음으로, 두 단계의 파이프라인을 사용하는 `parallel.go`를 작성한다.
+- 우선, 파일경로, sum, 에러를 가지는 구조체를 만들고, `MD5ALL()`에서 `sumFiles()`을 호출한다. 이곳에서 스레드를 생성하여 파이프라인을 구성한다. `filepath.Walk()` 함수는 첫 번째 매개변수로 전달된 path의 파일과 디렉터리를 모두 순회하고, 두 번째 매개변수로 전달된 함수를 수행한다. 이렇게 순회한 경로를 기반으로, `md5.Sum(data)`를 돌려 채널로 전송한다. 그러면 다시 `MD5ALL()`에서 값을 받아 처리하는 방식이다.
+
+```go
+package main
+
+import (
+	"crypto/md5"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"sort"
+	"sync"
+)
+
+type result struct {
+	path string
+	sum  [md5.Size]byte
+	err  error
+}
+
+func sumFiles(done <-chan struct{}, root string) (<-chan result, <-chan error) {
+	// For each regular file, start a goroutine that sums the file and sends
+	// the result on c.  Send the result of the walk on errc.
+	c := make(chan result)
+	errc := make(chan error, 1)
+	go func() {
+		var wg sync.WaitGroup
+		err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			if !info.Mode().IsRegular() {
+				return nil
+			}
+			wg.Add(1)
+			go func() {
+				data, err := ioutil.ReadFile(path)
+				select {
+				case c <- result{path, md5.Sum(data), err}:
+				case <-done:
+				}
+				wg.Done()
+			}()
+			// Abort the walk if done is closed.
+			select {
+			case <-done:
+				return errors.New("walk canceled")
+			default:
+				return nil
+			}
+		})
+		// Walk has returned, so all calls to wg.Add are done.  Start a
+		// goroutine to close c once all the sends are done.
+		go func() {
+			wg.Wait()
+			close(c)
+		}()
+		// No select needed here, since errc is buffered.
+		errc <- err
+	}()
+	return c, errc
+}
+
+func MD5All(root string) (map[string][md5.Size]byte, error) {
+	// MD5All closes the done channel when it returns; it may do so before
+	// receiving all the values from c and errc.
+	done := make(chan struct{})
+	defer close(done)
+
+	c, errc := sumFiles(done, root)
+
+	m := make(map[string][md5.Size]byte)
+	for r := range c {
+		if r.err != nil {
+			return nil, r.err
+		}
+		m[r.path] = r.sum
+	}
+	if err := <-errc; err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func main() {
+	// Calculate the MD5 sum of all files under the specified directory,
+	// then print the results sorted by path name.
+	m, err := MD5All(os.Args[1])
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var paths []string
+	for path := range m {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	for _, path := range paths {
+		fmt.Printf("%x  %s\n", m[path], path)
+	}
+}
+```
+
+- 위 방식에서, 파일마다 고루틴을 생성하여 처리하는 방식을 사용한다. 만일, 파일 각각의 용량이 매우 큰 경우, 컴퓨터의 메모리보다 더 큰 파일을 로드해야 하는 경우가 발생할 수 있다. 이런 경우를 해결하기 위해,  `bounded.go`를 작성해 보자.
+- 파이프라인에서 워킹 트리, 파일 읽기 및 digests, digests 수집의 세 가지 단계를 거친다.
+
+```go
+// walkFiles starts a goroutine to walk the directory tree at root and send the
+// path of each regular file on the string channel.  It sends the result of the
+// walk on the error channel.  If done is closed, walkFiles abandons its work.
+func walkFiles(done <-chan struct{}, root string) (<-chan string, <-chan error) {
+	paths := make(chan string)
+	errc := make(chan error, 1)
+	go func() { // HL
+		// Close the paths channel after Walk returns.
+		defer close(paths) // HL
+		// No select needed for this send, since errc is buffered.
+		errc <- filepath.Walk(root, func(path string, info os.FileInfo, err error) error { // HL
+			if err != nil {
+				return err
+			}
+			if !info.Mode().IsRegular() {
+				return nil
+			}
+			select {
+			case paths <- path: // HL
+			case <-done: // HL
+				return errors.New("walk canceled")
+			}
+			return nil
+		})
+	}()
+	return paths, errc
+}
+
+// A result is the product of reading and summing a file using MD5.
+type result struct {
+	path string
+	sum  [md5.Size]byte
+	err  error
+}
+
+// digester reads path names from paths and sends digests of the corresponding
+// files on c until either paths or done is closed.
+func digester(done <-chan struct{}, paths <-chan string, c chan<- result) {
+	for path := range paths { // HLpaths
+		data, err := ioutil.ReadFile(path)
+		select {
+		case c <- result{path, md5.Sum(data), err}:
+		case <-done:
+			return
+		}
+	}
+}
+
+// MD5All reads all the files in the file tree rooted at root and returns a map
+// from file path to the MD5 sum of the file's contents.  If the directory walk
+// fails or any read operation fails, MD5All returns an error.  In that case,
+// MD5All does not wait for inflight read operations to complete.
+func MD5All(root string) (map[string][md5.Size]byte, error) {
+	// MD5All closes the done channel when it returns; it may do so before
+	// receiving all the values from c and errc.
+	done := make(chan struct{})
+	defer close(done)
+
+	paths, errc := walkFiles(done, root)
+
+	// Start a fixed number of goroutines to read and digest files.
+	c := make(chan result) // HLc
+	var wg sync.WaitGroup
+	const numDigesters = 20
+	wg.Add(numDigesters)
+	for i := 0; i < numDigesters; i++ {
+		go func() {
+			digester(done, paths, c) // HLc
+			wg.Done()
+		}()
+	}
+	go func() {
+		wg.Wait()
+		close(c) // HLc
+	}()
+	// End of pipeline. OMIT
+
+	m := make(map[string][md5.Size]byte)
+	for r := range c {
+		if r.err != nil {
+			return nil, r.err
+		}
+		m[r.path] = r.sum
+	}
+	// Check whether the Walk failed.
+	if err := <-errc; err != nil { // HLerrc
+		return nil, err
+	}
+	return m, nil
+}
+
+func main() {
+	// Calculate the MD5 sum of all files under the specified directory,
+	// then print the results sorted by path name.
+	m, err := MD5All(os.Args[1])
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var paths []string
+	for path := range m {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	for _, path := range paths {
+		fmt.Printf("%x  %s\n", m[path], path)
+	}
+}
+```
+
+- 
+
+
+
+---
+
 읽어주셔서 감사합니다!
