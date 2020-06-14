@@ -11,6 +11,8 @@ categories:
 
 > [Github Source Code - Pipeline](https://github.com/TakeaimK/Study_Goroutine_Channel/tree/master/pipeline){: target="\_blank"}
 
+교육내용 예제 응용 코드는 하단에 있습니다.
+
 ---
 
 # Pipeline
@@ -524,6 +526,156 @@ func main() {
 		fmt.Printf("%x  %s\n", m[path], path)
 	}
 }
+```
+
+---
+
+# Pipeline 교육 코드 응용
+
+## 원본 코드
+
+```go
+package main
+
+import "fmt"
+
+func gen() <-chan int {
+	next := 0
+	intStream := make(chan int)
+	go func() {
+		defer close(intStream)
+		for {
+			next++
+			intStream <- next
+		}
+	}()
+	return intStream
+}
+
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n * n
+		}
+		close(out)
+	}()
+	return out
+}
+
+func addone(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n + 1
+		}
+		close(out)
+	}()
+	return out
+}
+
+func main() {
+	n := 0
+	for s := range square(square(addone(square(gen())))) {
+		if n == 5 {
+			break
+		}
+		fmt.Println(s)
+		n++
+	}
+}
+
+```
+
+## 응용 코드
+
+- goroutine을 종료시켜 자원을 회수할 수 있도록 각 goroutine에 done 채널을 전송
+- done과 out 두 개의 채널을 받는 경우 range를 사용할 수 없어서 가장 마지막에 out만 출력시키는 `finalPipe()`을 추가
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func gen(done <-chan struct{}) (<-chan struct{}, <-chan int) {
+	next := 0
+	intStream := make(chan int)
+
+	go func() {
+		defer close(intStream)
+		for {
+			select {
+			case <-done:
+				return
+			default:
+				next++
+				intStream <- next
+			}
+		}
+	}()
+	return done, intStream
+}
+
+func square(done <-chan struct{}, in <-chan int) (<-chan struct{}, <-chan int) {
+	out := make(chan int)
+
+	go func() {
+		for {
+			select {
+			case n := <-in:
+				out <- n * n
+			case <-done:
+				close(out)
+				return
+			}
+
+		}
+	}()
+	return done, out
+}
+
+func addone(done <-chan struct{}, in <-chan int) (<-chan struct{}, <-chan int) {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n + 1
+		}
+		close(out)
+	}()
+	return done, out
+}
+
+func finalPipe(done <-chan struct{}, in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for {
+			select {
+			case n := <-in:
+				out <- n
+			case <-done:
+				fmt.Println("done!")
+				close(out)
+				return
+			}
+		}
+	}()
+	return out
+}
+
+func main() {
+	done := make(chan struct{})
+	defer close(done)
+
+	for n := range finalPipe(addone(square(gen(done)))) {
+		fmt.Println(n)
+		if n > 100 {
+			break
+		}
+	}
+}
+
 ```
 
 ---
