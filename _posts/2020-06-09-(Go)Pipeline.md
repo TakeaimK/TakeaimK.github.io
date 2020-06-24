@@ -11,6 +11,8 @@ categories:
 
 > [Github Source Code - Pipeline](https://github.com/TakeaimK/Study_Goroutine_Channel/tree/master/pipeline){: target="\_blank"}
 
+교육내용 예제 응용 코드는 하단에 있습니다.
+
 ---
 
 # Pipeline
@@ -62,8 +64,8 @@ func main() {
 }
 ```
 
-- 우선, 정수 배열을 차례대로 출력하는 `gen()`이라는 제네레이터에 수를 넣고, 제네레이터는 하나씩 수를 꺼내어 채널에 전송한다. `sq()`에서 이 값을 받아 자기 자신을 곱하고, 이 과정을 한번 더 반복한다.  
-- 즉, n에서는 `sq()`의 채널을 받게 되고, 세 번의 채널을 거쳐 돌아오는 값을 출력한다.  
+- 우선, 정수 배열을 차례대로 출력하는 `gen()`이라는 제네레이터에 수를 넣고, 제네레이터는 하나씩 수를 꺼내어 채널에 전송한다. `sq()`에서 이 값을 받아 자기 자신을 곱하고, 이 과정을 한번 더 반복한다.
+- 즉, n에서는 `sq()`의 채널을 받게 되고, 세 번의 채널을 거쳐 돌아오는 값을 출력한다.
 
 ---
 
@@ -71,14 +73,14 @@ func main() {
 
 ```
 채널이 닫혀도 여러 함수가 동일한 채널에서 읽을 수 있고(Fan-out), 함수가 여러 입력에서 읽고 모든 입력이 닫히면 닫힌 단일 채널에 입력 채널을 다중화하여 모두 닫을 때까지 진행할 수 있다(Fan-in)
-```  
+```
 
- - ...라고 공식 블로그에서 설명하지만, 이게 도통 무슨 소리인지 모르겠어서 조금 더 검색해서 추가해 보았다. 
- - 쉽게 말하자면, 회전문이다. Fan-out은 특정 채널을 통해 Input이 들어왔을 때 여러 개의 goroutine을 생성해 task를 분산 처리하는 것이며, fan-in은 처리된 결과들을 내뱉는 채널들을 하나로 취합하는 `merge`과정을 거쳐 생성된 하나의 채널에서 output을 뽑아낸다.
+- ...라고 공식 블로그에서 설명하지만, 이게 도통 무슨 소리인지 모르겠어서 조금 더 검색해서 추가해 보았다.
+- 쉽게 말하자면, 회전문이다. Fan-out은 특정 채널을 통해 Input이 들어왔을 때 여러 개의 goroutine을 생성해 task를 분산 처리하는 것이며, fan-in은 처리된 결과들을 내뱉는 채널들을 하나로 취합하는 `merge`과정을 거쳐 생성된 하나의 채널에서 output을 뽑아낸다.
 
-![CS-Pipeline](/assets/images/Go/Pipeline/fan-out_fan-in.png)  
+![CS-Pipeline](/assets/images/Go/Pipeline/fan-out_fan-in.png)
 
- - 아래 코드는 fan-in 예시이다. 두 채널에서 들어온 결과값을 취합하여 출력한다.
+- 아래 코드는 fan-in 예시이다. 두 채널에서 들어온 결과값을 취합하여 출력한다.
 
 ```go
 func main() {
@@ -95,41 +97,41 @@ func main() {
 }
 ```
 
- - 두 채널 중 먼저 입력이 들어오는 채널에 대해 n으로 값을 출력하는 `merge()` 코드를 살펴보자.
+- 두 채널 중 먼저 입력이 들어오는 채널에 대해 n으로 값을 출력하는 `merge()` 코드를 살펴보자.
 
- ```go
- func merge(cs ...<-chan int) <-chan int {
-	var wg sync.WaitGroup
-	out := make(chan int)
+```go
+func merge(cs ...<-chan int) <-chan int {
+var wg sync.WaitGroup
+out := make(chan int)
 
-	// Start an output goroutine for each input channel in cs.  output
-	// copies values from c to out until c is closed, then calls wg.Done.
-	output := func(c <-chan int) {
-		for n := range c {
-			out <- n
-		}
-		wg.Done()
+// Start an output goroutine for each input channel in cs.  output
+// copies values from c to out until c is closed, then calls wg.Done.
+output := func(c <-chan int) {
+	for n := range c {
+		out <- n
 	}
-	wg.Add(len(cs))
-	for _, c := range cs {
-		go output(c)
-	}
-
-	// Start a goroutine to close out once all the output goroutines are
-	// done.  This must start after the wg.Add call.
-	go func() {
-		wg.Wait()
-		close(out)
-	}()
-	return out
+	wg.Done()
 }
- ```
+wg.Add(len(cs))
+for _, c := range cs {
+	go output(c)
+}
 
- - `sync.WaitGroup()`은 모든 고루틴이 종료될 때까지 대기해야 할 때 사용한다.
+// Start a goroutine to close out once all the output goroutines are
+// done.  This must start after the wg.Add call.
+go func() {
+	wg.Wait()
+	close(out)
+}()
+return out
+}
+```
 
- > • func (wg *WaitGroup) Add(delta int): WaitGroup에 대기 중인 고루틴 개수 추가  
+- `sync.WaitGroup()`은 모든 고루틴이 종료될 때까지 대기해야 할 때 사용한다.
+
+> • func (wg *WaitGroup) Add(delta int): WaitGroup에 대기 중인 고루틴 개수 추가  
 > • func (wg *WaitGroup) Done(): 대기 중인 고루틴의 수행이 종료되는 것을 알려줌  
-> • func (wg *WaitGroup) Wait(): 모든 고루틴이 종료될 때까지 대기  
+> • func (wg \*WaitGroup) Wait(): 모든 고루틴이 종료될 때까지 대기
 
 - 즉, `Done()`을 수행하면 `Wait()` 부분에서 기다리다 종료시킨다.
 
@@ -137,13 +139,13 @@ func main() {
 
 ## Stopping short
 
- - 파이프라인에는 다음과 같은 규칙이 있다.
+- 파이프라인에는 다음과 같은 규칙이 있다.
 
- > 모든 송신이 완료되면 출력 채널을 닫는다  
- > 채널이 닫혀도 입력 채널에서는 값을 계속 수신
+> 모든 송신이 완료되면 출력 채널을 닫는다  
+> 채널이 닫혀도 입력 채널에서는 값을 계속 수신
 
- - 만약, goroutine에서 생성된 값을 아직 출력 채널에 전부 보내지 않은 상태에서 수신 측이 return한다면, 나머지 값은 보내지지 못하고 무한정 대기한다. 이 자원은 가비지 컬렉터가 회수하지 않는다. goroutine 스택의 Heap 참조는 가비지 컬렉션이 건들지 않기 때문이다.
- 
+- 만약, goroutine에서 생성된 값을 아직 출력 채널에 전부 보내지 않은 상태에서 수신 측이 return한다면, 나머지 값은 보내지지 못하고 무한정 대기한다. 이 자원은 가비지 컬렉터가 회수하지 않는다. goroutine 스택의 Heap 참조는 가비지 컬렉션이 건들지 않기 때문이다.
+
 ```go
  // Consume the first value from the output.
     out := merge(c1, c2)
@@ -171,7 +173,7 @@ func gen(nums ...int) <-chan int {
 
 ## Explicit cancellation
 
- - 위 상황에서 모든 데이터를 전송하지 않고 수신 측이 종료한다면, 메모리 자원이 회수되지 못한다. 이런 일이 발생하지 않도록 goroutine을 명시적으로 종료시켜 나머지 자원이 모두 회수될 수 있도록 해야 한다.
+- 위 상황에서 모든 데이터를 전송하지 않고 수신 측이 종료한다면, 메모리 자원이 회수되지 못한다. 이런 일이 발생하지 않도록 goroutine을 명시적으로 종료시켜 나머지 자원이 모두 회수될 수 있도록 해야 한다.
 
 ```go
 func gen(nums ...int) <-chan int {
@@ -248,10 +250,10 @@ func main() {
 
 ```
 
- - 파이프라인 구성의 기본은 아래와 같다.
- 
- > 모든 송신이 완료되면 출력 채널을 닫는다  
- > 채널이 닫히거나 발신자가 차단 해제될 때까지 입력 채널에서는 값을 계속 수신
+- 파이프라인 구성의 기본은 아래와 같다.
+
+> 모든 송신이 완료되면 출력 채널을 닫는다  
+> 채널이 닫히거나 발신자가 차단 해제될 때까지 입력 채널에서는 값을 계속 수신
 
 - 파이프라인은 전송되는 모든 값에 대해 충분한 버퍼가 있는지 확인하거나 수신자가 채널을 포기할 수 있을 때 발신자에게 명시적으로 신호를 보내 발신자의 차단을 해제한다.
 
@@ -261,50 +263,50 @@ func main() {
 
 - 디렉토리의 md5 file checksum을 출력하는 프로그램을 제작한다. 먼저, 스레드를 사용하지 않는 `serial.go` 코드를 작성한다.
 
- ```go
- // MD5All reads all the files in the file tree rooted at root and returns a map
+```go
+// MD5All reads all the files in the file tree rooted at root and returns a map
 // from file path to the MD5 sum of the file's contents.  If the directory walk
 // fails or any read operation fails, MD5All returns an error.
- func MD5All(root string) (map[string][md5.Size]byte, error) {
-    m := make(map[string][md5.Size]byte)
-    err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-        if err != nil {
-            return err
-        }
-        if !info.Mode().IsRegular() {
-            return nil
-        }
-        data, err := ioutil.ReadFile(path)
-        if err != nil {
-            return err
-        }
-        m[path] = md5.Sum(data)
-        return nil
-    })
-    if err != nil {
-        return nil, err
-    }
-    return m, nil
+func MD5All(root string) (map[string][md5.Size]byte, error) {
+   m := make(map[string][md5.Size]byte)
+   err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+       if err != nil {
+           return err
+       }
+       if !info.Mode().IsRegular() {
+           return nil
+       }
+       data, err := ioutil.ReadFile(path)
+       if err != nil {
+           return err
+       }
+       m[path] = md5.Sum(data)
+       return nil
+   })
+   if err != nil {
+       return nil, err
+   }
+   return m, nil
 }
 
 func main() {
-    // Calculate the MD5 sum of all files under the specified directory,
-    // then print the results sorted by path name.
-    m, err := MD5All(os.Args[1])
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    var paths []string
-    for path := range m {
-        paths = append(paths, path)
-    }
-    sort.Strings(paths)
-    for _, path := range paths {
-        fmt.Printf("%x  %s\n", m[path], path)
-    }
+   // Calculate the MD5 sum of all files under the specified directory,
+   // then print the results sorted by path name.
+   m, err := MD5All(os.Args[1])
+   if err != nil {
+       fmt.Println(err)
+       return
+   }
+   var paths []string
+   for path := range m {
+       paths = append(paths, path)
+   }
+   sort.Strings(paths)
+   for _, path := range paths {
+       fmt.Printf("%x  %s\n", m[path], path)
+   }
 }
- ```
+```
 
 - 다음으로, 두 단계의 파이프라인을 사용하는 `parallel.go`를 작성한다.
 - 우선, 파일경로, sum, 에러를 가지는 구조체를 만들고, `MD5ALL()`에서 `sumFiles()`을 호출한다. 이곳에서 스레드를 생성하여 파이프라인을 구성한다. `filepath.Walk()` 함수는 첫 번째 매개변수로 전달된 path의 파일과 디렉터리를 모두 순회하고, 두 번째 매개변수로 전달된 함수를 수행한다. 이렇게 순회한 경로를 기반으로, `md5.Sum(data)`를 돌려 채널로 전송한다. 그러면 다시 `MD5ALL()`에서 값을 받아 처리하는 방식이다.
@@ -412,7 +414,7 @@ func main() {
 }
 ```
 
-- 위 방식에서, 파일마다 고루틴을 생성하여 처리하는 방식을 사용한다. 만일, 파일 각각의 용량이 매우 큰 경우, 컴퓨터의 메모리보다 더 큰 파일을 로드해야 하는 경우가 발생할 수 있다. 이런 경우를 해결하기 위해,  `bounded.go`를 작성해 보자.
+- 위 방식에서, 파일마다 고루틴을 생성하여 처리하는 방식을 사용한다. 만일, 파일 각각의 용량이 매우 큰 경우, 컴퓨터의 메모리보다 더 큰 파일을 로드해야 하는 경우가 발생할 수 있다. 이런 경우를 해결하기 위해, `bounded.go`를 작성해 보자.
 - 파이프라인에서 워킹 트리, 파일 읽기 및 digests, digests 수집의 세 가지 단계를 거친다.
 
 ```go
@@ -526,9 +528,155 @@ func main() {
 }
 ```
 
-- 
+---
 
+# Pipeline 교육 코드 응용
 
+## 원본 코드
+
+```go
+package main
+
+import "fmt"
+
+func gen() <-chan int {
+	next := 0
+	intStream := make(chan int)
+	go func() {
+		defer close(intStream)
+		for {
+			next++
+			intStream <- next
+		}
+	}()
+	return intStream
+}
+
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n * n
+		}
+		close(out)
+	}()
+	return out
+}
+
+func addone(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n + 1
+		}
+		close(out)
+	}()
+	return out
+}
+
+func main() {
+	n := 0
+	for s := range square(square(addone(square(gen())))) {
+		if n == 5 {
+			break
+		}
+		fmt.Println(s)
+		n++
+	}
+}
+
+```
+
+## 응용 코드
+
+- goroutine을 종료시켜 자원을 회수할 수 있도록 각 goroutine에 done 채널을 전송
+- done과 out 두 개의 채널을 받는 경우 range를 사용할 수 없어서 가장 마지막에 out만 출력시키는 `finalPipe()`을 추가
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func gen(done <-chan struct{}) (<-chan struct{}, <-chan int) {
+	next := 0
+	intStream := make(chan int)
+
+	go func() {
+		defer close(intStream)
+		for {
+			select {
+			case <-done:
+				return
+			default:
+				next++
+				intStream <- next
+			}
+		}
+	}()
+	return done, intStream
+}
+
+func square(done <-chan struct{}, in <-chan int) (<-chan struct{}, <-chan int) {
+	out := make(chan int)
+
+	go func() {
+		for {
+			select {
+			case n := <-in:
+				out <- n * n
+			case <-done:
+				close(out)
+				return
+			}
+
+		}
+	}()
+	return done, out
+}
+
+func addone(done <-chan struct{}, in <-chan int) (<-chan struct{}, <-chan int) {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n + 1
+		}
+		close(out)
+	}()
+	return done, out
+}
+
+func finalPipe(done <-chan struct{}, in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for {
+			select {
+			case n := <-in:
+				out <- n
+			case <-done:
+				fmt.Println("done!")
+				close(out)
+				return
+			}
+		}
+	}()
+	return out
+}
+
+func main() {
+	done := make(chan struct{})
+	defer close(done)
+
+	for n := range finalPipe(addone(square(gen(done)))) {
+		fmt.Println(n)
+		if n > 100 {
+			break
+		}
+	}
+}
+
+```
 
 ---
 
