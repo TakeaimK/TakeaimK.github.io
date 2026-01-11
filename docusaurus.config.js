@@ -110,11 +110,11 @@ const config = {
         },
         items: [
           // 1. AI 탭 (AI 태그 목록으로 이동)
-          {
-            to: '/blog/tags/ai',
-            label: 'AI',
-            position: 'left'
-          },
+          // {
+          //   to: '/blog/tags/ai',
+          //   label: 'AI',
+          //   position: 'left'
+          // },
           // 2. Cloud 탭
           {
             to: '/blog/tags/cloud',
@@ -122,17 +122,17 @@ const config = {
             position: 'left'
           },
           // 3. Virtualization 탭
-          {
-            to: '/blog/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
-            label: 'Infra',
-            position: 'left'
-          },
+          // {
+          //   to: '/blog/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
+          //   label: 'Infra',
+          //   position: 'left'
+          // },
           // 4. Daily 탭
-          {
-            to: '/blog/tags/daily',
-            label: 'Daily',
-            position: 'left'
-          },
+          // {
+          //   to: '/blog/tags/daily',
+          //   label: 'Daily',
+          //   position: 'left'
+          // },
           // (선택) 전체 글 보기 탭을 맨 뒤에 두거나 뺄 수 있습니다.
           {
             to: '/blog',
