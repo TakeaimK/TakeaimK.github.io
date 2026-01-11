@@ -106,7 +106,7 @@ const config = {
         title: 'Jini\'s Blog',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/ai-star.svg',
+          src: 'img/ai-star.png',
         },
         items: [
           // 1. AI 탭 (AI 태그 목록으로 이동)
