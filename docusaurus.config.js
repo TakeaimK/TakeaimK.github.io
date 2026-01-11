@@ -4,7 +4,10 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
+import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -24,6 +27,17 @@ const config = {
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
+
+  // 수식 렌더링을 위한 CSS
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity:
+        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ],
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -51,11 +65,15 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
@@ -85,23 +103,41 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'Jini\'s Blog',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/ai-star.svg',
         },
         items: [
+          // 1. AI 탭 (AI 태그 목록으로 이동)
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
+            to: '/blog/tags/ai',
+            label: 'AI',
+            position: 'left'
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          // 2. Cloud 탭
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
+            to: '/blog/tags/cloud',
+            label: 'Cloud',
+            position: 'left'
+          },
+          // 3. Virtualization 탭
+          {
+            to: '/blog/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
+            label: 'Infra',
+            position: 'left'
+          },
+          // 4. Daily 탭
+          {
+            to: '/blog/tags/daily',
+            label: 'Daily',
+            position: 'left'
+          },
+          // (선택) 전체 글 보기 탭을 맨 뒤에 두거나 뺄 수 있습니다.
+          {
+            to: '/blog',
+            label: 'All Posts',
+            position: 'right'
           },
         ],
       },
