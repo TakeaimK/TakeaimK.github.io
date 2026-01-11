@@ -2,7 +2,7 @@
 slug: AKS-starter-terminology-terminology
 title: AKS 입문을 위한 용어 정리
 authors: [me]
-tags: [cloud]
+tags: [cloud, aks]
 date: 2026-01-10
 ---
 

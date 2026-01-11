@@ -8,9 +8,9 @@ cloud:
   permalink: /cloud
   description: Cloud 관련된 모든 게시글
 
-AKS:
+aks:
   label: AKS
-  permalink: /AKS
+  permalink: /aks
   description: AKS tag description
 
 infra:
