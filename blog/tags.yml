@@ -6,7 +6,12 @@ ai:
 cloud:
   label: Cloud
   permalink: /cloud
-  description: Cloud tag description
+  description: Cloud 관련된 모든 게시글
+
+AKS:
+  label: AKS
+  permalink: /AKS
+  description: AKS tag description
 
 infra:
   label: Infra
