@@ -6,7 +6,7 @@ tags: [cloud, aks]
 date: 2026-01-10
 ---
 
-안녕하세요! 오늘은 Azure Cloud의 Kubernetes 서비스인 **AKS(Azure Kubernetes Service)**를 처음 접하시는 분들을 위해, 필수적인 기초 용어들을 정리해드리고자 합니다.
+안녕하세요! 오늘은 Azure Cloud의 Kubernetes 서비스인 **AKS(Azure Kubernetes Service)** 를 처음 접하시는 분들을 위해, 필수적인 기초 용어들을 정리해드리고자 합니다.
 
 클라우드 네이티브 환경을 구축하다 보면 낯선 용어들이 많이 등장하여 당황스러울 때가 많습니다. 특히 AKS를 구성할 때 자주 마주치게 되는 핵심 용어들과, 함께 자주 사용되는 데이터베이스 용어까지 포함하여 알기 쉽게 풀어서 설명해 드리겠습니다.
 
