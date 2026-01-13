@@ -110,11 +110,11 @@ const config = {
         },
         items: [
           // 1. AI 탭 (AI 태그 목록으로 이동)
-          // {
-            // to: '/blog/tags/ai',
-            // label: 'AI',
-            // position: 'left'
-          // },
+          {
+            to: '/blog/tags/ai',
+            label: 'AI',
+            position: 'left'
+          },
           // 2. Cloud 탭
           {
             to: '/blog/tags/cloud',
