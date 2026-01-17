@@ -122,12 +122,12 @@ const config = {
             label: "Cloud",
             position: "left",
           },
-          // 3. Virtualization 탭
-          // {
-          //   to: '/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
-          //   label: 'Infra',
-          //   position: 'left'
-          // },
+          // 3. Infra 탭
+          {
+            to: '/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
+            label: 'Infra',
+            position: 'left'
+          },
           // 4. Daily 탭
           // {
           //   to: '/tags/daily',

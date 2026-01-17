@@ -18,6 +18,11 @@ infra:
   permalink: /infra
   description: Infra tag description
 
+git:
+  label: Git
+  permalink: /git
+  description: Git tag description
+
 daily:
   label: Daily
   permalink: /daily
