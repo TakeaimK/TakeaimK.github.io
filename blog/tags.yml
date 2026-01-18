@@ -32,3 +32,8 @@ mlops:
   label: MLOps
   permalink: /mlops
   description: MLOps tag description
+
+docker:
+  label: Docker
+  permalink: /docker
+  description: Docker tag description
