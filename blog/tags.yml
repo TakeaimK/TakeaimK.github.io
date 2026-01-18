@@ -27,3 +27,8 @@ daily:
   label: Daily
   permalink: /daily
   description: Daily tag description
+
+mlops:
+  label: MLOps
+  permalink: /mlops
+  description: MLOps tag description
