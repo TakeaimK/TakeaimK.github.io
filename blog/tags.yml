@@ -37,3 +37,53 @@ docker:
   label: Docker
   permalink: /docker
   description: Docker tag description
+
+python:
+  label: Python
+  permalink: /python
+  description: Python tag description
+
+uv:
+  label: uv
+  permalink: /uv
+  description: uv tag description
+
+package-manager:
+  label: Package Manager
+  permalink: /package-manager
+  description: Package Manager tag description
+
+devops:
+  label: DevOps
+  permalink: /devops
+  description: DevOps tag description
+
+vllm:
+  label: vLLM
+  permalink: /vllm
+  description: vLLM tag description
+
+serving:
+  label: Serving
+  permalink: /serving
+  description: Serving tag description
+
+vllm-omni:
+  label: vLLM-omni
+  permalink: /vllm-omni
+  description: vLLM-omni tag description
+
+tts:
+  label: TTS
+  permalink: /tts
+  description: TTS tag description
+
+qwen:
+  label: Qwen
+  permalink: /qwen
+  description: Qwen tag description
+
+multimodal:
+  label: Multimodal
+  permalink: /multimodal
+  description: Multimodal tag description

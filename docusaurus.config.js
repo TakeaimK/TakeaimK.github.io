@@ -124,11 +124,17 @@ const config = {
           },
           // 3. Infra 탭
           {
-            to: '/tags/infra', // 태그는 소문자로 쓰는 게 안전합니다
+            to: '/tags/infra', 
             label: 'Infra',
             position: 'left'
           },
-          // 4. Daily 탭
+          // 4. Python 탭
+          {
+            to: '/tags/python',
+            label: 'Python',
+            position: 'left'
+          },
+          // 5. Daily 탭
           // {
           //   to: '/tags/daily',
           //   label: 'Daily',
