@@ -1,7 +1,7 @@
 ---
 slug: uv-usage-guide
 title: "[Python] PIP를 대체하는 차세대 패키지 매니저 UV 사용법 완벽 가이드"
-authors: [jini]
+authors: [me]
 tags: [python, uv, package-manager, devops]
 ---
 
