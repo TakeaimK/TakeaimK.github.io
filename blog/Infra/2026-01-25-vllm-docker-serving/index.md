@@ -188,8 +188,7 @@ docker-compose down
 3. **모델 선택**: 채팅 화면 상단에서 `Qwen/Qwen3-8B` 모델을 선택합니다.
 4. **대화하기**: 문장을 입력하면 답변을 확인할 수 있습니다.
 
-![Open WebUI Example](/img/open-webui-example.png)
-*(실행 예시 이미지가 들어갈 자리)*
+
 
 ## 7. (심화) 실습하기 2: Python API로 직접 호출하기
 
