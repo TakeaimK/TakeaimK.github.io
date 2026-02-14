@@ -1,4 +1,9 @@
-# 🚀 WSL2 + K3s + NVIDIA GPU 완전 정복 가이드
+---
+slug: k3s-wsl-install-guide
+title: "[Infra] WSL2 + K3s + NVIDIA GPU 완전 정복 가이드"
+authors: [me]
+tags: [k3s, wsl, gpu, nvidia, infra]
+---
 
 이 문서는 **Windows 11 (WSL2 Ubuntu)** 환경에서 **K3s**를 설치하고, **NVIDIA GPU**를 파드에서 사용할 수 있도록 설정하는 최종 정리본입니다.
 
