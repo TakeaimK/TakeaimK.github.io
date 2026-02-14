@@ -221,6 +221,16 @@ kubectl logs gpu-test
 
 > **성공 기준:** 로그에 호스트와 동일한 **GPU 표(예: RTX 5060 Ti)**가 출력되면 성공입니다.
 
+### 4. 테스트 리소스 정리
+
+검증이 완료되면 테스트용 파드는 삭제하여 클러스터를 정리합니다.
+
+```bash
+kubectl delete pod gpu-test
+```
+
+> **참고**: `nvidia-device-plugin-daemonset`은 GPU 사용을 위해 계속 실행되어야 하므로 삭제하지 마세요.
+
 ---
 
 ## 🔧 트러블슈팅
