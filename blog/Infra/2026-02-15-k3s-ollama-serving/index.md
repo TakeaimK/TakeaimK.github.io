@@ -19,7 +19,7 @@ tags: [k3s, ollama, qwen, llm, serving, gpu, nvidia]
 
 지난 포스팅에서 vLLM의 강력함을 확인했지만, 솔직히 설정이 꽤 복잡했죠? `LD_LIBRARY_PATH`, `gpu-memory-utilization`, `max-model-len`... 옵션이 한가득이었습니다.
 
-**Ollama**는 이런 복잡함을 모두 감추고, **"모델 실행은 원래 이렇게 쉬워야 한다"**는 철학으로 만들어진 도구입니다.
+**Ollama**는 이런 복잡함을 모두 감추고, **"모델 실행은 원래 이렇게 쉬워야 한다"** 는 철학으로 만들어진 도구입니다.
 
 ### 1.1 원커맨드 실행 (One-Command Simplicity)
 
@@ -30,12 +30,39 @@ Ollama의 가장 큰 매력은 **한 줄이면 끝**이라는 것입니다.
 ollama run qwen3:4b
 ```
 
-복잡한 설정 파일도, 토크나이저 초기화도, 메모리 계산도 필요 없습니다. Ollama가 알아서 해줍니다.
+복잡한 설정 파일도, 토크나이저 초기화도, 메모리 계산도 필요 없습니다. Ollama가 알아서 해줍니다. 그 비밀은 Ollama의 내부 동작 방식에 있습니다.
+
+<details>
+<summary>🔽 <strong>(클릭) Ollama는 어떻게 이것을 자동화하나요?</strong></summary>
+
+Ollama 내부에서는 다음과 같은 일이 자동으로 일어납니다:
+
+**1. 모델 포맷 (GGUF)**
+Ollama는 **llama.cpp** 라이브러리를 백엔드로 사용하며, 모든 모델을 **GGUF**(GPT-Generated Unified Format)라는 단일 파일 포맷으로 관리합니다.
+GGUF 파일 하나에 **모델 가중치 + 토크나이저 + 메타데이터**가 모두 포함되어 있기 때문에, vLLM처럼 별도로 토크나이저를 초기화하거나 `config.json`을 파싱할 필요가 없습니다.
+
+**2. 자동 메모리 관리**
+모델을 로드하면, Ollama(llama.cpp)는 다음 순서로 메모리를 할당합니다:
+1. 사용 가능한 **GPU VRAM** 용량을 자동으로 감지합니다.
+2. 모델의 각 레이어를 VRAM에 올릴 수 있는 만큼 GPU에 적재합니다.
+3. VRAM이 부족하면, 나머지 레이어를 **CPU RAM(시스템 메모리)** 에 자동으로 오프로딩합니다.
+4. 사용하지 않는 모델은 `OLLAMA_KEEP_ALIVE` 시간(기본 5분) 이후 자동으로 VRAM에서 언로드합니다.
+
+즉, vLLM에서 `--gpu-memory-utilization 0.85`나 `--max-model-len 8192` 같은 값을 수동으로 계산해서 넣어야 했던 것을, Ollama는 **하드웨어를 감지하고 알아서 최적의 설정을 결정**합니다.
+
+**3. 자동 양자화**
+Ollama 레지스트리의 모델들은 대부분 **Q4_K_M** 양자화가 기본 적용되어 있습니다. 이는 정확도와 모델 크기 사이의 밸런스가 좋은 4비트 양자화 방식으로, 원본(FP16/BF16) 대비 약 **1/4 크기**로 압축됩니다. 따라서 vLLM보다 훨씬 적은 VRAM으로도 동일한 모델을 실행할 수 있습니다.
+
+> **예시**: Qwen3-4B 모델 기준
+> - vLLM (FP16): ~8GB VRAM 필요
+> - Ollama (Q4_K_M): ~2.5GB VRAM 필요
+
+</details>
 
 ### 1.2 자체 모델 레지스트리
 
 vLLM은 HuggingFace에서 모델을 다운로드하거나 로컬 경로를 직접 마운트해야 했습니다.
-Ollama는 자체적으로 **모델 레지스트리**를 운영합니다. Docker Hub처럼 `pull`/`push` 명령어로 모델을 관리할 수 있습니다.
+Ollama는 자체적으로 **모델 레지스트리** ([ollama.com/library](https://ollama.com/library))를 운영합니다. Docker Hub처럼 `pull`/`push` 명령어로 모델을 관리할 수 있습니다.
 
 ```bash
 # 모델 다운로드 (Docker 이미지 pull과 동일한 UX)
@@ -43,6 +70,55 @@ ollama pull qwen3:4b
 
 # 다운로드된 모델 목록 확인
 ollama list
+```
+
+#### 💡 레지스트리에 없는 모델은 어떡하나요?
+
+갓 출시된 모델이 아직 Ollama 레지스트리에 등록되지 않은 경우에도 사용할 수 있습니다! 두 가지 방법이 있습니다:
+
+**방법 1: HuggingFace에서 GGUF 파일 직접 가져오기**
+
+최근 대부분의 모델은 HuggingFace에 GGUF 포맷으로도 함께 업로드됩니다. (예: `모델명-GGUF` 레포지토리 검색)
+
+```bash
+# 1. HuggingFace에서 GGUF 파일 다운로드
+wget https://huggingface.co/사용자/모델명-GGUF/resolve/main/model-Q4_K_M.gguf
+
+# 2. Modelfile 작성 (FROM에 로컬 GGUF 파일 경로 지정)
+cat > Modelfile << EOF
+FROM ./model-Q4_K_M.gguf
+EOF
+
+# 3. Ollama에 모델 등록
+ollama create my-model -f Modelfile
+```
+
+**방법 2: Safetensors → GGUF 변환**
+
+GGUF 파일이 없는 경우, `llama.cpp`의 변환 도구를 사용할 수 있습니다.
+
+```bash
+# llama.cpp의 convert 스크립트로 변환
+python3 llama.cpp/convert_hf_to_gguf.py ./model-directory --outtype q4_k_m
+```
+
+> **Ollama 레지스트리 검색**: [ollama.com/library](https://ollama.com/library)에서 모델명을 검색하세요. `qwen3`, `llama3`, `gemma3` 등 주요 오픈소스 모델은 대부분 등록되어 있습니다.
+
+#### 🌐 오프라인 환경에서 Ollama 사용하기
+
+인터넷이 없는 폐쇄망 서버에서도 Ollama를 활용할 수 있습니다:
+
+1. **인터넷이 되는 PC**에서 모델을 미리 다운로드합니다.
+   ```bash
+   ollama pull qwen3:4b
+   ```
+2. Ollama 모델 디렉토리(`~/.ollama/models`)를 통째로 USB나 네트워크를 통해 오프라인 서버로 복사합니다.
+3. 오프라인 서버에서 Ollama를 실행하면 **모델이 이미 있으므로 바로 사용 가능**합니다.
+
+GGUF 파일을 직접 가져오는 방법도 동일합니다:
+```bash
+# 오프라인 서버에서 로컬 GGUF 파일로 모델 등록
+ollama create my-model -f Modelfile  # FROM ./model.gguf
 ```
 
 ### 1.3 Modelfile: 나만의 모델 만들기
@@ -64,13 +140,40 @@ PARAMETER num_ctx 8192
 | :--- | :--- | :--- |
 | **주요 목적** | 프로덕션 서빙 | 로컬 개발/프로토타이핑 |
 | **설정 난이도** | 높음 (옵션 다수) | 매우 낮음 (원커맨드) |
-| **동시 처리 성능** | 매우 높음 (PagedAttention) | 보통 |
+| **동시 처리 성능** | 매우 높음 (PagedAttention) | 보통 (순차 처리 기본) |
 | **모델 포맷** | HuggingFace (Safetensors) | GGUF (양자화 특화) |
 | **커스터마이징** | 코드 레벨 | Modelfile (선언적) |
 | **OpenAI API 호환** | ✅ 완전 호환 | ✅ 호환 (실험적) |
 | **적합한 환경** | 팀/서비스 운영 | 개인 개발/학습 |
 
-> **한 줄 요약**: 동시 접속자가 많은 **프로덕션 서비스**라면 vLLM, **빠르게 모델을 테스트**하고 프로토타이핑하고 싶다면 Ollama!
+#### 📌 실전 시나리오별 비교
+
+단순 기능 비교만으로는 어떤 도구를 선택해야 할지 감이 잘 안 오죠? 실제 환경별로 어떤 도구가 유리한지 비교해 봅시다.
+
+**시나리오 1: 개인 개발 환경**
+> 단일 GPU, 소수(1~5명) 사용자, 모델 1~2개 사용, 최신 모델이 출시되면 자주 교체
+
+| 기준 | vLLM | Ollama |
+| :--- | :--- | :--- |
+| **모델 교체 속도** | YAML 수정 → Pod 재시작 (수 분) | `ollama pull` → 즉시 사용 (수 초) |
+| **VRAM 효율** | FP16 기본, 큰 VRAM 필요 | Q4_K_M 양자화, 적은 VRAM으로 구동 |
+| **초기 설정** | 복잡 (LD_LIBRARY_PATH 등) | 간단 (서버만 띄우면 됨) |
+| **모델 관리** | 파일 다운로드 + 경로 설정 | `pull`/`rm`으로 간편 관리 |
+| **🏆 추천** | △ (오버스펙) | **✅ 강력 추천** |
+
+**시나리오 2: 팀 단위 개발 환경**
+> 멀티 GPU, 수십 명 사용자, 안정적인 모델 1~2개 상시 서빙 + 신규 모델 검증
+
+| 기준 | vLLM | Ollama |
+| :--- | :--- | :--- |
+| **동시 접속 처리** | PagedAttention + Continuous Batching | 순차 처리, 대기열 발생 가능 |
+| **멀티 GPU 활용** | Tensor Parallelism (모델 분할 가속) | Pipeline 방식 (순차 레이어 전달) |
+| **안정성** | Probe 기반 자동 복구, 프로덕션 검증 | 단순 서버, 기본적 안정성 |
+| **신규 모델 검증** | YAML 수정 + 별도 Deployment 필요 | `pull` → 즉시 비교 테스트 가능 |
+| **🏆 추천** | **✅ 상시 서빙용** | **✅ 신규 모델 검증용** |
+
+> **결론**: 두 도구를 **같은 K3s 클러스터에 공존**시키는 것이 가장 이상적입니다.
+> 안정적인 서비스는 vLLM으로, 새로운 모델 테스트나 프로토타이핑은 Ollama로 빠르게!
 
 ---
 
@@ -99,11 +202,45 @@ Ollama는 환경변수를 통해 서버 동작을 제어합니다. K3s 배포 �
 | `OLLAMA_MODELS` | `~/.ollama/models` | 모델 저장 디렉토리 경로 |
 | `OLLAMA_KEEP_ALIVE` | `5m` | 모델을 메모리에 유지하는 시간. `0`이면 즉시 언로드 |
 | `OLLAMA_NUM_PARALLEL` | `1` | 동시 처리 요청 수 |
-| `OLLAMA_MAX_LOADED_MODELS` | `1` | 동시에 메모리에 로드할 모델 수 |
+| `OLLAMA_MAX_LOADED_MODELS` | `1` | 동시에 메모리에 로드할 모델 수 (아래 상세 설명 참고) |
 | `OLLAMA_DEBUG` | `false` | 디버그 로깅 활성화 |
-| `OLLAMA_FLASH_ATTENTION` | `true` | Flash Attention 사용 여부 |
+| `OLLAMA_FLASH_ATTENTION` | `true` | Flash Attention 사용 여부 (아래 상세 설명 참고) |
 
-> **참고**: 환경변수 목록은 [공식 FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.md)를 참고하세요.
+#### 💡 `OLLAMA_MAX_LOADED_MODELS`와 멀티 GPU VRAM 적재 방식
+
+멀티 GPU 호스트(예: H200 8장)에서 여러 모델을 동시에 올리면 어떤 일이 일어나는지 알아봅시다.
+
+Ollama의 멀티 GPU 동작 방식은 다음과 같습니다:
+
+1. **단일 모델 로딩**: 모델이 하나의 GPU VRAM에 들어가면 해당 GPU에 전부 적재합니다. 만약 하나의 GPU에 들어가지 않으면, **여러 GPU에 레이어를 순차 분배**합니다. (Pipeline Parallelism)
+2. **여러 모델 동시 로딩**: `OLLAMA_MAX_LOADED_MODELS=N`으로 설정하면 N개의 모델을 동시에 VRAM에 올릴 수 있습니다. 이 경우 각 모델은 **가능한 한 서로 다른 GPU에 분산 배치**됩니다.
+3. **VRAM 부족 시**: 모델의 일부 레이어를 **CPU RAM으로 자동 오프로딩**합니다. (속도는 느려지지만 동작은 합니다)
+
+```
+# H200 8장 예시 - 3개 모델 동시 로딩
+GPU 0: [모델 A 전체 레이어]
+GPU 1: [모델 B 전체 레이어]
+GPU 2-3: [모델 C 레이어 분산] ← 큰 모델은 여러 GPU에 걸쳐 분배
+GPU 4-7: [유휴]
+```
+
+> ⚠️ **vLLM과의 차이**: vLLM은 **Tensor Parallelism**으로 하나의 모델을 여러 GPU에 분할하여 **추론 속도 자체를 가속**합니다. Ollama는 **Pipeline Parallelism**으로 레이어를 순차적으로 처리하므로, 단일 추론 속도 향상 효과는 제한적입니다.
+
+#### 💡 `OLLAMA_FLASH_ATTENTION`이란?
+
+**Flash Attention**은 LLM 추론의 핵심 연산인 Attention의 속도와 메모리 효율을 극적으로 개선하는 기술입니다.
+
+일반적인 Attention 연산은 시퀀스 길이의 제곱(N²)에 비례하는 메모리를 사용합니다. 예를 들어, 입력이 1만 토큰이면 1억 개의 값을 저장해야 합니다. Flash Attention은 이 문제를 다음과 같이 해결합니다:
+
+*   GPU의 **고속 SRAM(캐시 메모리)** 에서 Attention을 작은 블록 단위로 계산합니다.
+*   전체 Attention 행렬을 한번에 만들지 않으므로, **메모리 사용량이 O(N²) → O(N)으로 감소**합니다.
+*   결과적으로 **추론 속도 향상 + 더 긴 컨텍스트 처리**가 가능해집니다.
+
+> 비유하자면, 1000페이지짜리 책의 목차를 만들 때 **전체 내용을 한번에 메모리에 올리는 것**(일반 Attention)과 **한 챕터씩 읽으면서 목차를 채워나가는 것**(Flash Attention)의 차이입니다.
+
+Ollama는 기본적으로 Flash Attention을 활성화합니다. 특별한 이유가 없다면 꺼둘 필요가 없습니다.
+
+> **참고**: 환경변수에 대한 자세한 내용은 [Ollama 공식 문서](https://ollama.com/docs)를 참고하세요.
 
 </details>
 
@@ -144,6 +281,39 @@ spec:
       runtimeClassName: nvidia
       # 공유 메모리(SHM) 접근 허용 (GPU 간 통신 시 필요)
       hostIPC: true
+      # [자동 모델 Pull] 서버가 뜨자마자 모델을 다운로드하는 Init Container
+      initContainers:
+        - name: model-puller
+          image: ollama/ollama:latest
+          command:
+            - bash
+            - -c
+            - |
+              # 1. 백그라운드에서 Ollama 서버 시작
+              ollama serve &
+              # 서버가 준비될 때까지 대기
+              sleep 5
+              # 2. 모델 Pull (이미 있으면 즉시 완료)
+              ollama pull qwen3:4b
+              # 3. 서버 종료
+              kill %1
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+            - name: OLLAMA_MODELS
+              value: "/models/ollama/models"
+            - name: LD_LIBRARY_PATH
+              value: "/usr/lib/wsl/lib:/usr/lib/wsl/drivers/nvmdsi.inf_amd64_83eb34a6b09136c0:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+          securityContext:
+            privileged: true
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests:
+              nvidia.com/gpu: 1
+          volumeMounts:
+            - name: ollama-models
+              mountPath: /models/ollama
       containers:
         - name: ollama
           # Ollama 공식 Docker 이미지 (최신 버전)
@@ -164,11 +334,12 @@ spec:
               value: "0.0.0.0:11434"
             # 모델 저장 경로 (볼륨 마운트 경로와 일치)
             - name: OLLAMA_MODELS
-              value: "/root/.ollama/models"
-            # 로그 레벨 설정 (디버깅 시 DEBUG로 변경)
+              value: "/models/ollama/models"
+            # 로그 레벨 설정 (디버깅 시 "true"로 변경)
             - name: OLLAMA_DEBUG
               value: "false"
             # [WSL2 필수] 호스트 드라이버가 먼저 로딩되도록 경로 우선 배치
+            # (아래 상세 설명 참고)
             - name: LD_LIBRARY_PATH
               value: "/usr/lib/wsl/lib:/usr/lib/wsl/drivers/nvmdsi.inf_amd64_83eb34a6b09136c0:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
             # NCCL 관련 설정 (WSL2 환경 호환성)
@@ -205,13 +376,13 @@ spec:
             failureThreshold: 30
           volumeMounts:
             # Ollama 모델 저장소 (호스트와 공유하여 재다운로드 방지)
-            - name: ollama-data
-              mountPath: /root/.ollama
+            - name: ollama-models
+              mountPath: /models/ollama
       volumes:
-        - name: ollama-data
+        - name: ollama-models
           hostPath:
-            # 호스트(WSL2)의 Ollama 데이터 디렉토리
-            path: /root/.ollama
+            # 호스트(WSL2)의 모델 디렉토리
+            path: /mnt/c/Users/csj76/models/ollama
             type: DirectoryOrCreate
 ---
 apiVersion: v1
@@ -235,18 +406,55 @@ spec:
 
 vLLM 배포와 비교하면서 핵심적인 차이점을 살펴봅시다.
 
-*   `image: ollama/ollama:latest`: Ollama 공식 Docker 이미지입니다. vLLM과 달리 별도의 태그(버전) 지정 없이도 GPU를 자동으로 감지합니다.
+*   `image: ollama/ollama:latest`: Ollama 공식 Docker 이미지입니다. vLLM은 `vllm/vllm-openai:v0.15.1`처럼 특정 버전을 지정했지만, Ollama는 `latest` 태그만으로도 자동으로 GPU를 감지합니다. 아래에서 자세히 설명합니다.
 *   `containerPort: 11434`: Ollama의 기본 포트입니다. (vLLM은 8000번)
 *   `OLLAMA_HOST: "0.0.0.0:11434"`: **중요!** 기본값이 `127.0.0.1`이라 Pod 외부에서 접근할 수 없습니다. 반드시 `0.0.0.0`으로 바꿔야 Service를 통해 접근할 수 있습니다.
 *   `OLLAMA_MODELS`: 모델이 저장되는 경로입니다. `hostPath` 볼륨과 매칭하여 파드를 재시작해도 모델을 다시 다운로드하지 않습니다.
-*   `args`가 **없다**는 점에 주목하세요! vLLM과 달리 Ollama는 서버만 띄우면 됩니다. 모델은 나중에 `pull` 명령으로 다운로드합니다.
-*   `LD_LIBRARY_PATH`: **(WSL2 필수)** vLLM과 동일하게 WSL2 호스트 드라이버가 먼저 로딩되도록 경로를 설정합니다.
+*   `initContainers`: **배포 시 자동으로 모델을 Pull** 하는 Init Container입니다. 아래에서 자세히 설명합니다.
+*   `args`가 **없다**는 점에 주목하세요! vLLM과 달리 Ollama는 서버만 띄우면 됩니다.
 *   `livenessProbe`의 `path: /`: Ollama는 루트 경로(`/`)에 접근하면 `"Ollama is running"` 메시지를 반환합니다. vLLM의 `/health`와 다릅니다.
 
-> **vLLM과의 핵심 차이**: vLLM은 Deployment 시점에 `--model` 옵션으로 모델까지 지정하고 한번에 로딩합니다.
-> Ollama는 서버만 먼저 띄우고, 모델은 이후에 `ollama pull`로 다운로드합니다. 마치 Docker 데몬을 먼저 띄우고, 이미지를 나중에 pull 하는 것과 같은 개념입니다.
+#### 🤔 GPU 자동 감지는 어떻게 되나요? (`runtimeClassName`과 `LD_LIBRARY_PATH`)
 
-### 3.2 배포 및 모델 다운로드
+vLLM 이미지(`vllm/vllm-openai`)와 Ollama 이미지(`ollama/ollama`) 모두 **`runtimeClassName: nvidia`가 필수**입니다. 이 설정이 K3s에게 "NVIDIA 컨테이너 런타임을 사용해서 GPU 디바이스를 파드에 주입해줘!"라고 알려주는 역할을 합니다. 이 설정이 없으면 어떤 이미지든 GPU를 인식하지 못합니다.
+
+그렇다면 `LD_LIBRARY_PATH`와 `NCCL` 설정은 왜 필요할까요?
+
+*   **`LD_LIBRARY_PATH`** : **(WSL2 환경 필수)** vLLM과 Ollama 이미지 모두 내부에 CUDA 관련 라이브러리(`libcuda.so`)가 포함되어 있습니다. 문제는 WSL2에서는 실제 GPU와 통신하는 드라이버가 **호스트(Windows)의 드라이버**(`/usr/lib/wsl/lib/libcuda.so`)인데, 컨테이너 내부의 드라이버가 먼저 로딩되면 충돌이 발생합니다.
+    ```
+    # LD_LIBRARY_PATH 검색 순서 (왼쪽이 우선)
+    /usr/lib/wsl/lib          ← ① WSL2 호스트 드라이버 (진짜)
+    /usr/local/nvidia/lib64   ← ② 컨테이너 내부 드라이버 (가짜!)
+    /usr/local/cuda/lib64     ← ③ CUDA 라이브러리
+    ```
+    따라서 `LD_LIBRARY_PATH`의 **맨 앞에 WSL2 드라이버 경로를 배치**하여, 호스트의 진짜 드라이버가 먼저 로딩되도록 강제합니다. **네이티브 Linux나 Docker Desktop에서는 이 설정이 불필요**합니다.
+
+*   **`NCCL_*` 설정**: NCCL(NVIDIA Collective Communications Library)은 멀티 GPU 통신에 사용되는 라이브러리입니다. WSL2에서는 P2P(Peer-to-Peer) 메모리 접근 등 일부 기능이 지원되지 않으므로, 해당 기능을 비활성화하여 호환성 문제를 방지합니다. 이 역시 **WSL2 환경에서만 필요한 설정**입니다.
+
+#### 🔄 `initContainers`로 배포 시 자동 모델 Pull
+
+vLLM은 `args`에 `--model` 옵션으로 모델을 지정하면 Deployment 시작 시 자동으로 모델을 로딩합니다. 하지만 Ollama는 서버만 먼저 뜨고, 모델은 별도로 `pull` 해야 하는 구조입니다.
+
+매번 수동으로 `kubectl exec ... -- ollama pull`을 실행하면 번거롭겠죠? **Init Container**를 활용하면 배포 시 자동으로 모델을 다운로드할 수 있습니다.
+
+```yaml
+initContainers:
+  - name: model-puller
+    image: ollama/ollama:latest
+    command:
+      - bash
+      - -c
+      - |
+        ollama serve &   # 백그라운드 서버 시작
+        sleep 5           # 준비 대기
+        ollama pull qwen3:4b  # 모델 Pull (이미 있으면 즉시 완료)
+        kill %1           # 서버 종료
+```
+
+> **동작 원리**: Init Container가 먼저 실행되어 모델을 다운로드한 뒤 종료되고, 그 다음에 메인 Container가 시작됩니다. 볼륨을 공유하므로 Init Container에서 받은 모델을 메인 Container가 그대로 사용합니다.
+> **이미 모델이 있다면?** `ollama pull`은 이미 다운로드된 모델은 `already exists` 처리하고 즉시 완료되므로, 재배포 시에도 불필요한 다운로드가 발생하지 않습니다.
+
+### 3.2 배포 및 확인
 
 작성한 YAML 파일을 K3s 클러스터에 적용합니다.
 
@@ -265,31 +473,10 @@ kubectl apply -f ollama-qwen3.yaml
 kubectl get pods -n llm-serving -w
 ```
 
-파드가 `Running` 상태가 되면, Ollama 서버가 준비된 것입니다.
-이제 모델을 다운로드합니다.
+Init Container가 모델 Pull을 완료한 후, 메인 Container가 `Running` 상태가 되면 준비 완료입니다.
 
 ```bash
-# Pod 내부에서 모델 다운로드 실행
-kubectl exec -n llm-serving deploy/ollama-qwen3 -- ollama pull qwen3:4b
-```
-
-**[실행 결과 예시]**
-
-```
-pulling manifest
-pulling 3e4cb1417446: 100% ▕██████████████████▏ 2.5 GB
-pulling 2d54db2b9bb2: 100% ▕██████████████████▏ 1.5 KB
-pulling d18a5cc71b84: 100% ▕██████████████████▏  11 KB
-pulling cff3f395ef37: 100% ▕██████████████████▏  120 B
-pulling e18a783aae55: 100% ▕██████████████████▏  487 B
-verifying sha256 digest
-writing manifest
-success
-```
-
-다운로드가 완료되면, 모델이 정상적으로 등록되었는지 확인합니다.
-
-```bash
+# 모델이 정상 등록되었는지 확인
 kubectl exec -n llm-serving deploy/ollama-qwen3 -- ollama list
 ```
 
@@ -298,7 +485,7 @@ NAME        ID              SIZE      MODIFIED
 qwen3:4b    359d7dd4bcda    2.5 GB    21 seconds ago
 ```
 
-> **💡 Tip**: `hostPath`로 `/root/.ollama`를 마운트했기 때문에, 파드를 삭제하고 다시 만들어도 모델이 유지됩니다. 다시 다운로드할 필요가 없습니다!
+> **💡 Tip**: `hostPath`로 호스트의 모델 디렉토리를 마운트했기 때문에, 파드를 삭제하고 다시 만들어도 모델이 유지됩니다. 다시 다운로드할 필요가 없습니다!
 
 #### 🚧 트러블슈팅: GPU 관련 문제
 
@@ -403,6 +590,23 @@ print(json.load(urllib.request.urlopen(urllib.request.Request( \
 ```
 
 vLLM과 동일한 OpenAI 포맷으로 응답이 옵니다!
+
+#### 📊 Ollama 네이티브 API vs OpenAI 호환 API 비교
+
+두 API의 차이를 표로 정리합니다. 어떤 API를 사용할지 선택할 때 참고하세요.
+
+| 비교 항목 | Ollama 네이티브 API | OpenAI 호환 API |
+| :--- | :--- | :--- |
+| **엔드포인트** | `/api/chat`, `/api/generate` | `/v1/chat/completions` |
+| **포트** | `11434` | `11434` (동일) |
+| **요청 포맷** | `{"model", "messages", "stream"}` | `{"model", "messages", "temperature", ...}` |
+| **응답 구조** | `message.content` + `message.thinking` (분리) | `choices[0].message.content` (통합) |
+| **Thinking 처리** | `thinking` 필드로 별도 분리 | `content` 안에 포함 |
+| **성능 지표** | `total_duration`, `eval_count`, `eval_duration` 제공 | 제공하지 않음 |
+| **스트리밍** | `"stream": true/false` | `"stream": true/false` |
+| **호환성** | Ollama 전용 | OpenAI SDK, LangChain 등 기존 도구와 호환 |
+| **안정성** | 안정 (공식 API) | 실험적 (변경 가능성 있음) |
+| **추천 용도** | Ollama 단독 사용 시 | 기존 코드 마이그레이션, 프레임워크 연동 시 |
 
 > **💡 vLLM → Ollama 마이그레이션 팁**
 > OpenAI 호환 API를 사용하면, 코드 변경 없이 `base_url`만 바꾸면 됩니다.
