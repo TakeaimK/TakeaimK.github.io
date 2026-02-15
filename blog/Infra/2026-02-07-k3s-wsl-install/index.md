@@ -304,7 +304,7 @@ env:
     value: "/usr/lib/wsl/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
 ```
 
-> 자세한 내용은 [vLLM 서빙 가이드](./2026-02-15-k3s-vllm-serving/index.md)의 트러블슈팅 섹션을 참고하세요.
+> 자세한 내용은 [vLLM 서빙 가이드](../2026-02-15-k3s-vllm-serving/index.md)의 트러블슈팅 섹션을 참고하세요.
 
 ---
 

@@ -294,7 +294,7 @@ GPU가 1개뿐인 환경에서는 자원 경합으로 인해 새 파드가 바�
 > 로그에 `RuntimeError: No CUDA GPUs are available` 에러가 뜨는 경우입니다.
 >
 > 이 에러는 다음 두 가지 원인으로 발생합니다:
-> 1. **CDI 스펙 미생성**: [K3s 설치 가이드](./2026-02-07-k3s-wsl-install/index.md)의 1단계에서 `sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml` 명령을 실행했는지 확인하세요.
+> 1. **CDI 스펙 미생성**: [K3s 설치 가이드](../2026-02-07-k3s-wsl-install/index.md)의 1단계에서 `sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml` 명령을 실행했는지 확인하세요.
 > 2. **CUDA compat 드라이버 충돌**: YAML의 `env`에 `LD_LIBRARY_PATH: "/usr/lib/wsl/lib:..."` 설정이 포함되어 있는지 확인하세요. (WSL2 환경 필수)
 
 > **증상 3: 무한 재시작 (CrashLoopBackOff) - 기존 파드 충돌**
