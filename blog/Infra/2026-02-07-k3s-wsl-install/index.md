@@ -44,7 +44,17 @@ curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-
 # 2. 툴킷 설치
 sudo apt-get update
 sudo apt-get install -y nvidia-container-toolkit
+
+# 3. [WSL2 필수] CDI(Container Device Interface) 스펙 생성
+#    이 단계를 빠뜨리면, 나중에 vLLM 등 GPU 워크로드에서
+#    "No CUDA GPUs are available" 에러가 발생합니다.
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 ```
+
+> **⚠️ 중요 (2026-02-15 추가)**
+> WSL2 환경에서는 반드시 `nvidia-ctk cdi generate` 명령으로 **CDI 스펙 파일**을 생성해야 합니다.
+> CDI 스펙이 없으면 `nvidia-container-runtime`이 GPU 디바이스(`/dev/dxg`)를 컨테이너에 올바르게 주입하지 못합니다.
+> 이 명령어는 **최초 1회만** 실행하면 됩니다. (GPU 드라이버를 업데이트한 경우 다시 실행하세요.)
 
 ---
 
@@ -265,6 +275,36 @@ kubectl exec -n kube-system <nvidia-device-plugin-pod-name> -- nvidia-smi
 ### 3. gpu-test Pod에서 GPU가 보이지 않는 경우
 
 Pod 정의에 `runtimeClassName: nvidia`가 있는지 확인하세요. K3s에서는 이 설정이 필수입니다.
+
+### 4. vLLM 등에서 `No CUDA GPUs are available` 에러
+
+`nvidia-smi`는 작동하는데 PyTorch에서 `torch.cuda.is_available()`이 `False`를 반환하는 경우입니다.
+
+**원인 1: CDI 스펙 미생성**
+
+1단계에서 `nvidia-ctk cdi generate` 명령을 실행했는지 확인하세요.
+
+```bash
+# CDI 스펙 파일 존재 여부 확인
+ls /etc/cdi/nvidia.yaml
+
+# 없다면 생성
+sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+sudo systemctl restart k3s
+```
+
+**원인 2: CUDA compat 드라이버 충돌 (WSL2)**
+
+vLLM 이미지 내부의 `/usr/local/cuda-xx.x/compat/libcuda.so.1`이 WSL2 호스트의 실제 드라이버보다 먼저 로딩되어 CUDA 초기화가 실패할 수 있습니다.
+이 경우 Pod의 `env`에 다음을 추가하여 WSL2 드라이버 경로를 우선시해야 합니다.
+
+```yaml
+env:
+  - name: LD_LIBRARY_PATH
+    value: "/usr/lib/wsl/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+```
+
+> 자세한 내용은 [vLLM 서빙 가이드](/blog/k3s-vllm-serving)의 트러블슈팅 섹션을 참고하세요.
 
 ---
 
