@@ -127,133 +127,112 @@ vLLM은 매우 많은 실행 옵션을 제공합니다. 실무에서 가장 자�
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vllm-qwen3            # 디플로이먼트 이름
-  namespace: llm-serving      # 배포할 네임스페이스
+  name: vllm-qwen3
+  namespace: llm-serving
   labels:
-    app: vllm-qwen3           # 라벨 (서비스와 연결하기 위함)
+    app: vllm-qwen3
 spec:
-  replicas: 1                 # 파드 복제본 개수 (GPU 1개당 1개가 적절)
+  replicas: 1
   selector:
     matchLabels:
-      app: vllm-qwen3         # 어떤 파드를 관리할지 선택하는 라벨
+      app: vllm-qwen3
   template:
     metadata:
       labels:
-        app: vllm-qwen3       # 생성될 파드의 라벨
+        app: vllm-qwen3
     spec:
-      runtimeClassName: nvidia  # [중요] NVIDIA GPU 사용을 위해 필수!
-      hostIPC: true             # [권장] GPU 간 메모리 공유 및 성능 최적화
+      runtimeClassName: nvidia
+      hostIPC: true
       containers:
-      - name: vllm
-        image: vllm/vllm-openai:latest  # 사용할 vLLM 이미지
-        imagePullPolicy: IfNotPresent   # 이미지가 로컬에 없으면 다운로드
-        securityContext:
-          privileged: true      # [참고] 일부 환경에서 GPU 접근을 위해 필요할 수 있음
-        
-        # [리소스 할당]
-        resources:
-          limits:
-            nvidia.com/gpu: 1   # GPU 1개를 전용으로 할당 (필수)
-            memory: "16Gi"      # 최대 메모리 제한
-          requests:
-            nvidia.com/gpu: 1   # GPU 1개 요청
-            memory: "8Gi"       # 최소 메모리 보장
-            
-        # [환경 변수 설정]
-        env:
-          - name: HUGGING_FACE_HUB_TOKEN
-            value: "hf_YOUR_TOKEN_HERE" # (Optional) Gated Model 사용 시 토큰 필요
-          - name: VLLM_LOGGING_LEVEL
-            value: "INFO"       # 로그 레벨 설정
-          - name: VLLM_WORKER_MULTIPROC_METHOD # [중요] Worker 프로세스 시작 방식 (Python 3.12+ 필수)
-            value: "spawn"
-          - name: NCCL_P2P_DISABLE
-            value: "1"          # 소비자용 GPU(RTX 시리즈)에서 P2P 이슈 방지
-          - name: NCCL_CUMEM_HOST_ENABLE # WSL2/Docker 환경 호환성
-            value: "0"
-          - name: NCCL_NVLS_ENABLE    # WSL2/Docker 환경 호환성
-            value: "0"
-          # [핵심 - WSL2 필수] 이미지 내 compat 드라이버 대신 호스트 드라이버를 우선 로드
-          - name: LD_LIBRARY_PATH
-            value: "/usr/lib/wsl/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
-            
-        # [실행 옵션: command 없이 args만 사용]
-        args:
-          # (1) 모델 설정
-          # 로컬 모델 경로 사용 (볼륨 마운트 경로 기준)
-          - --model=/models/Qwen/Qwen3-4B-Thinking-2507
-          # HuggingFace에서 다운로드하려면: --model=Qwen/Qwen3-4B-Thinking-2507
-          - --served-model-name=qwen3-4b  # API 호출 시 사용할 모델 이름 별칭
-          
-          # (2) GPU 및 메모리 설정
-          - --gpu-memory-utilization=0.85  # VRAM의 85%를 KV 캐시로 사용
-          - --max-model-len=8192          # 최대 컨텍스트 길이 제한 (OOM 방지)
-          - --dtype=auto                  # 데이터 타입 자동 설정 (BF16 등)
-          
-          # (3) 기타 설정
-          - --trust-remote-code           # 새로운 아키텍처 모델 사용 시 필요
-          
-        # [포트 설정]
-        ports:
-        - containerPort: 8000   # vLLM 기본 포트
-          name: http
-          
-        # [상태 검사 (Health Check)]
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 120 # 모델 로딩 시간 동안 대기 (넉넉하게)
-          periodSeconds: 10
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 60
-          periodSeconds: 5
-          failureThreshold: 3
-        startupProbe:             # 초기 기동 시에만 체크 (성공할 때까지 liveness 실패 무시)
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          failureThreshold: 30    # 10초*30회 = 최대 5분까지 대기
-          
-        # [볼륨 마운트]
-        volumeMounts:
-          - name: hf-cache
-            mountPath: /root/.cache/huggingface # 컨테이너 내부 캐시 경로
-          - name: models-volume
-            mountPath: /models                  # 컨테이너 내부 로컬 모델 경로
-            readOnly: true
-            
-      # [볼륨 정의]
+        - name: vllm
+          image: vllm/vllm-openai:v0.15.1
+          securityContext:
+            privileged: true
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              memory: "16Gi"
+            requests:
+              nvidia.com/gpu: 1
+              memory: "8Gi"
+          env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              value: "hf_YOUR_TOKEN_HERE"
+            - name: VLLM_LOGGING_LEVEL
+              value: "INFO"
+            - name: VLLM_WORKER_MULTIPROC_METHOD
+              value: "spawn"
+            - name: NCCL_P2P_DISABLE
+              value: "1"
+            - name: NCCL_CUMEM_HOST_ENABLE
+              value: "0"
+            - name: NCCL_NVLS_ENABLE
+              value: "0"
+            # [핵심] WSL2 드라이버 경로를 LD_LIBRARY_PATH 앞에 배치하여
+            # 이미지 내 compat 드라이버 대신 호스트 드라이버가 로딩되도록 강제
+            - name: LD_LIBRARY_PATH
+              value: "/usr/lib/wsl/lib:/usr/lib/wsl/drivers/nvmdsi.inf_amd64_83eb34a6b09136c0:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+          args:
+            - --model=/models/Qwen/Qwen3-4B-Thinking-2507
+            - --served-model-name=qwen3-4b
+            - --gpu-memory-utilization=0.85
+            - --max-model-len=8192
+            - --dtype=auto
+            - --trust-remote-code
+          ports:
+            - containerPort: 8000
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 30
+          volumeMounts:
+            - name: hf-cache
+              mountPath: /root/.cache/huggingface
+            - name: models-volume
+              mountPath: /models
+              readOnly: true
       volumes:
-      - name: hf-cache
-        hostPath:
-          path: /root/.cache/huggingface        # 호스트(WSL2)의 캐시 경로 공유
-          type: DirectoryOrCreate
-      - name: models-volume
-        hostPath:
-          # [중요] 로컬 모델이 있는 실제 호스트 경로로 수정하세요!
-          path: /mnt/c/Users/takeaim/models 
-          type: DirectoryOrCreate
+        - name: hf-cache
+          hostPath:
+            path: /root/.cache/huggingface
+            type: DirectoryOrCreate
+        - name: models-volume
+          hostPath:
+            path: /mnt/c/Users/takeaim/models
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vllm-qwen3-service    # 서비스 이름
+  name: vllm-qwen3-service
   namespace: llm-serving
 spec:
   selector:
-    app: vllm-qwen3           # 연결할 파드 라벨
+    app: vllm-qwen3
   ports:
     - protocol: TCP
-      port: 80                # 외부에서 접속할 포트
-      targetPort: 8000        # 내부 파드 포트 (vLLM)
-  type: ClusterIP             # 클러스터 내부 IP 할당
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+
 ```
 
 </details>
@@ -434,10 +413,168 @@ I think that's solid. So the answer should be 3.9 is larger than 3.11.
 
 ---
 
-## 5. 마치며: 다음 예고
+## 5. 보너스: Ingress로 포트포워딩 없이 접근하기
+
+4번 섹션에서 `kubectl port-forward`를 사용해 API를 테스트했습니다. 간단한 테스트에는 충분하지만, 다음과 같은 한계가 있습니다.
+
+*   터미널을 하나 점유해야 합니다 (포트 포워딩 프로세스 유지)
+*   터미널을 닫으면 연결이 끊깁니다
+*   여러 서비스에 동시에 접근하려면 포트 번호를 관리해야 합니다
+
+**Ingress**를 사용하면 이런 번거로움 없이, URL 경로 기반으로 서비스에 바로 접근할 수 있습니다!
+
+### 5.1 Ingress란?
+
+**Ingress**는 클러스터 외부에서 내부 서비스로 들어오는 HTTP(S) 트래픽을 관리하는 쿠버네티스 리소스입니다.
+
+```
+[외부 요청] → [Ingress Controller (Traefik)] → [Service] → [Pod (vLLM)]
+```
+
+K3s는 기본적으로 **Traefik**이라는 Ingress Controller가 내장되어 있어, 별도 설치 없이 바로 Ingress를 사용할 수 있습니다.
+
+> **Service vs Ingress, 뭐가 다른가요?**
+> - **Service (ClusterIP)**: 클러스터 내부에서만 접근 가능한 가상 IP를 생성합니다.
+> - **Ingress**: Service 앞단에서 **URL 경로(`/v1`)나 호스트명(`api.example.com`)**을 기준으로 트래픽을 적절한 Service로 라우팅해주는 **L7 로드밸런서** 역할을 합니다.
+
+### 5.2 Ingress Manifest 작성
+
+`vllm-ingress.yaml` 파일을 작성합니다. 기존 Deployment, Service와 **같은 `llm-serving` 네임스페이스**에 배포합니다.
+
+```yaml
+# vLLM Ingress 설정
+# K3s 내장 Traefik Ingress Controller를 사용하여
+# 포트 포워딩 없이 vLLM API에 접근할 수 있도록 구성합니다.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vllm-ingress
+  namespace: llm-serving
+  annotations:
+    # Traefik을 Ingress Controller로 사용
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  # K3s 내장 Traefik Ingress Class 지정
+  ingressClassName: traefik
+  rules:
+    # DNS가 없으므로 localhost를 호스트로 사용
+    - host: localhost
+      http:
+        paths:
+          # /v1 경로로 들어오는 요청을 vLLM 서비스로 라우팅
+          # (OpenAI 호환 API: /v1/chat/completions, /v1/models 등)
+          - path: /v1
+            pathType: Prefix
+            backend:
+              service:
+                name: vllm-qwen3-service
+                port:
+                  number: 80
+          # /health 엔드포인트도 라우팅 (헬스체크용)
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: vllm-qwen3-service
+                port:
+                  number: 80
+```
+
+#### 📄 YAML 파일 상세 설명
+
+*   `ingressClassName: traefik`: K3s에 내장된 Traefik Ingress Controller를 사용하겠다는 선언입니다. K3s 설치 시 자동으로 `traefik` IngressClass가 생성됩니다.
+*   `host: localhost`: DNS를 할당받지 않았으므로, WSL에서 `localhost`로 접근할 수 있도록 설정합니다.
+*   `path: /v1`, `pathType: Prefix`: `/v1`로 시작하는 모든 요청(예: `/v1/chat/completions`, `/v1/models`)을 매칭합니다.
+*   `backend.service.name: vllm-qwen3-service`: 3.1절에서 만든 Service의 이름과 정확히 일치해야 합니다.
+*   `backend.service.port.number: 80`: Service의 `port`(80)를 가리킵니다. (Service가 내부적으로 Pod의 8000번 포트로 전달합니다)
+
+### 5.3 Ingress 배포 및 확인
+
+```bash
+# Ingress 배포
+kubectl apply -f vllm-ingress.yaml
+
+# 배포 확인
+kubectl get ingress -n llm-serving
+```
+
+**[실행 결과 예시]**
+
+```
+NAME           CLASS     HOSTS       ADDRESS         PORTS   AGE
+vllm-ingress   traefik   localhost   172.22.239.53   80      10s
+```
+
+`ADDRESS`에 IP가 할당되고 `HOSTS`에 `localhost`가 표시되면 성공입니다!
+
+이제 전체 리소스를 한번에 확인해 봅시다.
+
+```bash
+kubectl get all,ingress -n llm-serving
+```
+
+```
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/vllm-qwen3-xxx...             1/1     Running   0          5m
+
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/vllm-qwen3-service   ClusterIP   10.43.xxx.xxx   <none>        80/TCP    5m
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/vllm-qwen3   1/1     1            1           5m
+
+NAME                                     CLASS     HOSTS       ADDRESS         PORTS   AGE
+ingress.networking.k8s.io/vllm-ingress   traefik   localhost   172.22.239.53   80      10s
+```
+
+Deployment, Service, Ingress 세 가지 리소스가 모두 같은 네임스페이스에서 정상 동작하고 있음을 확인할 수 있습니다.
+
+### 5.4 Ingress를 통한 API 테스트
+
+이제 **`kubectl port-forward` 없이** 바로 API를 호출할 수 있습니다!
+Traefik이 80번 포트에서 요청을 받아 vLLM 서비스로 전달합니다.
+
+```bash
+# 헬스체크 (HTTP 상태 코드 확인)
+curl -s -o /dev/null -w '%{http_code}' -H 'Host: localhost' http://localhost/health
+# 200
+
+# 모델 목록 확인
+curl -s -H 'Host: localhost' http://localhost/v1/models | python3 -m json.tool
+```
+
+채팅 API도 동일하게 동작합니다. **포트 번호(8000)가 사라지고, 표준 HTTP 포트(80)**를 사용하는 것이 핵심입니다.
+
+```bash
+# 채팅 API 테스트 (Ingress 경유)
+python3 -c "import urllib.request, json; \
+print(json.load(urllib.request.urlopen(urllib.request.Request( \
+    'http://localhost/v1/chat/completions', \
+    data=json.dumps({ \
+        'model': 'qwen3-4b', \
+        'messages': [{'role': 'user', 'content': '3.11과 3.9 중 어느 숫자가 더 큰가요?'}], \
+        'temperature': 0.7 \
+    }).encode('utf-8'), \
+    headers={'Content-Type': 'application/json', 'Host': 'localhost'} \
+)))['choices'][0]['message']['content'])"
+```
+
+> **💡 포트포워딩 vs Ingress 비교**
+>
+> | 구분 | 포트포워딩 | Ingress |
+> | :--- | :--- | :--- |
+> | **URL** | `http://localhost:8000/v1/...` | `http://localhost/v1/...` |
+> | **터미널 점유** | 별도 터미널 필요 | 불필요 |
+> | **안정성** | 터미널 종료 시 끊김 | 항상 유지 |
+> | **여러 서비스** | 포트 번호 관리 필요 | 경로(Path)로 구분 |
+> | **용도** | 개발/디버깅 | 개발~운영 전 단계 |
+
+---
+
+## 6. 마치며: 다음 예고
 
 오늘은 **vLLM**을 활용해 고성능 추론 환경을 구축하고, 최신 Thinking 모델을 서빙하는 방법까지 알아봤습니다.
-특히 `Deployment`와 `Service`를 사용하여 쿠버네티스 환경에서 안정적으로 운영할 수 있는 기반을 닦았습니다.
+`Deployment`와 `Service`를 사용하여 쿠버네티스 환경에서 안정적으로 운영할 수 있는 기반을 닦고, **Ingress**를 통해 포트포워딩 없이도 깔끔하게 API에 접근하는 방법까지 다뤘습니다.
 
 하지만, "나는 복잡한 설정 없이 그냥 로컬에서 간단하게 모델 한번 돌려보고 싶어!" 하는 분들도 계시겠죠?
 그런 분들을 위해 **2탄**에서는 **Ollama**를 활용한 초간단 서빙 방법을 소개하겠습니다.
