@@ -122,3 +122,8 @@ llm:
   label: LLM
   permalink: /llm
   description: LLM related posts
+
+ollama:
+  label: Ollama
+  permalink: /ollama
+  description: Ollama related posts
