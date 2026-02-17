@@ -73,7 +73,7 @@ Qwen3-TTS는 사용 목적에 따라 세 가지 특화된 모델을 제공합니
 
 *   **Docker & NVIDIA Container Toolkit**: GPU 사용을 위해 필수입니다.
 *   **uv**: 빠르고 간편한 Python 패키지 관리자입니다.
-*   **Kubernetes (k3s)**: [이전 포스팅](../Infra/2026-02-07-k3s-wsl-install/index.md)을 참고하여 구축된 상태여야 합니다.
+*   **Kubernetes (k3s)**: wsl 환경 내에 k3s가 구축된 상태여야 합니다.
 
 ---
 
@@ -400,7 +400,7 @@ uv run tts.py
 
 ## 5. k3s에 vLLM-omni 배포하기 (Serving Setup)
 
-이제 [k3s vLLM 서빙 가이드](../Infra/2026-02-15-k3s-vllm-serving/index.md)를 참고하여, Qwen3-TTS를 위한 매니페스트를 작성하겠습니다.
+이제 Qwen3-TTS를 위한 매니페스트를 작성하겠습니다. (블로그의 k3s vLLM 서빙 가이드 문서 참조)
 
 ### 5.1 Deployment Manifest 작성
 
