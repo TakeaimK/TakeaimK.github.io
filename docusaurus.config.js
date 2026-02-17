@@ -85,8 +85,12 @@ const config = {
             "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
-          onInlineAuthors: "warn",
+      onInlineAuthors: "warn",
           onUntruncatedBlogPosts: "warn",
+        },
+        gtag: {
+          trackingID: 'G-9XR0E21741',
+          anonymizeIP: true,
         },
         theme: {
           customCss: "./src/css/custom.css",
