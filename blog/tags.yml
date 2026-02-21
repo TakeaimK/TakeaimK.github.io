@@ -127,3 +127,38 @@ ollama:
   label: Ollama
   permalink: /ollama
   description: Ollama related posts
+
+openclaw:
+  label: OpenClaw
+  permalink: /openclaw
+  description: OpenClaw related posts
+
+hyper-v:
+  label: Hyper-V
+  permalink: /hyper-v
+  description: Hyper-V related posts
+
+vm:
+  label: VM
+  permalink: /vm
+  description: Virtual Machine related posts
+
+gemini:
+  label: Gemini
+  permalink: /gemini
+  description: Gemini related posts
+
+telegram:
+  label: Telegram
+  permalink: /telegram
+  description: Telegram related posts
+
+discord:
+  label: Discord
+  permalink: /discord
+  description: Discord related posts
+
+line:
+  label: LINE
+  permalink: /line
+  description: LINE related posts
