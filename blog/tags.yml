@@ -68,6 +68,11 @@ serving:
   permalink: /serving
   description: Serving tag description
 
+inference:
+  label: Inference
+  permalink: /inference
+  description: Inference related posts
+
 vllm-omni:
   label: vLLM-omni
   permalink: /vllm-omni
