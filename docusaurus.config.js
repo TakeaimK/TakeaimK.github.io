@@ -132,13 +132,19 @@ const config = {
             label: 'Infra',
             position: 'left'
           },
-          // 4. Python 탭
+          // 4. Serving 탭
+          {
+            to: '/tags/serving',
+            label: 'Serving',
+            position: 'left'
+          },
+          // 5. Python 탭
           {
             to: '/tags/python',
             label: 'Python',
             position: 'left'
           },
-          // 5. Daily 탭
+          // 6. Daily 탭
           // {
           //   to: '/tags/daily',
           //   label: 'Daily',
