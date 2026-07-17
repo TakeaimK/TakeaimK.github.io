@@ -1,6 +1,6 @@
 ---
 slug: llm-autoregressive-decoding
-title: "[AI] LLM은 글을 어떻게 생성할까요? Autoregressive Decoding 쉽게 이해하기"
+title: "[Serving 최적화 #01] LLM은 글을 어떻게 생성할까요? Autoregressive Decoding 쉽게 이해하기"
 authors: [me]
 tags: [ai, llm, serving, inference]
 ---
