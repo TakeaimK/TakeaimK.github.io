@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="title desc">
+  <title id="title">LLM 서빙 성능 지표 조합으로 병목을 좁히는 진단 지도</title>
+  <desc id="desc">TTFT, TPOT와 ITL, E2E, Throughput 조합에 따라 대기열, Decode, 출력 길이, 서비스 앞단을 점검하는 흐름</desc>
+  <rect width="1672" height="941" fill="#fbfcfe"/>
+  <rect x="16" y="16" width="1640" height="7" fill="#cc1534"/>
+  <text x="836" y="102" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="55" font-weight="800" fill="#102755">느리다는 말은 지표 조합으로 해석합니다</text>
+  <text x="836" y="155" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" fill="#445168">화살표 하나만 보고 원인을 단정하지 말고, 같은 시간대의 네 지표를 함께 봅니다</text>
+
+  <g font-family="Pretendard, Noto Sans KR, sans-serif">
+    <rect x="60" y="214" width="1552" height="116" rx="8" fill="#ffffff" stroke="#d6dce7" stroke-width="2"/>
+    <rect x="60" y="214" width="16" height="116" fill="#ed5b13"/>
+    <text x="106" y="258" font-size="25" font-weight="800" fill="#102755">시작 전 병목</text>
+    <text x="106" y="296" font-size="21" fill="#445168">첫 토큰만 늦고 생성 속도는 유지됩니다</text>
+    <rect x="438" y="238" width="150" height="68" rx="8" fill="#fff1e9" stroke="#ed5b13" stroke-width="2"/>
+    <text x="513" y="280" text-anchor="middle" font-size="25" font-weight="800" fill="#c94608">TTFT ↑</text>
+    <rect x="608" y="238" width="174" height="68" rx="8" fill="#edf7f6" stroke="#0b7c78" stroke-width="2"/>
+    <text x="695" y="280" text-anchor="middle" font-size="23" font-weight="700" fill="#0b7c78">TPOT →</text>
+    <path d="M822 272h76" stroke="#71809a" stroke-width="4"/>
+    <path d="M898 272l-14-9v18z" fill="#71809a"/>
+    <text x="945" y="258" font-size="23" font-weight="800" fill="#102755">먼저 확인</text>
+    <text x="945" y="296" font-size="21" fill="#33445f">긴 ISL · Waiting 요청 · Prefix miss · Proxy 버퍼링</text>
+
+    <rect x="60" y="354" width="1552" height="116" rx="8" fill="#ffffff" stroke="#d6dce7" stroke-width="2"/>
+    <rect x="60" y="354" width="16" height="116" fill="#0b7c78"/>
+    <text x="106" y="398" font-size="25" font-weight="800" fill="#102755">생성 중 병목</text>
+    <text x="106" y="436" font-size="21" fill="#445168">답변은 시작하지만 토큰 사이가 길어집니다</text>
+    <rect x="438" y="378" width="150" height="68" rx="8" fill="#f1f4f8" stroke="#71809a" stroke-width="2"/>
+    <text x="513" y="420" text-anchor="middle" font-size="25" font-weight="800" fill="#526078">TTFT →</text>
+    <rect x="608" y="378" width="174" height="68" rx="8" fill="#edf7f6" stroke="#0b7c78" stroke-width="2"/>
+    <text x="695" y="420" text-anchor="middle" font-size="23" font-weight="800" fill="#0b7c78">ITL p99 ↑</text>
+    <path d="M822 412h76" stroke="#71809a" stroke-width="4"/>
+    <path d="M898 412l-14-9v18z" fill="#71809a"/>
+    <text x="945" y="398" font-size="23" font-weight="800" fill="#102755">먼저 확인</text>
+    <text x="945" y="436" font-size="21" fill="#33445f">Decode 배치 · KV 대역폭 · Preemption · Prefill 간섭</text>
+
+    <rect x="60" y="494" width="1552" height="116" rx="8" fill="#ffffff" stroke="#d6dce7" stroke-width="2"/>
+    <rect x="60" y="494" width="16" height="116" fill="#7152a6"/>
+    <text x="106" y="538" font-size="25" font-weight="800" fill="#102755">완료 시간 증가</text>
+    <text x="106" y="576" font-size="21" fill="#445168">시작과 생성 속도는 같은데 끝나는 시간이 늦습니다</text>
+    <rect x="438" y="518" width="150" height="68" rx="8" fill="#f1f4f8" stroke="#71809a" stroke-width="2"/>
+    <text x="513" y="560" text-anchor="middle" font-size="23" font-weight="700" fill="#526078">TPOT →</text>
+    <rect x="608" y="518" width="174" height="68" rx="8" fill="#f2edfa" stroke="#7152a6" stroke-width="2"/>
+    <text x="695" y="560" text-anchor="middle" font-size="23" font-weight="800" fill="#7152a6">E2E ↑</text>
+    <path d="M822 552h76" stroke="#71809a" stroke-width="4"/>
+    <path d="M898 552l-14-9v18z" fill="#71809a"/>
+    <text x="945" y="538" font-size="23" font-weight="800" fill="#102755">먼저 확인</text>
+    <text x="945" y="576" font-size="21" fill="#33445f">OSL 증가 · EOS·stop 조건 · Reasoning 토큰</text>
+
+    <rect x="60" y="634" width="1552" height="116" rx="8" fill="#ffffff" stroke="#d6dce7" stroke-width="2"/>
+    <rect x="60" y="634" width="16" height="116" fill="#cc1534"/>
+    <text x="106" y="678" font-size="25" font-weight="800" fill="#102755">서버 포화</text>
+    <text x="106" y="716" font-size="21" fill="#445168">요청을 더 보내도 완료량은 늘지 않습니다</text>
+    <rect x="438" y="658" width="150" height="68" rx="8" fill="#fdecef" stroke="#cc1534" stroke-width="2"/>
+    <text x="513" y="700" text-anchor="middle" font-size="23" font-weight="800" fill="#b20f2a">TPS →</text>
+    <rect x="608" y="658" width="174" height="68" rx="8" fill="#fff1e9" stroke="#ed5b13" stroke-width="2"/>
+    <text x="695" y="700" text-anchor="middle" font-size="23" font-weight="800" fill="#c94608">TTFT ↑↑</text>
+    <path d="M822 692h76" stroke="#71809a" stroke-width="4"/>
+    <path d="M898 692l-14-9v18z" fill="#71809a"/>
+    <text x="945" y="678" font-size="23" font-weight="800" fill="#102755">먼저 확인</text>
+    <text x="945" y="716" font-size="21" fill="#33445f">Request Rate · 대기열 · 오류율 · Goodput</text>
+
+    <rect x="60" y="796" width="1552" height="92" rx="8" fill="#eef4ff" stroke="#1b4ed8" stroke-width="3"/>
+    <text x="836" y="836" text-anchor="middle" font-size="27" font-weight="800" fill="#102755">클라이언트와 서버 지표가 다르면 모델 바깥 경로부터 확인합니다</text>
+    <text x="836" y="870" text-anchor="middle" font-size="21" fill="#33445f">같은 요청 ID로 Gateway · 애플리케이션 · 서빙 엔진의 시간을 이어서 봅니다</text>
+  </g>
+</svg>

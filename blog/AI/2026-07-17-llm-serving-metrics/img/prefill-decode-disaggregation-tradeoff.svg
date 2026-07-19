@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="title desc">
+  <title id="title">Prefill과 Decode 분리 서빙의 구조와 비용</title>
+  <desc id="desc">통합 GPU 풀과 Prefill 및 Decode 분리 풀을 비교하고 KV Cache 전송과 모델 가중치 복제 비용을 설명</desc>
+  <rect width="1672" height="941" fill="#fbfcfe"/>
+  <rect x="16" y="16" width="1640" height="7" fill="#cc1534"/>
+  <text x="836" y="102" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="55" font-weight="800" fill="#102755">Prefill과 Decode의 자원 비율을 따로 조절합니다</text>
+  <text x="836" y="155" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" fill="#445168">분리하면 각 단계에 맞는 GPU와 병렬화를 고를 수 있지만, KV Cache를 옮기는 비용이 생깁니다</text>
+
+  <g font-family="Pretendard, Noto Sans KR, sans-serif">
+    <text x="380" y="226" text-anchor="middle" font-size="30" font-weight="800" fill="#102755">통합 서빙</text>
+    <text x="380" y="263" text-anchor="middle" font-size="22" fill="#526078">같은 GPU 풀에서 두 단계가 자원을 나눕니다</text>
+    <rect x="90" y="302" width="580" height="346" rx="8" fill="#ffffff" stroke="#71809a" stroke-width="3"/>
+    <rect x="132" y="352" width="496" height="102" rx="8" fill="#fff1e9" stroke="#ed5b13" stroke-width="3"/>
+    <text x="380" y="397" text-anchor="middle" font-size="29" font-weight="800" fill="#c94608">Prefill</text>
+    <text x="380" y="431" text-anchor="middle" font-size="21" fill="#6a3a21">긴 입력 · 연산 자원 사용</text>
+    <rect x="132" y="496" width="496" height="102" rx="8" fill="#eaf7f6" stroke="#0b7c78" stroke-width="3"/>
+    <text x="380" y="541" text-anchor="middle" font-size="29" font-weight="800" fill="#0b7c78">Decode</text>
+    <text x="380" y="575" text-anchor="middle" font-size="21" fill="#21504e">반복 생성 · HBM 대역폭 사용</text>
+    <path d="M260 473h240" stroke="#cc1534" stroke-width="6" stroke-dasharray="14 10"/>
+    <path d="M500 473l-18-11v22z" fill="#cc1534"/>
+    <text x="380" y="632" text-anchor="middle" font-size="22" font-weight="700" fill="#b20f2a">새 Prefill이 실행 중인 Decode를 방해할 수 있습니다</text>
+
+    <path d="M724 475h124" stroke="#1b4ed8" stroke-width="5"/>
+    <path d="M848 475l-20-12v24z" fill="#1b4ed8"/>
+    <text x="786" y="442" text-anchor="middle" font-size="24" font-weight="800" fill="#1b4ed8">분리</text>
+
+    <text x="1170" y="226" text-anchor="middle" font-size="30" font-weight="800" fill="#102755">PD Disaggregation</text>
+    <text x="1170" y="263" text-anchor="middle" font-size="22" fill="#526078">워크로드와 SLO에 맞춰 두 풀을 독립적으로 늘립니다</text>
+    <rect x="882" y="302" width="296" height="346" rx="8" fill="#fffaf6" stroke="#ed5b13" stroke-width="3"/>
+    <text x="1030" y="363" text-anchor="middle" font-size="29" font-weight="800" fill="#c94608">Prefill Pool</text>
+    <text x="1030" y="407" text-anchor="middle" font-size="21" fill="#6a3a21">Compute-bound</text>
+    <text x="1030" y="445" text-anchor="middle" font-size="21" fill="#6a3a21">TTFT SLO에 맞춰 확장</text>
+    <g fill="#ed5b13">
+      <rect x="934" y="493" width="52" height="52" rx="6"/>
+      <rect x="1004" y="493" width="52" height="52" rx="6"/>
+      <rect x="1074" y="493" width="52" height="52" rx="6"/>
+    </g>
+    <text x="1030" y="594" text-anchor="middle" font-size="22" font-weight="700" fill="#102755">ISL이 길수록 부담 증가</text>
+
+    <path d="M1198 475h116" stroke="#7152a6" stroke-width="5"/>
+    <path d="M1314 475l-20-12v24z" fill="#7152a6"/>
+    <text x="1256" y="435" text-anchor="middle" font-size="21" font-weight="800" fill="#7152a6">레이어별 KV</text>
+    <text x="1256" y="527" text-anchor="middle" font-size="19" fill="#7152a6">고속 네트워크 필요</text>
+
+    <rect x="1334" y="302" width="248" height="346" rx="8" fill="#f5fbfa" stroke="#0b7c78" stroke-width="3"/>
+    <text x="1458" y="363" text-anchor="middle" font-size="29" font-weight="800" fill="#0b7c78">Decode Pool</text>
+    <text x="1458" y="407" text-anchor="middle" font-size="21" fill="#21504e">Memory-bound</text>
+    <text x="1458" y="445" text-anchor="middle" font-size="21" fill="#21504e">TPOT SLO에 맞춰 확장</text>
+    <g fill="#0b7c78">
+      <rect x="1374" y="493" width="46" height="52" rx="6"/>
+      <rect x="1435" y="493" width="46" height="52" rx="6"/>
+      <rect x="1496" y="493" width="46" height="52" rx="6"/>
+      <rect x="1374" y="558" width="46" height="52" rx="6"/>
+      <rect x="1435" y="558" width="46" height="52" rx="6"/>
+      <rect x="1496" y="558" width="46" height="52" rx="6"/>
+    </g>
+
+    <rect x="90" y="704" width="1492" height="160" rx="8" fill="#ffffff" stroke="#d6dce7" stroke-width="2"/>
+    <line x1="836" y1="724" x2="836" y2="844" stroke="#d6dce7" stroke-width="2"/>
+    <text x="448" y="754" text-anchor="middle" font-size="25" font-weight="800" fill="#0b7c78">얻는 것</text>
+    <text x="448" y="800" text-anchor="middle" font-size="22" fill="#33445f">단계별 GPU·병렬화 선택 · 간섭 완화 · P:D 비율 조절</text>
+    <text x="1224" y="754" text-anchor="middle" font-size="25" font-weight="800" fill="#cc1534">치르는 것</text>
+    <text x="1224" y="800" text-anchor="middle" font-size="22" fill="#33445f">KV 전송 · 가중치 복제 · Router · 네트워크와 운영 복잡도</text>
+    <text x="836" y="912" text-anchor="middle" font-size="25" font-weight="800" fill="#102755">적정 P:D 비율은 ISL · OSL · Request Rate · TTFT/TPOT SLO의 함수입니다</text>
+  </g>
+</svg>

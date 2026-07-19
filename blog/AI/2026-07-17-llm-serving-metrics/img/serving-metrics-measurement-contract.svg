@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="title desc">
+  <title id="title">재현 가능한 LLM 서빙 측정을 위한 다섯 단계 측정 계약</title>
+  <desc id="desc">측정 경계, 워크로드, 부하, 실행 조건, 결과 저장을 차례로 고정하는 흐름</desc>
+  <rect width="1672" height="941" fill="#fbfcfe"/>
+  <rect x="16" y="16" width="1640" height="7" fill="#cc1534"/>
+
+  <text x="836" y="104" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="55" font-weight="800" fill="#102755">좋은 측정은 도구보다 조건을 먼저 고정합니다</text>
+  <text x="836" y="157" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" fill="#445168">같은 모델도 입력 길이와 부하 방식이 다르면 전혀 다른 결과가 나옵니다</text>
+
+  <g font-family="Pretendard, Noto Sans KR, sans-serif">
+    <g transform="translate(54 243)">
+      <rect width="272" height="390" rx="8" fill="#ffffff" stroke="#1b4ed8" stroke-width="3"/>
+      <circle cx="136" cy="68" r="34" fill="#e8efff" stroke="#1b4ed8" stroke-width="3"/>
+      <path d="M118 68h36M136 50v36" stroke="#1b4ed8" stroke-width="5" stroke-linecap="round"/>
+      <text x="136" y="135" text-anchor="middle" font-size="24" font-weight="700" fill="#1b4ed8">1. 측정 경계</text>
+      <text x="136" y="190" text-anchor="middle" font-size="29" font-weight="800" fill="#102755">어디서 재나요?</text>
+      <line x1="34" y1="222" x2="238" y2="222" stroke="#d8deea" stroke-width="2"/>
+      <text x="136" y="270" text-anchor="middle" font-size="22" fill="#26354d">클라이언트 ↔ 서버</text>
+      <text x="136" y="309" text-anchor="middle" font-size="22" fill="#26354d">시작·종료 시점</text>
+      <text x="136" y="348" text-anchor="middle" font-size="22" fill="#26354d">Streaming 여부</text>
+    </g>
+
+    <path d="M338 438h42" stroke="#71809a" stroke-width="4"/>
+    <path d="M380 438l-13-9v18z" fill="#71809a"/>
+
+    <g transform="translate(392 243)">
+      <rect width="272" height="390" rx="8" fill="#ffffff" stroke="#0b7c78" stroke-width="3"/>
+      <circle cx="136" cy="68" r="34" fill="#e8f7f5" stroke="#0b7c78" stroke-width="3"/>
+      <path d="M116 57h40M116 69h40M116 81h27" stroke="#0b7c78" stroke-width="5" stroke-linecap="round"/>
+      <text x="136" y="135" text-anchor="middle" font-size="24" font-weight="700" fill="#0b7c78">2. 워크로드</text>
+      <text x="136" y="190" text-anchor="middle" font-size="29" font-weight="800" fill="#102755">무엇을 보내나요?</text>
+      <line x1="34" y1="222" x2="238" y2="222" stroke="#d8deea" stroke-width="2"/>
+      <text x="136" y="270" text-anchor="middle" font-size="22" fill="#26354d">ISL·OSL 분포</text>
+      <text x="136" y="309" text-anchor="middle" font-size="22" fill="#26354d">Cache hit·miss</text>
+      <text x="136" y="348" text-anchor="middle" font-size="22" fill="#26354d">Chat Template</text>
+    </g>
+
+    <path d="M676 438h42" stroke="#71809a" stroke-width="4"/>
+    <path d="M718 438l-13-9v18z" fill="#71809a"/>
+
+    <g transform="translate(730 243)">
+      <rect width="272" height="390" rx="8" fill="#ffffff" stroke="#ed5b13" stroke-width="3"/>
+      <circle cx="136" cy="68" r="34" fill="#fff1e9" stroke="#ed5b13" stroke-width="3"/>
+      <path d="M112 84l18-19 14 10 18-25" fill="none" stroke="#ed5b13" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="136" y="135" text-anchor="middle" font-size="24" font-weight="700" fill="#ed5b13">3. 부하</text>
+      <text x="136" y="190" text-anchor="middle" font-size="29" font-weight="800" fill="#102755">어떻게 몰리나요?</text>
+      <line x1="34" y1="222" x2="238" y2="222" stroke="#d8deea" stroke-width="2"/>
+      <text x="136" y="270" text-anchor="middle" font-size="22" fill="#26354d">Request Rate</text>
+      <text x="136" y="309" text-anchor="middle" font-size="22" fill="#26354d">Max Concurrency</text>
+      <text x="136" y="348" text-anchor="middle" font-size="22" fill="#26354d">도착 간격 분포</text>
+    </g>
+
+    <path d="M1014 438h42" stroke="#71809a" stroke-width="4"/>
+    <path d="M1056 438l-13-9v18z" fill="#71809a"/>
+
+    <g transform="translate(1068 243)">
+      <rect width="272" height="390" rx="8" fill="#ffffff" stroke="#7152a6" stroke-width="3"/>
+      <circle cx="136" cy="68" r="34" fill="#f2edfa" stroke="#7152a6" stroke-width="3"/>
+      <path d="M119 50v36M153 50v36M112 58h48M112 78h48" stroke="#7152a6" stroke-width="4" stroke-linecap="round"/>
+      <text x="136" y="135" text-anchor="middle" font-size="24" font-weight="700" fill="#7152a6">4. 실행 조건</text>
+      <text x="136" y="190" text-anchor="middle" font-size="29" font-weight="800" fill="#102755">언제 얼마나 재나요?</text>
+      <line x1="34" y1="222" x2="238" y2="222" stroke="#d8deea" stroke-width="2"/>
+      <text x="136" y="270" text-anchor="middle" font-size="22" fill="#26354d">Cold Start 분리</text>
+      <text x="136" y="309" text-anchor="middle" font-size="22" fill="#26354d">Warm-up 조건</text>
+      <text x="136" y="348" text-anchor="middle" font-size="22" fill="#26354d">시간·반복 횟수</text>
+    </g>
+
+    <path d="M1352 438h42" stroke="#71809a" stroke-width="4"/>
+    <path d="M1394 438l-13-9v18z" fill="#71809a"/>
+
+    <g transform="translate(1406 243)">
+      <rect width="212" height="390" rx="8" fill="#ffffff" stroke="#cc1534" stroke-width="3"/>
+      <circle cx="106" cy="68" r="34" fill="#fdecef" stroke="#cc1534" stroke-width="3"/>
+      <path d="M88 83V64h12v19M106 83V51h12v32M124 83V70h12v13" fill="none" stroke="#cc1534" stroke-width="5" stroke-linejoin="round"/>
+      <text x="106" y="135" text-anchor="middle" font-size="24" font-weight="700" fill="#cc1534">5. 결과</text>
+      <text x="106" y="190" text-anchor="middle" font-size="29" font-weight="800" fill="#102755">무엇을 남기나요?</text>
+      <line x1="28" y1="222" x2="184" y2="222" stroke="#d8deea" stroke-width="2"/>
+      <text x="106" y="270" text-anchor="middle" font-size="22" fill="#26354d">p50·p95·p99</text>
+      <text x="106" y="309" text-anchor="middle" font-size="22" fill="#26354d">오류·Goodput</text>
+      <text x="106" y="348" text-anchor="middle" font-size="22" fill="#26354d">요청별 원본</text>
+    </g>
+
+    <rect x="54" y="698" width="1564" height="126" rx="8" fill="#eef4ff" stroke="#1b4ed8" stroke-width="3"/>
+    <text x="836" y="754" text-anchor="middle" font-size="31" font-weight="800" fill="#102755">비교 실험에서는 한 번에 하나의 변수만 바꿉니다</text>
+    <text x="836" y="798" text-anchor="middle" font-size="23" fill="#33445f">측정 계약이 같아야 성능 차이를 모델·엔진·옵션의 효과로 설명할 수 있습니다</text>
+  </g>
+</svg>

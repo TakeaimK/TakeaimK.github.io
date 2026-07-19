@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" role="img" aria-labelledby="title desc">
+  <title id="title">서빙 엔진별 성능 지표 확인 경로</title>
+  <desc id="desc">vLLM과 SGLang은 서버 지표와 벤치마크를 제공하고 LM Studio와 Ollama는 응답 통계를 중심으로 제공하며, 사용자 경험은 클라이언트에서도 측정해야 한다는 비교</desc>
+  <rect width="1672" height="941" fill="#fbfcfe"/>
+  <rect x="16" y="16" width="1640" height="7" fill="#cc1534"/>
+  <g font-family="Pretendard, Noto Sans KR, sans-serif">
+    <text x="836" y="102" text-anchor="middle" font-size="55" font-weight="800" fill="#102755">엔진마다 지표를 내놓는 경로가 다릅니다</text>
+    <text x="836" y="155" text-anchor="middle" font-size="25" fill="#445168">직접 제공하는 값과 클라이언트에서 재야 하는 값을 먼저 구분합니다</text>
+
+    <rect x="58" y="210" width="756" height="498" rx="8" fill="#ffffff" stroke="#1b4ed8" stroke-width="3"/>
+    <rect x="58" y="210" width="756" height="82" rx="8" fill="#eef4ff"/>
+    <text x="436" y="263" text-anchor="middle" font-size="32" font-weight="800" fill="#102755">vLLM · SGLang</text>
+    <text x="436" y="335" text-anchor="middle" font-size="24" font-weight="700" fill="#1b4ed8">서버가 누적 지표를 내보냅니다</text>
+
+    <rect x="102" y="378" width="266" height="112" rx="8" fill="#f7f9fc" stroke="#71809a" stroke-width="2"/>
+    <text x="235" y="422" text-anchor="middle" font-size="25" font-weight="800" fill="#102755">/metrics</text>
+    <text x="235" y="458" text-anchor="middle" font-size="20" fill="#445168">Histogram · Counter · Gauge</text>
+    <rect x="500" y="378" width="266" height="112" rx="8" fill="#f7f9fc" stroke="#71809a" stroke-width="2"/>
+    <text x="633" y="422" text-anchor="middle" font-size="25" font-weight="800" fill="#102755">Benchmark CLI</text>
+    <text x="633" y="458" text-anchor="middle" font-size="20" fill="#445168">TTFT · TPOT · ITL · E2E</text>
+    <path d="M378 434h106" stroke="#1b4ed8" stroke-width="4"/>
+    <path d="M484 434l-16-10v20z" fill="#1b4ed8"/>
+
+    <rect x="102" y="536" width="664" height="114" rx="8" fill="#edf7f6" stroke="#0b7c78" stroke-width="2"/>
+    <text x="434" y="579" text-anchor="middle" font-size="24" font-weight="800" fill="#0b7c78">잘 맞는 용도</text>
+    <text x="434" y="616" text-anchor="middle" font-size="21" fill="#33445f">p95·p99 추세 · 서버 전체 처리량 · 대기열과 포화 상태</text>
+
+    <rect x="858" y="210" width="756" height="498" rx="8" fill="#ffffff" stroke="#ed5b13" stroke-width="3"/>
+    <rect x="858" y="210" width="756" height="82" rx="8" fill="#fff1e9"/>
+    <text x="1236" y="263" text-anchor="middle" font-size="32" font-weight="800" fill="#102755">LM Studio · Ollama</text>
+    <text x="1236" y="335" text-anchor="middle" font-size="24" font-weight="700" fill="#c94608">응답이 요청 단위 통계를 돌려줍니다</text>
+
+    <rect x="902" y="378" width="266" height="112" rx="8" fill="#f7f9fc" stroke="#71809a" stroke-width="2"/>
+    <text x="1035" y="422" text-anchor="middle" font-size="25" font-weight="800" fill="#102755">Response Stats</text>
+    <text x="1035" y="458" text-anchor="middle" font-size="20" fill="#445168">토큰 수 · 시간 · 생성 속도</text>
+    <rect x="1300" y="378" width="266" height="112" rx="8" fill="#f7f9fc" stroke="#71809a" stroke-width="2"/>
+    <text x="1433" y="422" text-anchor="middle" font-size="25" font-weight="800" fill="#102755">Client Timing</text>
+    <text x="1433" y="458" text-anchor="middle" font-size="20" fill="#445168">첫 chunk · 토큰 간격 · 완료</text>
+    <path d="M1178 434h106" stroke="#ed5b13" stroke-width="4"/>
+    <path d="M1284 434l-16-10v20z" fill="#ed5b13"/>
+
+    <rect x="902" y="536" width="664" height="114" rx="8" fill="#fff7f1" stroke="#ed5b13" stroke-width="2"/>
+    <text x="1234" y="579" text-anchor="middle" font-size="24" font-weight="800" fill="#c94608">추가로 필요한 것</text>
+    <text x="1234" y="616" text-anchor="middle" font-size="21" fill="#33445f">여러 요청의 분포와 Throughput은 클라이언트가 모아 계산합니다</text>
+
+    <rect x="58" y="758" width="1556" height="124" rx="8" fill="#102755"/>
+    <text x="836" y="808" text-anchor="middle" font-size="29" font-weight="800" fill="#ffffff">사용자가 체감한 시간은 어떤 엔진이든 클라이언트에서 한 번 더 잽니다</text>
+    <text x="836" y="851" text-anchor="middle" font-size="22" fill="#d9e5ff">요청 전송 → 첫 내용 chunk → 다음 chunk들 → 마지막 응답</text>
+  </g>
+</svg>
